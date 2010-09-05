@@ -1,0 +1,21 @@
+//
+//  RDTextInputCell.h
+//  Readdit
+//
+//  Created by Samuel Sutch on 9/5/10.
+//  Copyright 2010 __MyCompanyName__. All rights reserved.
+//
+
+#import <UIKit/UIKit.h>
+
+
+@interface RDTextInputCell : UITableViewCell <UITextFieldDelegate>
+{
+  IBOutlet UITextField *textField;
+  IBOutlet id delegate;
+}
+
+@property (nonatomic, retain) UITextField *textField;
+@property (nonatomic, assign) id delegate;
+
+@end

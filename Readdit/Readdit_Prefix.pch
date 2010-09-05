@@ -1,0 +1,19 @@
+//
+// Prefix header for all source files of the 'Readdit' target in the 'Readdit' project
+//
+#import <Availability.h>
+
+#ifndef __IPHONE_3_2
+#warning "This project uses features only available in iPhone SDK 3.2 and later."
+#endif
+
+
+#ifdef __OBJC__
+  #import <Foundation/Foundation.h>
+  #import <UIKit/UIKit.h>
+  #import "DeferredKit.h"
+
+  #define PREF_KEY(__key) [[NSUserDefaults standardUserDefaults] objectForKey:(__key)]
+  #define PREF_SYNCHRONIZE [[NSUserDefaults standardUserDefaults] synchronize]
+  #define PREF_SET(__key, __value) [[NSUserDefaults standardUserDefaults] setObject:(__value) forKey:(__key)]
+#endif
