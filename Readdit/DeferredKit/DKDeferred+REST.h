@@ -29,6 +29,7 @@
 - (DKDeferred *)DELETE:(NSString *)method values:(NSDictionary *)values;
 
 - (void)authorizeRequest:(NSMutableURLRequest *)req;
+- (NSDictionary *)authorizeParams:(NSDictionary *)params;
 
 + (id)clientWithURL:(NSString *)url;
 
@@ -58,5 +59,6 @@
  Returns a DKRestClient configured for the service URL `mnt`
  */
 + (DKRestClient *)rest:(NSString *)mnt;
++ (void)setRestClient:(DKRestClient *)client;
 
 @end

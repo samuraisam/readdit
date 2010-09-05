@@ -39,6 +39,9 @@
 		15B8D9D21234258C008DA31D /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15B8D9D11234258C008DA31D /* QuartzCore.framework */; };
 		15B8D9EA123425DA008DA31D /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15B8D9E9123425DA008DA31D /* SystemConfiguration.framework */; };
 		15B8D9F0123425E5008DA31D /* CoreLocation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 15B8D9EF123425E5008DA31D /* CoreLocation.framework */; };
+		15B8DAA2123434EB008DA31D /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B8DAA1123434EB008DA31D /* MBProgressHUD.m */; };
+		15B8DAD512343904008DA31D /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B8DAD412343904008DA31D /* RegexKitLite.m */; };
+		15B8DAE412343AFB008DA31D /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 15B8DAE312343AFB008DA31D /* libicucore.dylib */; };
 		1D3623260D0F684500981E51 /* RDAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* RDAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -112,6 +115,11 @@
 		15B8D9D11234258C008DA31D /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
 		15B8D9E9123425DA008DA31D /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		15B8D9EF123425E5008DA31D /* CoreLocation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreLocation.framework; path = System/Library/Frameworks/CoreLocation.framework; sourceTree = SDKROOT; };
+		15B8DAA0123434EB008DA31D /* MBProgressHUD.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = MBProgressHUD.h; sourceTree = "<group>"; };
+		15B8DAA1123434EB008DA31D /* MBProgressHUD.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = MBProgressHUD.m; sourceTree = "<group>"; };
+		15B8DAD312343904008DA31D /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
+		15B8DAD412343904008DA31D /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
+		15B8DAE312343AFB008DA31D /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* RDAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* RDAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDAppDelegate.m; sourceTree = "<group>"; };
@@ -141,6 +149,7 @@
 				15B8D9D21234258C008DA31D /* QuartzCore.framework in Frameworks */,
 				15B8D9EA123425DA008DA31D /* SystemConfiguration.framework in Frameworks */,
 				15B8D9F0123425E5008DA31D /* CoreLocation.framework in Frameworks */,
+				15B8DAE412343AFB008DA31D /* libicucore.dylib in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -267,6 +276,7 @@
 				15B8D9D11234258C008DA31D /* QuartzCore.framework */,
 				15B8D9E9123425DA008DA31D /* SystemConfiguration.framework */,
 				15B8D9EF123425E5008DA31D /* CoreLocation.framework */,
+				15B8DAE312343AFB008DA31D /* libicucore.dylib */,
 			);
 			name = CustomTemplate;
 			sourceTree = "<group>";
@@ -274,6 +284,10 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				15B8DAD312343904008DA31D /* RegexKitLite.h */,
+				15B8DAD412343904008DA31D /* RegexKitLite.m */,
+				15B8DAA0123434EB008DA31D /* MBProgressHUD.h */,
+				15B8DAA1123434EB008DA31D /* MBProgressHUD.m */,
 				15B8D97A12341FF5008DA31D /* DK */,
 				15B8D95212341A7F008DA31D /* MGSplitViewController */,
 				28A0AAE50D9B0CCF005BE974 /* Readdit_Prefix.pch */,
@@ -395,6 +409,8 @@
 				15B8D9C1123420A4008DA31D /* RDRedditClient.m in Sources */,
 				15B8D9C7123422EF008DA31D /* RDLoginController.m in Sources */,
 				15B8D9CB12342365008DA31D /* RDTextInputCell.m in Sources */,
+				15B8DAA2123434EB008DA31D /* MBProgressHUD.m in Sources */,
+				15B8DAD512343904008DA31D /* RegexKitLite.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

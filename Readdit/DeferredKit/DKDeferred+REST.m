@@ -27,6 +27,14 @@ NSMutableDictionary *__restClients = nil;
   return r;
 }
 
++ (void)setRestClient:(DKRestClient *)client
+{
+  @synchronized(self) {
+    if (__restClients == nil) __restClients = [[NSMutableDictionary dictionary] retain];
+    [__restClients setObject:client forKey:client.mountPoint];
+  }
+}
+
 @end
 
 
@@ -73,6 +81,11 @@ NSMutableDictionary *__restClients = nil;
     [req setAuthorization:self.username password:self.password];
 }
 
+- (NSDictionary *)authorizeParams:(NSDictionary *)params
+{
+  return params;
+}
+
 - (DKDeferred *)GET:(NSString *)method values:(NSDictionary *)values
 {
   return [self _do:method :@"GET" :values];
@@ -102,6 +115,9 @@ NSMutableDictionary *__restClients = nil;
       break;
     }
   }
+  
+  if (self.useAuthorizationIfAvailable)
+    [self authorizeParams:values];
   
   NSString *params = @"";
   if (!multipart) params = [values parameterString];

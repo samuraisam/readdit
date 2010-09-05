@@ -15,7 +15,7 @@
 
 @implementation RDRedditsController
 
-@synthesize detailViewController, splitController ;
+@synthesize detailViewController, splitController;
 
 
 #pragma mark -
@@ -40,12 +40,19 @@
   if (![[[RDRedditClient sharedClient] accounts] count]) {
     RDLoginController *login = [[[RDLoginController alloc] initWithStyle:
                                  UITableViewStyleGrouped] autorelease];
+    login.splitController = self.splitController;
+    login.delegate = self;
     login.title = @"Login";
     UINavigationController *nav = [[[UINavigationController alloc] 
                                 initWithRootViewController:login] autorelease];
     nav.modalPresentationStyle = UIModalPresentationFormSheet;
     [self.splitController presentModalViewController:nav animated:YES];
   }
+}
+
+- (void)loginControllerLoggedIn:(id)arg
+{
+  [self.splitController dismissModalViewControllerAnimated:YES];
 }
 
 /*

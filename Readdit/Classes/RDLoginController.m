@@ -8,11 +8,12 @@
 
 #import "RDLoginController.h"
 #import "RDTextInputCell.h"
+#import "RDRedditClient.h"
 
 
 @implementation RDLoginController
 
-@synthesize delegate;
+@synthesize delegate, splitController;
 
 
 #pragma mark -
@@ -103,16 +104,38 @@
   if ([cell.textLabel.text hasPrefix:@"Username"]) {
     if (passwordField) [passwordField becomeFirstResponder];
   } else {
-    // login
+    if (HUD) [HUD release];
+    HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
+    HUD.labelText = @"Loading...";
+    [self.navigationController.view addSubview:HUD];
+    [HUD show:YES];
+    [[[RDRedditClient sharedClient] loginUsername:usernameField.text password:
+      passwordField.text] addCallback:callbackTS(self, loggedIn:)];
   }
 }
 
-- (void) tableView:(UITableView *)tableView willDisplayCell:
-(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+- (id)loggedIn:(NSString *)status
 {
-//  RDTextInputCell *c = (RDTextInputCell *)cell;
-//  [c.contentView bringSubviewToFront:c.textField];
-//  NSLog(@"c.contentView %@", [c.contentView subviews]);
+  if ([status isEqual:@"success"]) {
+    HUD.labelText = @"Success";
+    if (delegate && [delegate respondsToSelector:@selector(loginControllerLoggedIn:)])
+      [delegate performSelector:@selector(loginControllerLoggedIn:) withObject:nil];
+  } else {
+    HUD.labelText = @"Incorrect Password";
+    if (delegate && [delegate respondsToSelector:@selector(loginControllerFailedLogin:)])
+      [delegate performSelector:@selector(loginControllerFailedLogin:) withObject:nil];
+  }
+  [[NSRunLoop currentRunLoop] runUntilDate:
+   [NSDate dateWithTimeIntervalSinceNow:0.5]];
+  [HUD hide:YES];
+  return status;
+}
+
+- (void) hudWasHidden
+{
+  [HUD removeFromSuperview];
+  [HUD release];
+  HUD = nil;
 }
 
 /*
