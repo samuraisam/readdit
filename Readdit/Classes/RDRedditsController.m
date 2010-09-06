@@ -218,9 +218,9 @@
                    @"$username" withString:username];
     reddit = s;
   } else {
-    c.title = [[[reddits objectAtIndex:0] objectForKey:@"data"]
+    c.title = [[[reddits objectAtIndex:indexPath.row] objectForKey:@"data"]
                objectForKey:@"display_name"];
-    reddit = [[[reddits objectAtIndex:0] objectForKey:@"data"] 
+    reddit = [[[reddits objectAtIndex:indexPath.row] objectForKey:@"data"] 
                 objectForKey:@"url"];
   }
   c.username = username;
