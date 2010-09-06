@@ -11,11 +11,12 @@
 #import "RDRedditClient.h"
 #import "RDItemCell.h"
 #import "NSDate+Helper.h"
+#import "RDBrowserController.h"
 
 
 @implementation RDSubredditController
 
-@synthesize username, reddit;
+@synthesize username, reddit, splitController;
 
 #pragma mark -
 #pragma mark Initialization
@@ -120,8 +121,8 @@
 */
 
 
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
-    // Override to allow orientations other than the default portrait orientation.
+- (BOOL)shouldAutorotateToInterfaceOrientation:
+(UIInterfaceOrientation)interfaceOrientation {
     return YES;
 }
 
@@ -147,7 +148,8 @@
 
 // Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView 
-         cellForRowAtIndexPath:(NSIndexPath *)indexPath {  
+         cellForRowAtIndexPath:(NSIndexPath *)indexPath 
+{  
   static NSString *ident = @"RedditItemCell1";
 
   RDItemCell *cell = (RDItemCell *)[tableView dequeueReusableCellWithIdentifier:ident];
@@ -160,86 +162,45 @@
   cell.titleLabel.text = [item objectForKey:@"title"];
   cell.upvoteLabel.text = [[item objectForKey:@"score"] description];
   cell.commentLabel.text = [[item objectForKey:@"num_comments"] description];
-  NSDate *created = [NSDate dateWithTimeIntervalSince1970:[[item objectForKey:@"created_utc"] intValue]];
-  cell.infoLabel.text = [NSString stringWithFormat:@"%@ by %@", [created stringDaysAgo], [item objectForKey:@"author"]];
+  NSDate *created = [NSDate dateWithTimeIntervalSince1970:
+                     [[item objectForKey:@"created_utc"] intValue]];
+  cell.infoLabel.text = [NSString stringWithFormat:@"%@ by %@", 
+                         [created stringDaysAgo], [item objectForKey:@"author"]];
   
   return cell;
 }
 
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-
 #pragma mark -
 #pragma mark Table view delegate
 
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Navigation logic may go here. Create and push another view controller.
-	/*
-	 <#DetailViewController#> *detailViewController = [[<#DetailViewController#> alloc] initWithNibName:@"<#Nib name#>" bundle:nil];
-     // ...
-     // Pass the selected object to the new view controller.
-	 [self.navigationController pushViewController:detailViewController animated:YES];
-	 [detailViewController release];
-	 */
+- (void)tableView:(UITableView *)tableView 
+didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
+{
+  [(id)[(id)splitController.detailViewController topViewController] setItem:
+    [[items objectAtIndex:indexPath.row] objectForKey:@"data"]];
 }
 
 
 #pragma mark -
 #pragma mark Memory management
 
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Relinquish ownership any cached data, images, etc that aren't in use.
+- (void)didReceiveMemoryWarning 
+{
+  [super didReceiveMemoryWarning];
 }
 
-- (void)viewDidUnload {
-    // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-    // For example: self.myOutlet = nil;
+- (void)viewDidUnload 
+{
 }
 
 
-- (void)dealloc {
-    [super dealloc];
+- (void)dealloc 
+{
+  [items release];
+  [splitController release];
+  [username release];
+  [reddit release];
+  [super dealloc];
 }
 
 

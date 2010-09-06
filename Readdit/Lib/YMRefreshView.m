@@ -8,7 +8,6 @@
 
 #import "YMRefreshView.h"
 #import <QuartzCore/QuartzCore.h>
-#import "UIColor+Extensions.h"
 
 
 #define kReleaseToReloadStatus	0

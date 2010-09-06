@@ -8,45 +8,40 @@
 
 #import "RDBrowserController.h"
 #import "RDRedditsController.h"
-
-
-@interface RDBrowserController (PrivateParts)
-
-@property (nonatomic, retain) UIPopoverController *popoverController;
-
-- (void)configureView;
-
-@end
-
+#import "NSDate+Helper.h"
 
 
 @implementation RDBrowserController
 
-@synthesize toolbar, popoverController, detailItem, detailDescriptionLabel, splitController;
+@synthesize splitController, item;
+@synthesize upButton, downButton, titleLabel, infoLabel, submissionLabel, webView;
+@synthesize forwardItem, backItem, refreshItem, urlItem;
 
-#pragma mark -
-#pragma mark Managing the detail item
-
-- (void)setDetailItem:(id)newDetailItem 
+- (void)setItem:(NSDictionary *)i
 {
-  if (detailItem != newDetailItem) {
-    [detailItem release];
-    detailItem = [newDetailItem retain];
-
-    [self configureView];
-  }
-
-  if (popoverController != nil) {
-    [popoverController dismissPopoverAnimated:YES];
-  }        
+  backItem.enabled = NO;
+  refreshItem.enabled = NO;
+  forwardItem.enabled = NO;
+  if (item) [item release];
+  item = [i retain];
+  NSURLRequest *req = [[[NSURLRequest alloc] initWithURL:
+                        [NSURL URLWithString:[i objectForKey:@"url"]]] autorelease];
+  if (webView) [webView loadRequest:req];
+  titleLabel.text = [item objectForKey:@"title"];
+  NSDate *date = [NSDate dateWithTimeIntervalSince1970:intv([item objectForKey:@"created_utc"])];
+  submissionLabel.text = [NSString stringWithFormat:@"%@ by %@ in %@", [date stringDaysAgo], 
+                          [item objectForKey:@"author"], [item objectForKey:@"subreddit"]];
+  infoLabel.text = [NSString stringWithFormat:@"%@ points | %@ comments", 
+                    [[item objectForKey:@"score"] description], 
+                    [[item objectForKey:@"num_comments"] description]];
 }
 
-
-- (void)configureView 
+- (void)webViewDidFinishLoad:(UIWebView *)v
 {
-  detailDescriptionLabel.text = [detailItem description];   
+  backItem.enabled = v.canGoBack;
+  forwardItem.enabled = v.canGoForward;
+  refreshItem.enabled = YES;
 }
-
 
 #pragma mark -
 #pragma mark Split view support
@@ -55,25 +50,12 @@
      willHideViewController:(UIViewController *)aViewController 
           withBarButtonItem:(UIBarButtonItem*)barButtonItem 
        forPopoverController: (UIPopoverController*)pc 
-{    
-  barButtonItem.title = @"Root List";
-  NSMutableArray *items = [[toolbar items] mutableCopy];
-  [items insertObject:barButtonItem atIndex:0];
-  [toolbar setItems:items animated:YES];
-  [items release];
-  self.popoverController = pc;
-}
+{}
 
 - (void)splitViewController: (UISplitViewController*)svc 
      willShowViewController:(UIViewController *)aViewController 
   invalidatingBarButtonItem:(UIBarButtonItem *)barButtonItem 
-{    
-  NSMutableArray *items = [[toolbar items] mutableCopy];
-  [items removeObjectAtIndex:0];
-  [toolbar setItems:items animated:YES];
-  [items release];
-  self.popoverController = nil;
-}
+{}
 
 
 #pragma mark -
@@ -88,12 +70,13 @@
 #pragma mark -
 #pragma mark View lifecycle
 
-/*
- // Implement viewDidLoad to do additional setup after loading the view, typically from a nib.
-- (void)viewDidLoad {
-    [super viewDidLoad];
+- (void)viewDidLoad 
+{
+  [super viewDidLoad];
+  [self.navigationController setNavigationBarHidden:YES animated:NO];
+  self.toolbarItems = array_(backItem, forwardItem, refreshItem);
+  [self.navigationController setToolbarHidden:NO animated:NO];
 }
- */
 
 /*
 - (void)viewWillAppear:(BOOL)animated {
@@ -116,32 +99,30 @@
 }
 */
 
-- (void)viewDidUnload {
-    // Release any retained subviews of the main view.
-    // e.g. self.myOutlet = nil;
-    self.popoverController = nil;
+- (void)viewDidUnload 
+{
 }
 
 
 #pragma mark -
 #pragma mark Memory management
 
-/*
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Release any cached data, images, etc that aren't in use.
-}
-*/
 
-- (void)dealloc {
-    [popoverController release];
-    [toolbar release];
-    
-    [detailItem release];
-    [detailDescriptionLabel release];
-    [super dealloc];
+- (void)dealloc 
+{
+  self.splitController = nil;
+  self.upButton = nil; 
+  self.downButton = nil; 
+  self.titleLabel = nil; 
+  self.infoLabel = nil; 
+  self.submissionLabel = nil; 
+  self.webView = nil;
+  self.forwardItem = nil; 
+  self.backItem = nil; 
+  self.refreshItem = nil; 
+  self.urlItem = nil;
+  self.item = nil;
+  [super dealloc];
 }
 
 @end

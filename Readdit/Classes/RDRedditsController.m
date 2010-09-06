@@ -65,6 +65,7 @@
   [super viewDidLoad];
   self.clearsSelectionOnViewWillAppear = YES;
   self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
+  self.navigationController.navigationBar.tintColor = [UIColor colorWithHexString:@"bdc5ca"];
 }
 
 - (void)viewWillAppear:(BOOL)animated 
@@ -224,6 +225,7 @@
   }
   c.username = username;
   c.reddit = [reddit stringByReplacingOccurrencesOfRegex:@"^/" withString:@""];
+  c.splitController = self.splitController;
   [self.navigationController pushViewController:c animated:YES];
 }
 
