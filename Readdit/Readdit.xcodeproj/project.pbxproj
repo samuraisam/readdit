@@ -42,6 +42,10 @@
 		15B8DAA2123434EB008DA31D /* MBProgressHUD.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B8DAA1123434EB008DA31D /* MBProgressHUD.m */; };
 		15B8DAD512343904008DA31D /* RegexKitLite.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B8DAD412343904008DA31D /* RegexKitLite.m */; };
 		15B8DAE412343AFB008DA31D /* libicucore.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 15B8DAE312343AFB008DA31D /* libicucore.dylib */; };
+		15B8DB3612344A3E008DA31D /* YMRefreshView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B8DB3312344A3E008DA31D /* YMRefreshView.m */; };
+		15B8DB3712344A3E008DA31D /* YMTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B8DB3512344A3E008DA31D /* YMTableViewController.m */; };
+		15B8DB4012344AE5008DA31D /* UIColor+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B8DB3F12344AE5008DA31D /* UIColor+Extensions.m */; };
+		15BBC0AB12347030001E20FC /* blueArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 15BBC0AA12347030001E20FC /* blueArrow.png */; };
 		1D3623260D0F684500981E51 /* RDAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* RDAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -120,6 +124,13 @@
 		15B8DAD312343904008DA31D /* RegexKitLite.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RegexKitLite.h; sourceTree = "<group>"; };
 		15B8DAD412343904008DA31D /* RegexKitLite.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RegexKitLite.m; sourceTree = "<group>"; };
 		15B8DAE312343AFB008DA31D /* libicucore.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libicucore.dylib; path = usr/lib/libicucore.dylib; sourceTree = SDKROOT; };
+		15B8DB3212344A3E008DA31D /* YMRefreshView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMRefreshView.h; sourceTree = "<group>"; };
+		15B8DB3312344A3E008DA31D /* YMRefreshView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMRefreshView.m; sourceTree = "<group>"; };
+		15B8DB3412344A3E008DA31D /* YMTableViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YMTableViewController.h; sourceTree = "<group>"; };
+		15B8DB3512344A3E008DA31D /* YMTableViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YMTableViewController.m; sourceTree = "<group>"; };
+		15B8DB3E12344AE5008DA31D /* UIColor+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIColor+Extensions.h"; sourceTree = "<group>"; };
+		15B8DB3F12344AE5008DA31D /* UIColor+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIColor+Extensions.m"; sourceTree = "<group>"; };
+		15BBC0AA12347030001E20FC /* blueArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = blueArrow.png; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* RDAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* RDAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDAppDelegate.m; sourceTree = "<group>"; };
@@ -284,6 +295,12 @@
 		29B97315FDCFA39411CA2CEA /* Other Sources */ = {
 			isa = PBXGroup;
 			children = (
+				15B8DB3212344A3E008DA31D /* YMRefreshView.h */,
+				15B8DB3312344A3E008DA31D /* YMRefreshView.m */,
+				15B8DB3412344A3E008DA31D /* YMTableViewController.h */,
+				15B8DB3512344A3E008DA31D /* YMTableViewController.m */,
+				15B8DB3E12344AE5008DA31D /* UIColor+Extensions.h */,
+				15B8DB3F12344AE5008DA31D /* UIColor+Extensions.m */,
 				15B8DAD312343904008DA31D /* RegexKitLite.h */,
 				15B8DAD412343904008DA31D /* RegexKitLite.m */,
 				15B8DAA0123434EB008DA31D /* MBProgressHUD.h */,
@@ -299,6 +316,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				15BBC0AA12347030001E20FC /* blueArrow.png */,
 				28AD735F0D9D9599002E5188 /* MainWindow.xib */,
 				2804203B108E9BAB000629CD /* DetailView.xib */,
 				8D1107310486CEB800E47090 /* Readdit-Info.plist */,
@@ -369,6 +387,7 @@
 				2804203C108E9BAB000629CD /* DetailView.xib in Resources */,
 				15B8D9C8123422EF008DA31D /* RDLoginController.xib in Resources */,
 				15B8D9CD12342430008DA31D /* RDTextInputCell.xib in Resources */,
+				15BBC0AB12347030001E20FC /* blueArrow.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -411,6 +430,9 @@
 				15B8D9CB12342365008DA31D /* RDTextInputCell.m in Sources */,
 				15B8DAA2123434EB008DA31D /* MBProgressHUD.m in Sources */,
 				15B8DAD512343904008DA31D /* RegexKitLite.m in Sources */,
+				15B8DB3612344A3E008DA31D /* YMRefreshView.m in Sources */,
+				15B8DB3712344A3E008DA31D /* YMTableViewController.m in Sources */,
+				15B8DB4012344AE5008DA31D /* UIColor+Extensions.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

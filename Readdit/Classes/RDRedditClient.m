@@ -8,15 +8,27 @@
 
 #import "RDRedditClient.h"
 #import "RegexKitLite.h"
+#import "DKDeferredSqliteCache.h"
 
 
 @implementation RDRedditClient
+
+@synthesize methodCache;
 
 + (id)sharedClient
 {
   static id sharedClient = nil;
   if (!sharedClient) {
     sharedClient = [[[self class] alloc] init];
+    // TODO: multi-user support
+    if (PREF_KEY(@"username")) {
+      [DKDeferred setRestClient:[RDRestClient clientWithURL:REDDIT_URL]];
+      [[DKDeferred rest:REDDIT_URL] setUsername:PREF_KEY(@"username")];
+    }
+    DKDeferredSqliteCache *c = [[[DKDeferredSqliteCache alloc] initWithDbName:
+      @"rdmethodcache.db" maxEntries:3000 cullFrequency:3] autorelease];
+    c.useMemoryCache = NO;
+    [sharedClient setMethodCache:c];
   }
   return sharedClient;
 }
@@ -30,11 +42,66 @@
   return EMPTY_ARRAY;
 } 
 
+- (DKDeferred *)subredditsForUsername:(NSString *)username
+{
+  static NSString *m = @"reddits/mine/.json";
+  if (!username) username = @"";
+  return [[[[DKDeferred rest:REDDIT_URL] GET:m values:EMPTY_DICT] addCallback:
+           curryTS(self, @selector(_didGetSubredditsUsername:method:results:), username, m)]
+          addCallback:curryTS(self, @selector(_cacheMethod:username:results:), m, username)];
+}
+
+- (DKDeferred *)cachedSubredditsForUsername:(NSString *)username
+{
+  static NSString *m = @"reddits/mine/.json";
+  if (!username) username = @"";
+  NSString *key = [username stringByAppendingString:m];
+  NSLog(@"fetching cache %i %@", [methodCache hasKey:key], key);
+  return [methodCache valueForKey:key];
+}
+
+- (id)_didGetSubredditsUsername:(NSString *)username method:(NSString *)method results:(id)r
+{
+  id ret = EMPTY_ARRAY;
+  id d = [[[[NSString alloc] initWithData:r encoding:
+            NSUTF8StringEncoding] autorelease] JSONValue];
+  if ([d isKindOfClass:[NSDictionary class]]) {
+    id _d = [d objectForKey:@"data"];
+    id _e = [_d objectForKey:@"children"];
+    if ([_e isKindOfClass:[NSArray class]]) ret = _e;
+    if (![[_d objectForKey:@"after"] isEqual:[NSNull null]]) {
+      return [[[[DKDeferred rest:REDDIT_URL] GET:
+                [method stringByAppendingFormat:@"?after=%@", [_d objectForKey:@"after"]] values:EMPTY_DICT] 
+               addBoth:curryTS(self, @selector(_didGetSubredditsUsername:method:results:), username, method)]
+              addBoth:curryTS(self, @selector(_appendToPriorResults:newResults:), ret)];
+    }
+  }
+  return ret;
+}
+
+- (id)_appendToPriorResults:(NSArray *)existing newResults:(id)r
+{
+  NSMutableArray *ret = [NSMutableArray arrayWithArray:existing];
+  [ret addObjectsFromArray:r];
+  return ret;
+}
+
+- (id)_cacheMethod:(NSString *)method username:(NSString *)username results:(id)r
+{
+  if (isDeferred(r)) return [r addCallback:curryTS(self, 
+                             @selector(_cacheMethod:username:results:), method, username)];
+  NSString *key = [username stringByAppendingString:method];
+  NSLog(@"caching %@", key);
+  [methodCache setValue:r forKey:key timeout:7200];
+  return r;
+}
+
 - (DKDeferred *)loginUsername:(NSString *)username password:(NSString *)password
 {
   NSMutableURLRequest *req = [[[NSMutableURLRequest alloc] initWithURL:
                                [NSURL URLWithString:REDDIT_URL @"api/login"]] autorelease];
   [req setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
+  [req setHTTPShouldHandleCookies:NO];
   [req setHTTPMethod:@"POST"];
   [req setHTTPBody:
    [[NSString stringWithFormat:@"rem=on&passwd=%@&user=%@&api_type=json", 
@@ -49,17 +116,19 @@
 
 - (id)_didLoginUsername:(NSString *)username results:(id)r
 {
+  NSDictionary *headers = [[r URLResponse] allHeaderFields];
+  NSLog(@"headers %@", headers);
   if ([r isKindOfClass:[NSData class]]) {
     id d = [[[[NSString alloc] initWithData:r encoding:
               NSUTF8StringEncoding] autorelease] JSONValue];
     if ([d isKindOfClass:[NSDictionary class]] 
-        && [[[d objectForKey:@"json"] objectForKey:@"data"] objectForKey:@"modhash"]) {
+        && [[[d objectForKey:@"json"] objectForKey:@"data"] objectForKey:@"modhash"]
+        && [headers objectForKey:@"Set-Cookie"]) {
       // TODO: multi-user support
       PREF_SET(@"modhash", [[[d objectForKey:@"json"] objectForKey:@"data"]
                             objectForKey:@"modhash"]); // required for editing
       PREF_SET(@"username", username);
-      PREF_SET(@"cookie", [[[d objectForKey:@"json"] objectForKey:@"data"]
-                           objectForKey:@"cookie"]); // required for personalized pages
+      PREF_SET(@"cookie", [headers objectForKey:@"Set-Cookie"]); // required for personalized pages
       PREF_SYNCHRONIZE;
       [DKDeferred setRestClient:[RDRestClient clientWithURL:REDDIT_URL]];
       [[DKDeferred rest:REDDIT_URL] setUsername:username];
@@ -67,6 +136,12 @@
     }
   }
   return @"failure";
+}
+
+- (void)dealloc
+{
+  [methodCache release];
+  [super dealloc];
 }
 
 @end
@@ -87,6 +162,7 @@
 - (void)authorizeRequest:(NSMutableURLRequest *)req
 {
   if (PREF_KEY(@"cookie")) {
+    [req setHTTPShouldHandleCookies:NO];
     [req setValue:PREF_KEY(@"cookie") forHTTPHeaderField:@"Cookie"];
   }
 }

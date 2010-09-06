@@ -7,17 +7,23 @@
 //
 
 #import <UIKit/UIKit.h>
+#import "YMTableViewController.h"
 
 @class RDBrowserController;
 @class MGSplitViewController;
 
-@interface RDRedditsController : UITableViewController 
+@interface RDRedditsController : YMTableViewController
 {
   RDBrowserController *detailViewController;
   IBOutlet MGSplitViewController *splitController;
+  BOOL performingInitialSync;
+  NSArray *reddits;
+  NSArray *builtins;
+  NSString *username;
 }
 
 @property (nonatomic, retain) IBOutlet MGSplitViewController *splitController;
 @property (nonatomic, retain) IBOutlet RDBrowserController *detailViewController;
+@property (nonatomic, retain) NSString *username;
 
 @end

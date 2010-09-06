@@ -119,7 +119,7 @@
   if ([status isEqual:@"success"]) {
     HUD.labelText = @"Success";
     if (delegate && [delegate respondsToSelector:@selector(loginControllerLoggedIn:)])
-      [delegate performSelector:@selector(loginControllerLoggedIn:) withObject:nil];
+      [delegate performSelector:@selector(loginControllerLoggedIn:) withObject:usernameField.text];
   } else {
     HUD.labelText = @"Incorrect Password";
     if (delegate && [delegate respondsToSelector:@selector(loginControllerFailedLogin:)])

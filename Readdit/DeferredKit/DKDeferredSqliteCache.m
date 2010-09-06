@@ -449,7 +449,7 @@ cullFrequency:(int)_cullFrequency
         sqlite3_finalize(stmt);
     }
     
-    NSLog(@"DKDeferredSqliteCache:initWithDbName found %d existing entries", 
+    NSLog(@"DKDeferredSqliteCache:initWithDbName %@ found %d existing entries", _dbname,
           [existingKeys count]);
     
     return self;
