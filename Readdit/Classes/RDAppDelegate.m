@@ -24,6 +24,7 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:
 (NSDictionary *)launchOptions 
 {
+  [splitViewController setShowsMasterInPortrait:YES];
   [window addSubview:splitViewController.view];
   [window makeKeyAndVisible];
   [DKDeferred setCache:[DKDeferredSqliteCache sharedCache]];
