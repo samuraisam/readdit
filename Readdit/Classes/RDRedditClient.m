@@ -40,7 +40,37 @@
     return array_(PREF_KEY(@"username"), PREF_KEY(@"modhash"), PREF_KEY(@"cookie"));
   }
   return EMPTY_ARRAY;
-} 
+}
+
+- (DKDeferred *)subreddit:(NSString *)sub forUsername:(NSString *)username
+{
+  if (!username) username = @"";
+  NSString *method = [sub stringByAppendingString:@".json"];
+  return [[[[DKDeferred rest:REDDIT_URL] GET:method values:EMPTY_DICT]
+           addBoth:curryTS(self, @selector(_gotSubredditUsername:method:results:), username, method)]
+          addBoth:curryTS(self, @selector(_cacheMethod:username:results:), method, username)];
+}
+
+- (DKDeferred *)cachedSubreddit:(NSString *)sub forUsername:(NSString *)username
+{
+  if (!username) username = @"";
+  NSString *method = [sub stringByAppendingString:@".json"];
+  NSString *key = [username stringByAppendingString:method];
+  NSLog(@"fetching cache %i %@", [methodCache hasKey:key], key);
+  return [methodCache valueForKey:key];
+}
+
+- (id)_gotSubredditUsername:(NSString *)username method:(NSString *)method results:(id)r
+{
+  id ret = EMPTY_ARRAY;
+  id d = [[[[NSString alloc] initWithData:r encoding:
+            NSUTF8StringEncoding] autorelease] JSONValue];
+  if ([d isKindOfClass:[NSDictionary class]]) {
+    if (!(ret = [[d objectForKey:@"data"] objectForKey:@"children"]))
+      ret = EMPTY_ARRAY;
+  }
+  return ret;
+}
 
 - (DKDeferred *)subredditsForUsername:(NSString *)username
 {

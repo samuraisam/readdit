@@ -46,6 +46,10 @@
 		15B8DB3712344A3E008DA31D /* YMTableViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B8DB3512344A3E008DA31D /* YMTableViewController.m */; };
 		15B8DB4012344AE5008DA31D /* UIColor+Extensions.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B8DB3F12344AE5008DA31D /* UIColor+Extensions.m */; };
 		15BBC0AB12347030001E20FC /* blueArrow.png in Resources */ = {isa = PBXBuildFile; fileRef = 15BBC0AA12347030001E20FC /* blueArrow.png */; };
+		15BBC10512347A09001E20FC /* RDSubredditController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BBC10412347A09001E20FC /* RDSubredditController.m */; };
+		15BBC1831234A565001E20FC /* RDItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BBC1821234A565001E20FC /* RDItemCell.m */; };
+		15BBC1851234A570001E20FC /* RDItemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15BBC1841234A570001E20FC /* RDItemCell.xib */; };
+		15BBC1901234A92F001E20FC /* NSDate+Helper.m in Sources */ = {isa = PBXBuildFile; fileRef = 15BBC18F1234A92F001E20FC /* NSDate+Helper.m */; };
 		1D3623260D0F684500981E51 /* RDAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* RDAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -131,6 +135,13 @@
 		15B8DB3E12344AE5008DA31D /* UIColor+Extensions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIColor+Extensions.h"; path = "Lib/UIColor+Extensions.h"; sourceTree = "<group>"; };
 		15B8DB3F12344AE5008DA31D /* UIColor+Extensions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIColor+Extensions.m"; path = "Lib/UIColor+Extensions.m"; sourceTree = "<group>"; };
 		15BBC0AA12347030001E20FC /* blueArrow.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = blueArrow.png; path = Resources/blueArrow.png; sourceTree = "<group>"; };
+		15BBC10312347A09001E20FC /* RDSubredditController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDSubredditController.h; sourceTree = "<group>"; };
+		15BBC10412347A09001E20FC /* RDSubredditController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDSubredditController.m; sourceTree = "<group>"; };
+		15BBC1811234A565001E20FC /* RDItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDItemCell.h; sourceTree = "<group>"; };
+		15BBC1821234A565001E20FC /* RDItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDItemCell.m; sourceTree = "<group>"; };
+		15BBC1841234A570001E20FC /* RDItemCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RDItemCell.xib; sourceTree = "<group>"; };
+		15BBC18E1234A92F001E20FC /* NSDate+Helper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSDate+Helper.h"; path = "Lib/NSDate+Helper.h"; sourceTree = "<group>"; };
+		15BBC18F1234A92F001E20FC /* NSDate+Helper.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSDate+Helper.m"; path = "Lib/NSDate+Helper.m"; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* RDAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* RDAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDAppDelegate.m; sourceTree = "<group>"; };
@@ -170,20 +181,24 @@
 		080E96DDFE201D6D7F000001 /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				15BBC14D1234A280001E20FC /* Data */,
 				1D3623240D0F684500981E51 /* RDAppDelegate.h */,
 				1D3623250D0F684500981E51 /* RDAppDelegate.m */,
 				28042007108E984D000629CD /* RDRedditsController.h */,
 				28042008108E984D000629CD /* RDRedditsController.m */,
 				28042009108E984D000629CD /* RDBrowserController.h */,
 				2804200A108E984D000629CD /* RDBrowserController.m */,
-				15B8D9BF123420A4008DA31D /* RDRedditClient.h */,
-				15B8D9C0123420A4008DA31D /* RDRedditClient.m */,
 				15B8D9C4123422EF008DA31D /* RDLoginController.h */,
 				15B8D9C5123422EF008DA31D /* RDLoginController.m */,
 				15B8D9C6123422EF008DA31D /* RDLoginController.xib */,
 				15B8D9C912342365008DA31D /* RDTextInputCell.h */,
 				15B8D9CA12342365008DA31D /* RDTextInputCell.m */,
 				15B8D9CC12342430008DA31D /* RDTextInputCell.xib */,
+				15BBC10312347A09001E20FC /* RDSubredditController.h */,
+				15BBC10412347A09001E20FC /* RDSubredditController.m */,
+				15BBC1811234A565001E20FC /* RDItemCell.h */,
+				15BBC1821234A565001E20FC /* RDItemCell.m */,
+				15BBC1841234A570001E20FC /* RDItemCell.xib */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -268,6 +283,15 @@
 			path = JSON;
 			sourceTree = "<group>";
 		};
+		15BBC14D1234A280001E20FC /* Data */ = {
+			isa = PBXGroup;
+			children = (
+				15B8D9BF123420A4008DA31D /* RDRedditClient.h */,
+				15B8D9C0123420A4008DA31D /* RDRedditClient.m */,
+			);
+			name = Data;
+			sourceTree = "<group>";
+		};
 		19C28FACFE9D520D11CA2CBB /* Products */ = {
 			isa = PBXGroup;
 			children = (
@@ -306,6 +330,8 @@
 				15B8DAD412343904008DA31D /* RegexKitLite.m */,
 				15B8DAA0123434EB008DA31D /* MBProgressHUD.h */,
 				15B8DAA1123434EB008DA31D /* MBProgressHUD.m */,
+				15BBC18E1234A92F001E20FC /* NSDate+Helper.h */,
+				15BBC18F1234A92F001E20FC /* NSDate+Helper.m */,
 				15B8D97A12341FF5008DA31D /* DK */,
 				15B8D95212341A7F008DA31D /* MGSplitViewController */,
 				28A0AAE50D9B0CCF005BE974 /* Readdit_Prefix.pch */,
@@ -389,6 +415,7 @@
 				15B8D9C8123422EF008DA31D /* RDLoginController.xib in Resources */,
 				15B8D9CD12342430008DA31D /* RDTextInputCell.xib in Resources */,
 				15BBC0AB12347030001E20FC /* blueArrow.png in Resources */,
+				15BBC1851234A570001E20FC /* RDItemCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -434,6 +461,9 @@
 				15B8DB3612344A3E008DA31D /* YMRefreshView.m in Sources */,
 				15B8DB3712344A3E008DA31D /* YMTableViewController.m in Sources */,
 				15B8DB4012344AE5008DA31D /* UIColor+Extensions.m in Sources */,
+				15BBC10512347A09001E20FC /* RDSubredditController.m in Sources */,
+				15BBC1831234A565001E20FC /* RDItemCell.m in Sources */,
+				15BBC1901234A92F001E20FC /* NSDate+Helper.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -12,6 +12,7 @@
 #import "RDRedditClient.h"
 #import "RDLoginController.h"
 #import "YMRefreshView.h"
+#import "RDSubredditController.h"
 
 
 @interface RDRedditsController (PrivateParts)
@@ -46,12 +47,14 @@
   self.actionTableViewHeaderClass = [YMRefreshView class];
   // TODO: multi-user support
   username = [PREF_KEY(@"username") retain];
-  performingInitialSync = NO;
+  performingInitialSync = firstSyncCompleted = NO;
   reddits = [EMPTY_ARRAY retain];
-  builtins = [array_(array_(@"Front Page", @"/"), array_(@"All", @"/r/all/"),
-                    array_(@"Friends", @"/r/friends/"), array_(@"Submitted", @"/user/$username/submitted/"),
-                    array_(@"Liked", @"/user/$username/liked/"), array_(@"Disliked", @"/user/$username/disliked/"),
-                     array_(@"Hidden", @"/user/$username/hidden/")) retain];
+  builtins = [array_(array_(@"Front Page", @"/"), array_(@"All", @"/r/all/"), array_(@"Top", @"/top/"), 
+                     array_(@"New", @"/new/"), array_(@"Controversial", @"/controversial/")) retain];
+  builtins2 = [array_(array_(@"Saved", @"/saved/"),
+                      array_(@"Friends", @"/r/friends/"), array_(@"Submitted", @"/user/$username/submitted/"),
+                      array_(@"Liked", @"/user/$username/liked/"), array_(@"Disliked", @"/user/$username/disliked/"),
+                      array_(@"Hidden", @"/user/$username/hidden/")) retain];
 }
 
 #pragma mark -
@@ -60,14 +63,14 @@
 - (void)viewDidLoad 
 {
   [super viewDidLoad];
-  self.clearsSelectionOnViewWillAppear = NO;
+  self.clearsSelectionOnViewWillAppear = YES;
   self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
 }
 
 - (void)viewWillAppear:(BOOL)animated 
 {
   [super viewWillAppear:animated];
-  [self.tableView reloadData];
+  //[self.tableView reloadData];
 }
 
 - (void)viewDidAppear:(BOOL)animated 
@@ -93,7 +96,7 @@
     }
     if (!performingInitialSync) {
       performingInitialSync = YES;
-      [self showReloadAnimationAnimated:YES];
+      [self showReloadAnimationAnimated:!firstSyncCompleted];
       [[[RDRedditClient sharedClient] cachedSubredditsForUsername:username] 
        addBoth:callbackTS(self, _gotCachedSubreddits:)];
     }
@@ -108,12 +111,14 @@
 - (id)_gotCachedSubreddits:(id)r
 {
   if ([r isKindOfClass:[NSArray class]]) {
+    if (reddits) [reddits release];
     reddits = [r retain];
     NSLog(@"gotCachedSubreddits: %d", [r count]);
   } else {
     NSLog(@"cachedSubreddits Miss %@", r);
   }
   [self.tableView reloadData];
+  firstSyncCompleted = YES;
   [[[RDRedditClient sharedClient] subredditsForUsername:username] 
    addBoth:callbackTS(self, _gotSubreddits:)];
   return r;
@@ -145,19 +150,8 @@
    addBoth:callbackTS(self, _gotCachedSubreddits:)];
 }
 
-/*
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
-}
-*/
-/*
-- (void)viewDidDisappear:(BOOL)animated {
-    [super viewDidDisappear:animated];
-}
-*/
-
-// Ensure that the view controller supports rotation and that the split view can therefore show in both portrait and landscape.
-- (BOOL)shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)interfaceOrientation {
+- (BOOL)shouldAutorotateToInterfaceOrientation:
+(UIInterfaceOrientation)interfaceOrientation {
     return YES;
 }
 
@@ -167,19 +161,19 @@
 
 - (NSInteger)numberOfSectionsInTableView:(UITableView *)aTableView 
 {
-  return 2;
+  return 3;
 }
 
 
 - (NSInteger)tableView:(UITableView *)aTableView 
  numberOfRowsInSection:(NSInteger)section 
 {
-  return section == 0 ? [builtins count] : [reddits count];
+  return section == 0 ? [builtins count] : section == 1 ? [builtins2 count] : [reddits count];
 }
 
 - (NSString *) tableView:(UITableView *)tableView titleForHeaderInSection:(NSInteger)section
 {
-  return section == 0 ? nil : @"Subscribed";
+  return section == 0 ? nil : section == 1 ? @"My Posts" : @"Subscribed";
 }
 
 
@@ -194,8 +188,9 @@
                                    reuseIdentifier:ident] autorelease];
     cell.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
   }
-  if (indexPath.section == 0) {
-    cell.textLabel.text = [[builtins objectAtIndex:indexPath.row] objectAtIndex:0];
+  if (indexPath.section < 2) {
+    cell.textLabel.text = [[(indexPath.section == 0 ? builtins : builtins2)
+                            objectAtIndex:indexPath.row] objectAtIndex:0];
     cell.detailTextLabel.text = nil;
   } else {
     NSDictionary *s = [[reddits objectAtIndex:indexPath.row] objectForKey:@"data"];
@@ -206,74 +201,44 @@
   return cell;
 }
 
-
-/*
-// Override to support conditional editing of the table view.
-- (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the specified item to be editable.
-    return YES;
-}
-*/
-
-
-/*
-// Override to support editing the table view.
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        // Delete the row from the data source
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:YES];
-    }   
-    else if (editingStyle == UITableViewCellEditingStyleInsert) {
-        // Create a new instance of the appropriate class, insert it into the array, and add a new row to the table view
-    }   
-}
-*/
-
-
-/*
-// Override to support rearranging the table view.
-- (void)tableView:(UITableView *)tableView moveRowAtIndexPath:(NSIndexPath *)fromIndexPath toIndexPath:(NSIndexPath *)toIndexPath {
-}
-*/
-
-
-/*
-// Override to support conditional rearranging of the table view.
-- (BOOL)tableView:(UITableView *)tableView canMoveRowAtIndexPath:(NSIndexPath *)indexPath {
-    // Return NO if you do not want the item to be re-orderable.
-    return YES;
-}
-*/
-
-
 #pragma mark -
 #pragma mark Table view delegate
 
-- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
-    
-    /*
-     When a row is selected, set the detail view controller's detail item to the item associated with the selected row.
-     */
-    detailViewController.detailItem = [NSString stringWithFormat:@"Row %d", indexPath.row];
+- (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
+{
+  RDSubredditController *c = [[[RDSubredditController alloc] initWithStyle:
+                               UITableViewStylePlain] autorelease];
+  NSString *reddit = @"";
+  if (indexPath.section < 2) {
+    NSArray *a = (indexPath.section == 0 ? builtins : builtins2);
+    c.title = [[a objectAtIndex:indexPath.row] objectAtIndex:0];
+    NSString *s = [[[a objectAtIndex:indexPath.row] objectAtIndex:1]
+                   stringByReplacingOccurrencesOfString:
+                   @"$username" withString:username];
+    reddit = s;
+  } else {
+    c.title = [[[reddits objectAtIndex:0] objectForKey:@"data"]
+               objectForKey:@"display_name"];
+    reddit = [[[reddits objectAtIndex:0] objectForKey:@"data"] 
+                objectForKey:@"url"];
+  }
+  c.username = username;
+  c.reddit = [reddit stringByReplacingOccurrencesOfRegex:@"^/" withString:@""];
+  [self.navigationController pushViewController:c animated:YES];
 }
 
 
 #pragma mark -
 #pragma mark Memory management
 
-- (void)didReceiveMemoryWarning {
-    // Releases the view if it doesn't have a superview.
-    [super didReceiveMemoryWarning];
-    
-    // Relinquish ownership any cached data, images, etc. that aren't in use.
+- (void)didReceiveMemoryWarning 
+{
+  [super didReceiveMemoryWarning];
 }
 
-- (void)viewDidUnload {
-    // Relinquish ownership of anything that can be recreated in viewDidLoad or on demand.
-    // For example: self.myOutlet = nil;
+- (void)viewDidUnload 
+{
 }
-
 
 - (void)dealloc 
 {
@@ -283,7 +248,6 @@
   [detailViewController release];
   [super dealloc];
 }
-
 
 @end
 

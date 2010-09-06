@@ -16,9 +16,9 @@
 {
   RDBrowserController *detailViewController;
   IBOutlet MGSplitViewController *splitController;
-  BOOL performingInitialSync;
+  BOOL performingInitialSync, firstSyncCompleted;
   NSArray *reddits;
-  NSArray *builtins;
+  NSArray *builtins, *builtins2;
   NSString *username;
 }
 
