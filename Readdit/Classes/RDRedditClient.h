@@ -22,6 +22,7 @@
 
 - (NSArray *)accounts;
 - (DKDeferred *)loginUsername:(NSString *)username password:(NSString *)password;
+- (DKDeferred *)vote:(int)d item:(NSString *)theid subreddit:(NSString *)sub username:(NSString *)un;
 
 - (DKDeferred *)subredditsForUsername:(NSString *)username;
 - (DKDeferred *)cachedSubredditsForUsername:(NSString *)username;

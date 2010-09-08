@@ -9,11 +9,12 @@
 #import "RDBrowserController.h"
 #import "RDRedditsController.h"
 #import "NSDate+Helper.h"
+#import "RDRedditClient.h"
 
 
 @implementation RDBrowserController
 
-@synthesize splitController, item;
+@synthesize splitController, item, username;
 @synthesize upButton, downButton, titleLabel, infoLabel, submissionLabel, webView;
 @synthesize forwardItem, backItem, refreshItem, urlItem;
 
@@ -34,6 +35,14 @@
   infoLabel.text = [NSString stringWithFormat:@"%@ points | %@ comments", 
                     [[item objectForKey:@"score"] description], 
                     [[item objectForKey:@"num_comments"] description]];
+  UIImage *up = [UIImage imageNamed:@"up-arrow.png"];
+  UIImage *down = [UIImage imageNamed:@"down-arrow.png"];
+  if (![[i objectForKey:@"likes"] isEqual:[NSNull null]]) {
+    if (boolv([i objectForKey:@"likes"])) up = [UIImage imageNamed:@"up-arrow-liked.png"];
+    else down = [UIImage imageNamed:@"down-arrow-disliked.png"];
+  }
+  [downButton setImage:down forState:UIControlStateNormal];
+  [upButton setImage:up forState:UIControlStateNormal];
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)v
@@ -41,6 +50,31 @@
   backItem.enabled = v.canGoBack;
   forwardItem.enabled = v.canGoForward;
   refreshItem.enabled = YES;
+}
+
+- (void)upvote:(UIButton *)sender
+{
+  int v = 1 + ([[item objectForKey:@"liked"] isEqual:nsni(-1)] ? -1 : 0);
+  [[[RDRedditClient sharedClient] vote:v item:
+   [item objectForKey:@"name"] subreddit:
+    [item objectForKey:@"subreddit"] username:username] 
+   addBoth:callbackTS(self, _didVote:)];
+}
+
+- (void)downvote:(UIButton *)sender
+{
+  int v = -1 + ([[item objectForKey:@"liked"] isEqual:nsni(-1)] ? 1 : 0);
+  [[[RDRedditClient sharedClient] vote:v item:
+    [item objectForKey:@"name"] subreddit:
+    [item objectForKey:@"subreddit"] username:username]
+   addBoth:callbackTS(self, _didVote:)];
+}
+
+- (id)_didVote:(id)r
+{
+  NSLog(@"didVote %@", [[[NSString alloc] initWithData:r encoding:
+                         NSUTF8StringEncoding] autorelease]);
+  return r;
 }
 
 #pragma mark -

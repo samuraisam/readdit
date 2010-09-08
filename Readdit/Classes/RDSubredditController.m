@@ -12,6 +12,7 @@
 #import "RDItemCell.h"
 #import "NSDate+Helper.h"
 #import "RDBrowserController.h"
+#import <CoreGraphics/CoreGraphics.h>
 
 
 @implementation RDSubredditController
@@ -51,6 +52,9 @@
 
 - (void)viewWillAppear:(BOOL)animated 
 {
+  self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+  self.tableView.separatorColor = [UIColor colorWithHexString:@"8c9ba4"];
+  self.tableView.backgroundColor = [UIColor colorWithHexString:@"8c9ba4"];
   [super viewWillAppear:animated];
 }
 
@@ -143,7 +147,12 @@
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-  return 54;
+  NSString *t = [[[items objectAtIndex:indexPath.row] objectForKey:@"data"] objectForKey:@"title"];
+  CGFloat w = tableView.frame.size.width;
+  CGSize s = [t sizeWithFont:[UIFont boldSystemFontOfSize:15] constrainedToSize:
+              CGSizeMake(w - 67 , 10000) lineBreakMode:UILineBreakModeWordWrap];
+  CGFloat r = floor(s.height + 26 + (s.height*.15)); // woot line break FUDGE
+  return (r >= 54 ? r : 54);
 }
 
 // Customize the appearance of table view cells.
@@ -176,8 +185,9 @@
 - (void)tableView:(UITableView *)tableView 
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-  [(id)[(id)splitController.detailViewController topViewController] setItem:
-    [[items objectAtIndex:indexPath.row] objectForKey:@"data"]];
+  RDBrowserController *c = (id)[(id)splitController.detailViewController topViewController];
+  c.item = [[items objectAtIndex:indexPath.row] objectForKey:@"data"];
+  c.username = username;
 }
 
 

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		15B89FCF12372E9000E09833 /* item-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 15B89FCE12372E9000E09833 /* item-bg.png */; };
 		15B8D930123413A3008DA31D /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 15B8D92F123413A3008DA31D /* libsqlite3.0.dylib */; };
 		15B8D95912341A7F008DA31D /* MGSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B8D95412341A7F008DA31D /* MGSplitViewController.m */; };
 		15B8D95A12341A7F008DA31D /* MGSplitDividerView.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B8D95612341A7F008DA31D /* MGSplitDividerView.m */; };
@@ -57,6 +58,8 @@
 		15BBC1EC1234B892001E20FC /* back.png in Resources */ = {isa = PBXBuildFile; fileRef = 15BBC1E91234B892001E20FC /* back.png */; };
 		15BBC1ED1234B892001E20FC /* forward.png in Resources */ = {isa = PBXBuildFile; fileRef = 15BBC1EA1234B892001E20FC /* forward.png */; };
 		15BBC1EE1234B892001E20FC /* refresh.png in Resources */ = {isa = PBXBuildFile; fileRef = 15BBC1EB1234B892001E20FC /* refresh.png */; };
+		15E686D41235AA79002D16B9 /* down-arrow-disliked.png in Resources */ = {isa = PBXBuildFile; fileRef = 15E686D21235AA79002D16B9 /* down-arrow-disliked.png */; };
+		15E686D51235AA79002D16B9 /* up-arrow-liked.png in Resources */ = {isa = PBXBuildFile; fileRef = 15E686D31235AA79002D16B9 /* up-arrow-liked.png */; };
 		1D3623260D0F684500981E51 /* RDAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* RDAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -68,6 +71,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		15B89FCE12372E9000E09833 /* item-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "item-bg.png"; path = "Resources/images/item-bg.png"; sourceTree = "<group>"; };
 		15B8D92F123413A3008DA31D /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		15B8D95312341A7F008DA31D /* MGSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MGSplitViewController.h; path = Lib/MGSplitViewController.h; sourceTree = "<group>"; };
 		15B8D95412341A7F008DA31D /* MGSplitViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MGSplitViewController.m; path = Lib/MGSplitViewController.m; sourceTree = "<group>"; };
@@ -155,6 +159,8 @@
 		15BBC1E91234B892001E20FC /* back.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = back.png; path = Resources/images/back.png; sourceTree = "<group>"; };
 		15BBC1EA1234B892001E20FC /* forward.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = forward.png; path = Resources/images/forward.png; sourceTree = "<group>"; };
 		15BBC1EB1234B892001E20FC /* refresh.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = refresh.png; path = Resources/images/refresh.png; sourceTree = "<group>"; };
+		15E686D21235AA79002D16B9 /* down-arrow-disliked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "down-arrow-disliked.png"; path = "Resources/images/down-arrow-disliked.png"; sourceTree = "<group>"; };
+		15E686D31235AA79002D16B9 /* up-arrow-liked.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "up-arrow-liked.png"; path = "Resources/images/up-arrow-liked.png"; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* RDAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* RDAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDAppDelegate.m; sourceTree = "<group>"; };
@@ -356,6 +362,9 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				15B89FCE12372E9000E09833 /* item-bg.png */,
+				15E686D21235AA79002D16B9 /* down-arrow-disliked.png */,
+				15E686D31235AA79002D16B9 /* up-arrow-liked.png */,
 				15BBC1E91234B892001E20FC /* back.png */,
 				15BBC1EA1234B892001E20FC /* forward.png */,
 				15BBC1EB1234B892001E20FC /* refresh.png */,
@@ -440,6 +449,9 @@
 				15BBC1EC1234B892001E20FC /* back.png in Resources */,
 				15BBC1ED1234B892001E20FC /* forward.png in Resources */,
 				15BBC1EE1234B892001E20FC /* refresh.png in Resources */,
+				15E686D41235AA79002D16B9 /* down-arrow-disliked.png in Resources */,
+				15E686D51235AA79002D16B9 /* up-arrow-liked.png in Resources */,
+				15B89FCF12372E9000E09833 /* item-bg.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -42,6 +42,13 @@
   return EMPTY_ARRAY;
 }
 
+- (DKDeferred *)vote:(int)d item:(NSString *)theid subreddit:(NSString *)sub username:(NSString *)un
+{
+  return [[DKDeferred rest:REDDIT_URL] POST:@"api/vote" values:
+          dict_(theid, @"id", ([NSString stringWithFormat:@"%d", d]), @"dir", 
+          sub, @"r", PREF_KEY(@"modhash"), @"uh")];
+}
+
 - (DKDeferred *)subreddit:(NSString *)sub forUsername:(NSString *)username
 {
   if (!username) username = @"";
