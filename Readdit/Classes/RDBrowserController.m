@@ -100,6 +100,7 @@
     D = 1;
   } else if (D == -1 && E == 1) { // downvote with existing upvote
     Y = nsni(0);
+    D = -2;
   } else if (D == 1 && E == -1) { // upvote with no existing vote
     Y = nsni(1);
   } else if (D == 1 && E == 1) { // upvote with existing upvote
@@ -107,7 +108,7 @@
     D = -1;
   } else if (D == 1 && E == 0) { // upvote with existing downvote
     Y = nsni(1);
-    D = 1;
+    D = 2;
   }
   
   [_ setObject:Y forKey:@"likes"];
