@@ -10,9 +10,11 @@
 #import "YMRefreshView.h"
 #import "RDRedditClient.h"
 #import "RDItemCell.h"
-#import "NSDate+Helper.h"
 #import "RDBrowserController.h"
 #import <CoreGraphics/CoreGraphics.h>
+
+
+static UIFont *titleLabelFont = nil;
 
 
 @implementation RDSubredditController
@@ -22,6 +24,10 @@
 #pragma mark -
 #pragma mark Initialization
 
++ (void)initialize
+{
+  if (!titleLabelFont) titleLabelFont = [[UIFont boldSystemFontOfSize:15] retain];
+}
 
 - (id)initWithStyle:(UITableViewStyle)style 
 {
@@ -130,7 +136,6 @@
     return YES;
 }
 
-
 #pragma mark -
 #pragma mark Table view data source
 
@@ -138,7 +143,6 @@
 {
   return 1;
 }
-
 
 - (NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section 
 {
@@ -149,7 +153,7 @@
 {
   NSString *t = [[[items objectAtIndex:indexPath.row] objectForKey:@"data"] objectForKey:@"title"];
   CGFloat w = tableView.frame.size.width;
-  CGSize s = [t sizeWithFont:[UIFont boldSystemFontOfSize:15] constrainedToSize:
+  CGSize s = [t sizeWithFont:titleLabelFont constrainedToSize:
               CGSizeMake(w - 67 , 10000) lineBreakMode:UILineBreakModeWordWrap];
   CGFloat r = floor(s.height + 26 + (s.height*.15)); // woot line break FUDGE
   return (r >= 54 ? r : 54);
@@ -168,15 +172,23 @@
   }
   
   NSDictionary *item = [[items objectAtIndex:indexPath.row] objectForKey:@"data"];
+  [self configureCell:cell forItem:item];
+  return cell;
+}
+
+- (void)configureCell:(RDItemCell *)cell forItem:(NSDictionary *)item
+{
   cell.titleLabel.text = [item objectForKey:@"title"];
+  CGRect s = cell.titleLabel.frame;
+  s.size.height = [[item objectForKey:@"title"] sizeWithFont:titleLabelFont constrainedToSize:
+                   CGSizeMake(self.tableView.frame.size.width-67, 1000) lineBreakMode:UILineBreakModeWordWrap].height;
   cell.upvoteLabel.text = [[item objectForKey:@"score"] description];
   cell.commentLabel.text = [[item objectForKey:@"num_comments"] description];
   NSDate *created = [NSDate dateWithTimeIntervalSince1970:
                      [[item objectForKey:@"created_utc"] intValue]];
   cell.infoLabel.text = [NSString stringWithFormat:@"%@ by %@", 
-                         [created stringDaysAgo], [item objectForKey:@"author"]];
-  
-  return cell;
+                         [NSDate fastStringForDisplayFromDate:created],
+                         [item objectForKey:@"author"]];
 }
 
 #pragma mark -
@@ -188,6 +200,26 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
   RDBrowserController *c = (id)[(id)splitController.detailViewController topViewController];
   c.item = [[items objectAtIndex:indexPath.row] objectForKey:@"data"];
   c.username = username;
+  c.delegate = self;
+  if (currentItemIndexPath) [currentItemIndexPath release];
+  currentItemIndexPath = [indexPath copy];
+}
+
+- (void)didUpdateCurrentItem:(NSDictionary *)item
+{
+  NSMutableArray *a = [NSMutableArray arrayWithArray:items];
+  NSMutableDictionary *d = [NSMutableDictionary dictionaryWithDictionary:
+                            [a objectAtIndex:currentItemIndexPath.row]];
+  [d setObject:item forKey:@"data"];
+  [a replaceObjectAtIndex:currentItemIndexPath.row withObject:d];
+  NSArray *visible = [self.tableView indexPathsForVisibleRows];
+  if ([visible containsObject:currentItemIndexPath]) {
+    RDItemCell *cell = [[self.tableView visibleCells] objectAtIndex:
+                        [visible indexOfObject:currentItemIndexPath]];
+    [self configureCell:cell forItem:item];
+  }
+  [items release];
+  items = [a retain];
 }
 
 

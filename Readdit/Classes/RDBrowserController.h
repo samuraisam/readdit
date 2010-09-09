@@ -19,8 +19,10 @@
   IBOutlet UIBarButtonItem *forwardItem, *backItem, *refreshItem, *urlItem;
   NSDictionary *item;
   NSString *username;
+  id delegate;
 }
 
+@property (nonatomic, retain) id delegate;
 @property (nonatomic, retain) NSDictionary *item;
 @property (nonatomic, retain) MGSplitViewController *splitController;
 @property (nonatomic, retain) UIButton *upButton, *downButton;
@@ -31,5 +33,6 @@
 
 - (IBAction)upvote:(id)s;
 - (IBAction)downvote:(id)s;
+- (void)refreshVote;
 
 @end

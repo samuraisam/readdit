@@ -10,6 +10,7 @@
 #import "YMTableViewController.h"
 #import "MGSplitViewController.h"
 
+@class RDItemCell;
 
 @interface RDSubredditController : YMTableViewController 
 {
@@ -17,9 +18,12 @@
   NSString *username, *reddit;
   NSArray *items;
   BOOL didLoadCachedItems;
+  NSIndexPath *currentItemIndexPath;
 }
 
 @property(nonatomic, assign) MGSplitViewController *splitController;
 @property(nonatomic, retain) NSString *username, *reddit;
+
+- (void)configureCell:(RDItemCell *)cell forItem:(NSDictionary *)item;
 
 @end

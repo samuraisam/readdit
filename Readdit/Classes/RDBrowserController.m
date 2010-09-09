@@ -14,7 +14,7 @@
 
 @implementation RDBrowserController
 
-@synthesize splitController, item, username;
+@synthesize splitController, item, username, delegate;
 @synthesize upButton, downButton, titleLabel, infoLabel, submissionLabel, webView;
 @synthesize forwardItem, backItem, refreshItem, urlItem;
 
@@ -24,6 +24,7 @@
   refreshItem.enabled = NO;
   forwardItem.enabled = NO;
   if (item) [item release];
+  if (delegate) [delegate release];
   item = [i retain];
   NSURLRequest *req = [[[NSURLRequest alloc] initWithURL:
                         [NSURL URLWithString:[i objectForKey:@"url"]]] autorelease];
@@ -32,21 +33,32 @@
   NSDate *date = [NSDate dateWithTimeIntervalSince1970:intv([item objectForKey:@"created_utc"])];
   submissionLabel.text = [NSString stringWithFormat:@"%@ by %@ in %@", [date stringDaysAgo], 
                           [item objectForKey:@"author"], [item objectForKey:@"subreddit"]];
+  [self refreshVote];
+}
+
+- (void)refreshVote
+{
   infoLabel.text = [NSString stringWithFormat:@"%@ points | %@ comments", 
                     [[item objectForKey:@"score"] description], 
                     [[item objectForKey:@"num_comments"] description]];
   UIImage *up = [UIImage imageNamed:@"up-arrow.png"];
   UIImage *down = [UIImage imageNamed:@"down-arrow.png"];
-  if (![[i objectForKey:@"likes"] isEqual:[NSNull null]]) {
-    if (boolv([i objectForKey:@"likes"])) up = [UIImage imageNamed:@"up-arrow-liked.png"];
+  if (![[item objectForKey:@"likes"] isEqual:[NSNull null]]) {
+    if (boolv([item objectForKey:@"likes"])) up = [UIImage imageNamed:@"up-arrow-liked.png"];
     else down = [UIImage imageNamed:@"down-arrow-disliked.png"];
   }
   [downButton setImage:down forState:UIControlStateNormal];
   [upButton setImage:up forState:UIControlStateNormal];
 }
 
+- (void)webViewDidStartLoad:(UIWebView *)webView
+{
+  [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+}
+
 - (void)webViewDidFinishLoad:(UIWebView *)v
 {
+  [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
   backItem.enabled = v.canGoBack;
   forwardItem.enabled = v.canGoForward;
   refreshItem.enabled = YES;
@@ -58,7 +70,9 @@
   [[[RDRedditClient sharedClient] vote:v item:
    [item objectForKey:@"name"] subreddit:
     [item objectForKey:@"subreddit"] username:username] 
-   addBoth:callbackTS(self, _didVote:)];
+   addBoth:curryTS(self, @selector(_didVoteDirection::), nsni(v))];
+  [downButton setEnabled:NO];
+  [upButton setEnabled:NO];
 }
 
 - (void)downvote:(UIButton *)sender
@@ -67,13 +81,47 @@
   [[[RDRedditClient sharedClient] vote:v item:
     [item objectForKey:@"name"] subreddit:
     [item objectForKey:@"subreddit"] username:username]
-   addBoth:callbackTS(self, _didVote:)];
+   addBoth:curryTS(self, @selector(_didVoteDirection::), nsni(v))];
+  [downButton setEnabled:NO];
+  [upButton setEnabled:NO];
 }
 
-- (id)_didVote:(id)r
+- (id)_didVoteDirection:(id)d :(id)r
 {
-  NSLog(@"didVote %@", [[[NSString alloc] initWithData:r encoding:
-                         NSUTF8StringEncoding] autorelease]);
+  NSLog(@"didVote %@ %@", d, r);
+  NSMutableDictionary *_ = [[item mutableCopy] autorelease];
+  int E = [[_ objectForKey:@"likes"] isEqual:[NSNull null]] ? -1 : intv([_ objectForKey:@"likes"]);
+  int D = intv(d);
+  id  Y = nil;
+  if (D == -1 && E == -1) { // downvote with no existing vote
+    Y = nsni(0);
+  } else if (D == -1 && E == 0) { // downvote with existing downvote
+    Y = [NSNull null];
+    D = 1;
+  } else if (D == -1 && E == 1) { // downvote with existing upvote
+    Y = nsni(0);
+  } else if (D == 1 && E == -1) { // upvote with no existing vote
+    Y = nsni(1);
+  } else if (D == 1 && E == 1) { // upvote with existing upvote
+    Y = [NSNull null];
+    D = -1;
+  } else if (D == 1 && E == 0) { // upvote with existing downvote
+    Y = nsni(1);
+    D = 1;
+  }
+  
+  [_ setObject:Y forKey:@"likes"];
+  [_ setObject:nsni(intv([_ objectForKey:@"score"]) + D) forKey:@"score"];
+  
+  if (delegate && [delegate respondsToSelector:@selector(didUpdateCurrentItem:)]) {
+    [delegate performSelector:@selector(didUpdateCurrentItem:) withObject:_];
+  }
+  
+  [item release];
+  item = [_ retain];
+  [self refreshVote];
+  [downButton setEnabled:YES];
+  [upButton setEnabled:YES];
   return r;
 }
 
@@ -144,6 +192,7 @@
 
 - (void)dealloc 
 {
+  self.delegate = nil;
   self.splitController = nil;
   self.upButton = nil; 
   self.downButton = nil; 

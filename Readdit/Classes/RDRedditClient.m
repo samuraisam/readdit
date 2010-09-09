@@ -44,9 +44,20 @@
 
 - (DKDeferred *)vote:(int)d item:(NSString *)theid subreddit:(NSString *)sub username:(NSString *)un
 {
-  return [[DKDeferred rest:REDDIT_URL] POST:@"api/vote" values:
+  return [[[DKDeferred rest:REDDIT_URL] POST:@"api/vote" values:
           dict_(theid, @"id", ([NSString stringWithFormat:@"%d", d]), @"dir", 
-          sub, @"r", PREF_KEY(@"modhash"), @"uh")];
+                sub, @"r", PREF_KEY(@"modhash"), @"uh")] 
+          addCallback:callbackTS(self, _didVote:)];
+}
+
+- (id)_didVote:(id)r
+{
+  id d = nil;
+  if ([r isKindOfClass:[NSData class]] && [(d = [[[[NSString alloc] initWithData:r encoding:
+      NSUTF8StringEncoding] autorelease] JSONValue]) isKindOfClass:[NSDictionary class]]) {
+    return @"success";
+  }
+  return @"failure";
 }
 
 - (DKDeferred *)subreddit:(NSString *)sub forUsername:(NSString *)username
