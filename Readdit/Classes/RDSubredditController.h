@@ -22,7 +22,7 @@
 }
 
 @property(nonatomic, assign) MGSplitViewController *splitController;
-@property(nonatomic, retain) NSString *username, *reddit;
+@property(copy) NSString *username, *reddit;
 
 - (void)configureCell:(RDItemCell *)cell forItem:(NSDictionary *)item;
 

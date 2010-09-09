@@ -29,7 +29,7 @@
 @property (nonatomic, retain) UILabel *titleLabel, *submissionLabel, *infoLabel;
 @property (nonatomic, retain) UIBarButtonItem *forwardItem, *backItem, *refreshItem, *urlItem;
 @property (nonatomic, retain) UIWebView *webView;
-@property (retain) NSString *username;
+@property (copy) NSString *username;
 
 - (IBAction)upvote:(id)s;
 - (IBAction)downvote:(id)s;

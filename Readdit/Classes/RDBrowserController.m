@@ -90,7 +90,8 @@
 {
   NSLog(@"didVote %@ %@", d, r);
   NSMutableDictionary *_ = [[item mutableCopy] autorelease];
-  int E = [[_ objectForKey:@"likes"] isEqual:[NSNull null]] ? -1 : intv([_ objectForKey:@"likes"]);
+  int E = [[_ objectForKey:@"likes"] isEqual:[NSNull null]] 
+            ? -1 : intv([_ objectForKey:@"likes"]);
   int D = intv(d);
   id  Y = nil;
   if (D == -1 && E == -1) { // downvote with no existing vote

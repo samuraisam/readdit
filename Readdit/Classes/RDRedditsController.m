@@ -18,6 +18,7 @@
 @interface RDRedditsController (PrivateParts)
 
 - (void)privateInit;
+- (RDSubredditController *)subredditsController;
 
 @end
 
@@ -46,7 +47,7 @@
 {
   self.actionTableViewHeaderClass = [YMRefreshView class];
   // TODO: multi-user support
-  username = [PREF_KEY(@"username") retain];
+  username = [PREF_KEY(@"username") copy];
   performingInitialSync = firstSyncCompleted = NO;
   reddits = [EMPTY_ARRAY retain];
   builtins = [array_(array_(@"Front Page", @"/"), array_(@"All", @"/r/all/"), array_(@"Top", @"/top/"), 
@@ -55,6 +56,14 @@
                       array_(@"Friends", @"/r/friends/"), array_(@"Submitted", @"/user/$username/submitted/"),
                       array_(@"Liked", @"/user/$username/liked/"), array_(@"Disliked", @"/user/$username/disliked/"),
                       array_(@"Hidden", @"/user/$username/hidden/")) retain];
+}
+
+- (RDSubredditController *)subredditController
+{
+  if (!redditViewController)
+    redditViewController = [[RDSubredditController alloc] 
+                            initWithStyle:UITableViewStylePlain];
+  return redditViewController;
 }
 
 #pragma mark -
@@ -207,8 +216,7 @@
 
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-  RDSubredditController *c = [[[RDSubredditController alloc] initWithStyle:
-                               UITableViewStylePlain] autorelease];
+  RDSubredditController *c = [self subredditController];
   NSString *reddit = @"";
   if (indexPath.section < 2) {
     NSArray *a = (indexPath.section == 0 ? builtins : builtins2);
@@ -244,6 +252,7 @@
 
 - (void)dealloc 
 {
+  [reddits release];
   [username release];
   [builtins release];
   [reddits release];

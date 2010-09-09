@@ -97,6 +97,19 @@ static UIFont *titleLabelFont = nil;
   return r;
 }
 
+- (void)setReddit:(NSString *)r
+{
+  if (reddit) [reddit release];
+  reddit = [r copy];
+  didLoadCachedItems = NO;
+}
+
+- (void)setUsername:(NSString *)u
+{
+  if (username) [username release];
+  username = [u copy];
+  didLoadCachedItems = NO;
+}
 
 - (void)viewDidAppear:(BOOL)animated 
 {
@@ -198,11 +211,13 @@ static UIFont *titleLabelFont = nil;
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
   RDBrowserController *c = (id)[(id)splitController.detailViewController topViewController];
-  c.item = [[items objectAtIndex:indexPath.row] objectForKey:@"data"];
+  id i = [[[items objectAtIndex:indexPath.row] objectForKey:@"data"] copy];
+  c.item =  i;
   c.username = username;
   c.delegate = self;
   if (currentItemIndexPath) [currentItemIndexPath release];
   currentItemIndexPath = [indexPath copy];
+  [i release];
 }
 
 - (void)didUpdateCurrentItem:(NSDictionary *)item

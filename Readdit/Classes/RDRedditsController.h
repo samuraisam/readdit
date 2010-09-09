@@ -9,12 +9,13 @@
 #import <UIKit/UIKit.h>
 #import "YMTableViewController.h"
 
-@class RDBrowserController;
+@class RDBrowserController, RDSubredditController;
 @class MGSplitViewController;
 
 @interface RDRedditsController : YMTableViewController
 {
   RDBrowserController *detailViewController;
+  RDSubredditController *redditViewController;
   IBOutlet MGSplitViewController *splitController;
   BOOL performingInitialSync, firstSyncCompleted;
   NSArray *reddits;

@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		158A9F3B12398EC1004696EE /* icon-72.png in Resources */ = {isa = PBXBuildFile; fileRef = 158A9F3812398EC1004696EE /* icon-72.png */; };
+		158A9F4012398FAF004696EE /* icon-29.png in Resources */ = {isa = PBXBuildFile; fileRef = 158A9F3E12398FAF004696EE /* icon-29.png */; };
+		158A9F4112398FAF004696EE /* icon-50.png in Resources */ = {isa = PBXBuildFile; fileRef = 158A9F3F12398FAF004696EE /* icon-50.png */; };
 		15B89FCF12372E9000E09833 /* item-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 15B89FCE12372E9000E09833 /* item-bg.png */; };
 		15B8D930123413A3008DA31D /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 15B8D92F123413A3008DA31D /* libsqlite3.0.dylib */; };
 		15B8D95912341A7F008DA31D /* MGSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B8D95412341A7F008DA31D /* MGSplitViewController.m */; };
@@ -71,6 +74,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		158A9F3812398EC1004696EE /* icon-72.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon-72.png"; path = "Resources/icon-72.png"; sourceTree = "<group>"; };
+		158A9F3E12398FAF004696EE /* icon-29.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon-29.png"; path = "Resources/icon-29.png"; sourceTree = "<group>"; };
+		158A9F3F12398FAF004696EE /* icon-50.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "icon-50.png"; path = "Resources/icon-50.png"; sourceTree = "<group>"; };
 		15B89FCE12372E9000E09833 /* item-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "item-bg.png"; path = "Resources/images/item-bg.png"; sourceTree = "<group>"; };
 		15B8D92F123413A3008DA31D /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		15B8D95312341A7F008DA31D /* MGSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MGSplitViewController.h; path = Lib/MGSplitViewController.h; sourceTree = "<group>"; };
@@ -362,6 +368,9 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				158A9F3812398EC1004696EE /* icon-72.png */,
+				158A9F3E12398FAF004696EE /* icon-29.png */,
+				158A9F3F12398FAF004696EE /* icon-50.png */,
 				15B89FCE12372E9000E09833 /* item-bg.png */,
 				15E686D21235AA79002D16B9 /* down-arrow-disliked.png */,
 				15E686D31235AA79002D16B9 /* up-arrow-liked.png */,
@@ -452,6 +461,9 @@
 				15E686D41235AA79002D16B9 /* down-arrow-disliked.png in Resources */,
 				15E686D51235AA79002D16B9 /* up-arrow-liked.png in Resources */,
 				15B89FCF12372E9000E09833 /* item-bg.png in Resources */,
+				158A9F3B12398EC1004696EE /* icon-72.png in Resources */,
+				158A9F4012398FAF004696EE /* icon-29.png in Resources */,
+				158A9F4112398FAF004696EE /* icon-50.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
