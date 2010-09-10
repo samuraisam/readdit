@@ -10,19 +10,24 @@
 #import "YMTableViewController.h"
 #import "MGSplitViewController.h"
 
-@class RDItemCell;
+@class RDItemCell, RDBrowserController;
 
 @interface RDSubredditController : YMTableViewController 
 {
-  MGSplitViewController *splitController;
+  IBOutlet MGSplitViewController *splitController;
+  IBOutlet RDBrowserController *browserController;
   NSString *username, *reddit;
   NSArray *items;
   BOOL didLoadCachedItems;
   NSIndexPath *currentItemIndexPath;
+  BOOL didLoadFromLaunch;
 }
 
-@property(nonatomic, assign) MGSplitViewController *splitController;
+@property(nonatomic, retain) MGSplitViewController *splitController;
+@property(nonatomic, retain) RDBrowserController *browserController;
 @property(copy) NSString *username, *reddit;
+@property(assign) BOOL didLoadFromLaunch;
+@property(nonatomic, retain) NSArray *items;
 
 - (void)configureCell:(RDItemCell *)cell forItem:(NSDictionary *)item;
 

@@ -10,13 +10,14 @@
 #import "RDRedditsController.h"
 #import "NSDate+Helper.h"
 #import "RDRedditClient.h"
+#import "SHK.h"
 
 
 @implementation RDBrowserController
 
 @synthesize splitController, item, username, delegate;
 @synthesize upButton, downButton, titleLabel, infoLabel, submissionLabel, webView;
-@synthesize forwardItem, backItem, refreshItem, urlItem;
+@synthesize forwardItem, backItem, refreshItem, urlItem, actionItem;
 
 - (void)setItem:(NSDictionary *)i
 {
@@ -24,15 +25,42 @@
   refreshItem.enabled = NO;
   forwardItem.enabled = NO;
   if (item) [item release];
-  if (delegate) [delegate release];
   item = [i retain];
-  NSURLRequest *req = [[[NSURLRequest alloc] initWithURL:
-                        [NSURL URLWithString:[i objectForKey:@"url"]]] autorelease];
-  if (webView) [webView loadRequest:req];
+  NSMutableURLRequest *req = [[[NSMutableURLRequest alloc] initWithURL:
+                               [NSURL URLWithString:[i objectForKey:@"url"]] cachePolicy:
+                               NSURLRequestReturnCacheDataElseLoad timeoutInterval:15.0] autorelease];
+  if (boolv([i objectForKey:@"is_self"])) {
+    [req setValue:PREF_KEY(@"cookie") forHTTPHeaderField:@"Cookie"];
+  }
+  
+  UIWebView *wv = [[UIWebView alloc] initWithFrame:webView.frame];
+  [webView removeFromSuperview];
+  if (webView) [webView release];
+  webView = wv;
+  webView.delegate = self;
+  webView.scalesPageToFit = YES;
+  webView.dataDetectorTypes = UIDataDetectorTypeLink | UIDataDetectorTypePhoneNumber;
+  [self.view addSubview:webView];
+  [webView loadRequest:req];
+  
   titleLabel.text = [item objectForKey:@"title"];
   NSDate *date = [NSDate dateWithTimeIntervalSince1970:intv([item objectForKey:@"created_utc"])];
-  submissionLabel.text = [NSString stringWithFormat:@"%@ by %@ in %@", [date stringDaysAgo], 
-                          [item objectForKey:@"author"], [item objectForKey:@"subreddit"]];
+  submissionLabel.text = [NSString stringWithFormat:@"%@ in", [NSDate stringForDisplayFromDate:date]];
+  
+  [submissionLabel sizeToFit];
+  [redditButton setTitle:[item objectForKey:@"subreddit"] forState:UIControlStateNormal];
+  [redditButton sizeToFit];
+  redditButton.frame = CGRectMake(submissionLabel.frame.origin.x + submissionLabel.frame.size.width + 5, 
+                                  redditButton.frame.origin.y, redditButton.frame.size.width + 20, 25);
+  byLabel.frame = CGRectMake(redditButton.frame.origin.x + redditButton.frame.size.width + 5, 
+                             byLabel.frame.origin.y, byLabel.frame.size.width, byLabel.frame.size.height);
+  [authorButton setTitle:[item objectForKey:@"author"] forState:UIControlStateNormal];
+  [authorButton sizeToFit];
+  authorButton.frame = CGRectMake(byLabel.frame.origin.x + byLabel.frame.size.width + 5, 
+                                  authorButton.frame.origin.y, authorButton.frame.size.width + 20, 25);
+  
+  [urlButton setTitle:[i objectForKey:@"url"] forState:UIControlStateNormal];
+  [urlButton setEnabled:YES];
   [self refreshVote];
 }
 
@@ -73,6 +101,7 @@
    addBoth:curryTS(self, @selector(_didVoteDirection::), nsni(v))];
   [downButton setEnabled:NO];
   [upButton setEnabled:NO];
+  [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
 }
 
 - (void)downvote:(UIButton *)sender
@@ -84,6 +113,27 @@
    addBoth:curryTS(self, @selector(_didVoteDirection::), nsni(v))];
   [downButton setEnabled:NO];
   [upButton setEnabled:NO];
+  [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+}
+
+- (void)gotoAuthor:(id)s
+{
+}
+
+- (void)gotoReddit:(id)s
+{
+}
+
+- (void)action:(id)s
+{
+  SHKItem *i = [SHKItem URL:[item objectForKey:@"url"] title:[item objectForKey:@"title"]];
+  
+	// Get the ShareKit action sheet
+	SHKActionSheet *actionSheet = [SHKActionSheet actionSheetForItem:i];
+  
+	// Display the action sheet
+	//[actionSheet showFromToolbar:self.navigationController.toolbar];
+  [actionSheet showFromBarButtonItem:actionItem animated:YES];
 }
 
 - (id)_didVoteDirection:(id)d :(id)r
@@ -124,6 +174,7 @@
   [self refreshVote];
   [downButton setEnabled:YES];
   [upButton setEnabled:YES];
+  [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
   return r;
 }
 
@@ -157,9 +208,69 @@
 - (void)viewDidLoad 
 {
   [super viewDidLoad];
+  HUD = nil;
   [self.navigationController setNavigationBarHidden:YES animated:NO];
-  self.toolbarItems = array_(backItem, forwardItem, refreshItem);
+  
+  if (!urlButton) {
+    urlButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+    [urlButton setBackgroundImage:
+     [[UIImage imageNamed:@"urlbackground.png"] stretchableImageWithLeftCapWidth:
+      100 topCapHeight:15] forState:UIControlStateNormal];
+    [urlButton setTitleColor:[UIColor colorWithHexString:@"2c3640"] forState:UIControlStateNormal];
+    [urlButton setFrame:CGRectMake(0, 0, 250, 31)];
+    urlButton.titleEdgeInsets = UIEdgeInsetsMake(0, 20, 0, 20);
+    urlButton.titleLabel.font = [UIFont boldSystemFontOfSize:15];
+    urlButton.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+    [urlButton setTitle:@"Choose a Link" forState:UIControlStateNormal];
+    urlButton.titleLabel.lineBreakMode = UILineBreakModeTailTruncation;
+    urlItem = [[UIBarButtonItem alloc] initWithCustomView:urlButton];
+    [urlButton addTarget:self action:@selector(didTouchURL:) forControlEvents:UIControlEventTouchUpInside];
+    [urlButton setEnabled:NO];
+  }
+  UIImage *stretchableItemBg = [[UIImage imageNamed:@"inlineitem.png"] 
+                            stretchableImageWithLeftCapWidth:11 topCapHeight:15];
+  [redditButton setBackgroundImage:stretchableItemBg forState:UIControlStateNormal];
+  [authorButton setBackgroundImage:stretchableItemBg forState:UIControlStateNormal];
+  UIBarButtonItem *sp = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:
+                          UIBarButtonSystemItemFlexibleSpace target:nil action:NULL] autorelease];
+  self.toolbarItems = array_(backItem, forwardItem, refreshItem, urlItem, sp, actionItem);
   [self.navigationController setToolbarHidden:NO animated:NO];
+}
+
+- (void)didTouchURL:(id)s
+{
+  UIActionSheet *actionSheet 
+    = [[[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:
+        nil destructiveButtonTitle:nil otherButtonTitles:
+        @"Copy to Clipboard", @"Open in Safari", nil] autorelease];
+  [actionSheet showFromBarButtonItem:urlItem animated:YES];
+}
+
+- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+  NSLog(@"buttonIndex %i", buttonIndex);
+  if (buttonIndex == 0) {
+    if (HUD) [HUD release];
+    HUD = [[MBProgressHUD alloc] initWithView:self.view];
+    [HUD setLabelText:@"Copied"];
+    [self.view addSubview:HUD];
+    [HUD setMode:MBProgressHUDModeDeterminate];
+    [HUD setProgress:1.0];
+    [HUD show:YES];
+    [[UIPasteboard generalPasteboard] addItems:
+     array_(dict_([item objectForKey:@"url"], @"string"))];
+    [HUD performSelector:@selector(hide:) withObject:@"" afterDelay:.5];
+  } else if (buttonIndex == 1) {
+    [[UIApplication sharedApplication] openURL:
+     [NSURL URLWithString:[item objectForKey:@"url"]]];
+  }
+}
+  
+- (void) hudWasHidden
+{
+  [HUD removeFromSuperview];
+  [HUD release];
+  HUD = nil;
 }
 
 /*
@@ -185,6 +296,7 @@
 
 - (void)viewDidUnload 
 {
+  NSLog(@"view did unload %@", self);
 }
 
 
@@ -194,6 +306,9 @@
 
 - (void)dealloc 
 {
+  [HUD release];
+  [urlButton release];
+  self.actionItem = nil;
   self.delegate = nil;
   self.splitController = nil;
   self.upButton = nil; 

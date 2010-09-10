@@ -17,9 +17,16 @@
 static UIFont *titleLabelFont = nil;
 
 
+@interface RDSubredditController (PrivateParts)
+  
+- (void)privateInit;
+
+@end
+
+
 @implementation RDSubredditController
 
-@synthesize username, reddit, splitController;
+@synthesize username, reddit, splitController, browserController, didLoadFromLaunch, items;
 
 #pragma mark -
 #pragma mark Initialization
@@ -32,12 +39,32 @@ static UIFont *titleLabelFont = nil;
 - (id)initWithStyle:(UITableViewStyle)style 
 {
   if ((self = [super initWithStyle:style])) {
-    username = reddit = nil;
-    items = [EMPTY_ARRAY retain];
-    didLoadCachedItems = NO;
-    self.actionTableViewHeaderClass = [YMRefreshView class];
+    [self privateInit];
   }
   return self;
+}
+
+- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
+{
+  if ((self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil])) {
+    [self privateInit];
+  } return self;
+}
+
+- (id)initWithCoder:(NSCoder *)aDecoder
+{
+  if ((self = [super initWithCoder:aDecoder])) {
+    [self privateInit];
+  } return self;
+}
+
+- (void)privateInit
+{
+  username = reddit = nil;
+  items = [EMPTY_ARRAY retain];
+  didLoadCachedItems = NO;
+  self.actionTableViewHeaderClass = [YMRefreshView class];
+  currentItemIndexPath = nil;
 }
 
 #pragma mark -
@@ -88,13 +115,21 @@ static UIFont *titleLabelFont = nil;
     if (items) [items release];
     items = [r retain];
     NSDate *d = [NSDate date];
-    PREF_SET(([NSString stringWithFormat:@"%@%@lastupdated", username, reddit]), nsni([d timeIntervalSince1970]));
+    PREF_SET(([NSString stringWithFormat:@"%@%@lastupdated", username, reddit]),
+             nsni([d timeIntervalSince1970]));
     PREF_SYNCHRONIZE;
     [(YMRefreshView *)self.refreshHeaderView setLastUpdatedDate:d];
     [self dataSourceDidFinishLoadingNewData];
     [self.tableView reloadData];
   }
   return r;
+}
+
+- (void)setItems:(NSArray *)i
+{
+  if (items) [items release];
+  items = [i retain];
+  [self.tableView reloadData];
 }
 
 - (void)setReddit:(NSString *)r
@@ -210,13 +245,14 @@ static UIFont *titleLabelFont = nil;
 - (void)tableView:(UITableView *)tableView 
 didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-  RDBrowserController *c = (id)[(id)splitController.detailViewController topViewController];
+  //RDBrowserController *c = (id)[(id)splitController.detailViewController topViewController];
   id i = [[[items objectAtIndex:indexPath.row] objectForKey:@"data"] copy];
-  c.item =  i;
-  c.username = username;
-  c.delegate = self;
-  if (currentItemIndexPath) [currentItemIndexPath release];
-  currentItemIndexPath = [indexPath copy];
+  browserController.item =  i;
+  browserController.username = username;
+  browserController.delegate = self;
+  currentItemIndexPath = nil;
+  currentItemIndexPath = [[NSIndexPath indexPathForRow:indexPath.row inSection:0] retain];
+  NSLog(@"current index? %@", currentItemIndexPath);
   [i release];
 }
 
@@ -248,11 +284,13 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 
 - (void)viewDidUnload 
 {
+  NSLog(@"view did unload %@", self);
 }
 
 
 - (void)dealloc 
 {
+  [browserController release];
   [items release];
   [splitController release];
   [username release];

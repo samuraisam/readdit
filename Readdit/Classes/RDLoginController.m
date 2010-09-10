@@ -207,6 +207,7 @@
 
 - (void)dealloc 
 {
+  [splitController release];
   [super dealloc];
 }
 

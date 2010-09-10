@@ -53,6 +53,7 @@
 
 - (void)applicationDidReceiveMemoryWarning:(UIApplication *)application 
 {
+  NSLog(@"application did receive memory warning");
 }
 
 

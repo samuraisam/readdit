@@ -14,8 +14,8 @@
 
 @interface RDRedditsController : YMTableViewController
 {
-  RDBrowserController *detailViewController;
-  RDSubredditController *redditViewController;
+  IBOutlet RDBrowserController *detailViewController;
+  IBOutlet RDSubredditController *redditViewController;
   IBOutlet MGSplitViewController *splitController;
   BOOL performingInitialSync, firstSyncCompleted;
   NSArray *reddits;
@@ -25,6 +25,7 @@
 
 @property (nonatomic, retain) IBOutlet MGSplitViewController *splitController;
 @property (nonatomic, retain) IBOutlet RDBrowserController *detailViewController;
+@property (nonatomic, retain) IBOutlet RDSubredditController *redditViewController;
 @property (nonatomic, retain) NSString *username;
 
 @end

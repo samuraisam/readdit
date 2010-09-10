@@ -18,14 +18,13 @@
 @interface RDRedditsController (PrivateParts)
 
 - (void)privateInit;
-- (RDSubredditController *)subredditsController;
 
 @end
 
 
 @implementation RDRedditsController
 
-@synthesize detailViewController, splitController, username;
+@synthesize detailViewController, splitController, username, redditViewController;
 
 - (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
 {
@@ -58,13 +57,6 @@
                       array_(@"Hidden", @"/user/$username/hidden/")) retain];
 }
 
-- (RDSubredditController *)subredditController
-{
-  if (!redditViewController)
-    redditViewController = [[RDSubredditController alloc] 
-                            initWithStyle:UITableViewStylePlain];
-  return redditViewController;
-}
 
 #pragma mark -
 #pragma mark View lifecycle
@@ -74,7 +66,6 @@
   [super viewDidLoad];
   self.clearsSelectionOnViewWillAppear = YES;
   self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
-  self.navigationController.navigationBar.tintColor = [UIColor colorWithHexString:@"bdc5ca"];
 }
 
 - (void)viewWillAppear:(BOOL)animated 
@@ -216,25 +207,24 @@
 
 - (void)tableView:(UITableView *)aTableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath 
 {
-  RDSubredditController *c = [self subredditController];
   NSString *reddit = @"";
   if (indexPath.section < 2) {
     NSArray *a = (indexPath.section == 0 ? builtins : builtins2);
-    c.title = [[a objectAtIndex:indexPath.row] objectAtIndex:0];
+    redditViewController.title = [[a objectAtIndex:indexPath.row] objectAtIndex:0];
     NSString *s = [[[a objectAtIndex:indexPath.row] objectAtIndex:1]
                    stringByReplacingOccurrencesOfString:
                    @"$username" withString:username];
     reddit = s;
   } else {
-    c.title = [[[reddits objectAtIndex:indexPath.row] objectForKey:@"data"]
+    redditViewController.title = [[[reddits objectAtIndex:indexPath.row] objectForKey:@"data"]
                objectForKey:@"display_name"];
     reddit = [[[reddits objectAtIndex:indexPath.row] objectForKey:@"data"] 
                 objectForKey:@"url"];
   }
-  c.username = username;
-  c.reddit = [reddit stringByReplacingOccurrencesOfRegex:@"^/" withString:@""];
-  c.splitController = self.splitController;
-  [self.navigationController pushViewController:c animated:YES];
+  redditViewController.items = EMPTY_ARRAY;
+  redditViewController.username = username;
+  redditViewController.reddit = [reddit stringByReplacingOccurrencesOfRegex:@"^/" withString:@""];
+  [self.navigationController pushViewController:redditViewController animated:YES];
 }
 
 
@@ -248,14 +238,17 @@
 
 - (void)viewDidUnload 
 {
+  NSLog(@"view did unload %@", self);
 }
 
 - (void)dealloc 
 {
+  NSLog(@"dealloc %@", self);
   [reddits release];
   [username release];
   [builtins release];
   [reddits release];
+  [redditViewController release];
   [detailViewController release];
   [super dealloc];
 }

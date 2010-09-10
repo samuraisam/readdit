@@ -21,6 +21,6 @@
 }
 
 @property(nonatomic, retain) id delegate;
-@property(nonatomic, assign) MGSplitViewController *splitController;
+@property(nonatomic, retain) MGSplitViewController *splitController;
 
 @end

@@ -9,7 +9,8 @@
 #import <UIKit/UIKit.h>
 
 
-@interface RDItemCell : UITableViewCell {
+@interface RDItemCell : UITableViewCell 
+{
   IBOutlet UILabel *upvoteLabel, *commentLabel, *infoLabel, *titleLabel;
 }
 
