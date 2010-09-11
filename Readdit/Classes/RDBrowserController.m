@@ -127,12 +127,7 @@
 - (void)action:(id)s
 {
   SHKItem *i = [SHKItem URL:[item objectForKey:@"url"] title:[item objectForKey:@"title"]];
-  
-	// Get the ShareKit action sheet
 	SHKActionSheet *actionSheet = [SHKActionSheet actionSheetForItem:i];
-  
-	// Display the action sheet
-	//[actionSheet showFromToolbar:self.navigationController.toolbar];
   [actionSheet showFromBarButtonItem:actionItem animated:YES];
 }
 
@@ -278,11 +273,14 @@
     [super viewWillAppear:animated];
 }
 */
-/*
+
 - (void)viewDidAppear:(BOOL)animated {
-    [super viewDidAppear:animated];
+  [super viewDidAppear:animated];
+  CGRect f = urlButton.frame;
+  f.size.width = self.navigationController.toolbar.frame.size.width - 226;
+  urlButton.frame = f;
 }
-*/
+
 /*
 - (void)viewWillDisappear:(BOOL)animated {
     [super viewWillDisappear:animated];
