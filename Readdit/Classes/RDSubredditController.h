@@ -21,6 +21,7 @@
   BOOL didLoadCachedItems;
   NSIndexPath *currentItemIndexPath;
   BOOL didLoadFromLaunch;
+  id<DKKeyedPool> loadingPool;
 }
 
 @property(nonatomic, retain) MGSplitViewController *splitController;

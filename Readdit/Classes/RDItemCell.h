@@ -12,8 +12,10 @@
 @interface RDItemCell : UITableViewCell 
 {
   IBOutlet UILabel *upvoteLabel, *commentLabel, *infoLabel, *titleLabel;
+  IBOutlet UIImageView *thumbnail;
 }
 
 @property(nonatomic, retain) UILabel *upvoteLabel, *commentLabel, *infoLabel, *titleLabel;
+@property(nonatomic, retain) UIImageView *thumbnail;
 
 @end

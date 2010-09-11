@@ -13,6 +13,7 @@
 #import "RDLoginController.h"
 #import "YMRefreshView.h"
 #import "RDSubredditController.h"
+#import "NSObject+UIKitGenericErrorHandling.h"
 
 
 @interface RDRedditsController (PrivateParts)
@@ -127,6 +128,12 @@
 
 - (id)_gotSubreddits:(id)r
 {
+  [self dataSourceDidFinishLoadingNewData];
+  performingInitialSync = NO;
+  [self.tableView reloadData];
+  
+  if ([r handleErrorAndAlert:YES]) return r;
+  
   NSLog(@"gotSubreddits %d", [r count]);
   if (isDeferred(r)) return [r addBoth:callbackTS(self, _gotSubreddits:)];
   NSDate *d = [NSDate date];
@@ -135,9 +142,6 @@
   [(YMRefreshView *)self.refreshHeaderView setLastUpdatedDate:d];
   if (reddits) [reddits release];
   reddits = [r retain];
-  [self dataSourceDidFinishLoadingNewData];
-  performingInitialSync = NO;
-  [self.tableView reloadData];
   return r;
 }
 

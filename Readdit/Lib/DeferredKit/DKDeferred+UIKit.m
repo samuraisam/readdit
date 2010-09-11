@@ -12,19 +12,56 @@
 @implementation DKDeferred (UIKitAdditions)
 
 + (id)loadImage:(NSString *)aUrl cached:(BOOL)cached paused:(BOOL)_paused {
-  DKDeferred *d;
-  if (cached) {
-    d = [[DKDeferred cache] valueForKey:aUrl paused:_paused];
-//    if (_paused)
-//      d = pauseDeferred(d);
-    [d addCallback:curryTS((id)self, 
-     @selector(_cachedLoadURLCallback:cacheTimeout:results:), aUrl,
-     [NSNumber numberWithInt:INT_MAX])];
-  } else {
-    d = [self loadURL:aUrl paused:_paused];
-  }
-  [d addCallback:curryTS((id)self, @selector(_loadImageCallback:results:), aUrl)];
+//  DKDeferred *d;
+//  if (cached) {
+//    d = [[DKDeferred cache] valueForKey:aUrl paused:_paused];
+////    if (_paused)
+////      d = pauseDeferred(d);
+//    [d addCallback:curryTS((id)self, 
+//     @selector(_cachedLoadURLCallback:cacheTimeout:results:), aUrl,
+//     [NSNumber numberWithInt:INT_MAX])];
+//  } else {
+//    d = [self loadURL:aUrl paused:_paused];
+//  }
+//  [d addCallback:curryTS((id)self, @selector(_loadImageCallback:results:), aUrl)];
+//  return d;
+  DKDeferred *d = nil;
+  if (cached) d = [[[DKDeferred cache] valueForKey:aUrl paused:_paused] addCallback:
+                  curryTS(self, @selector(_gotCachedImageKey:results:), aUrl)];
+  else d = [[self loadURL:aUrl paused:_paused] addCallback:
+            curryTS(self, @selector(_gotUncachedImageKey:results:), aUrl)];
   return d;
+}
+
++ (id)_gotCachedImageKey:(NSString *)key results:(id)r
+{
+  if (r && ![r isEqual:[NSNull null]]) return r;
+  return [[DKDeferred loadURL:key paused:NO] addCallback:
+          curryTS(self, @selector(_cacheImageKey:results:), key)];
+}
+
++ (id)_cacheImageKey:(id)k results:(id)r
+{
+  if ([r isKindOfClass:[NSData class]]) {
+    r = [UIImage imageWithData:r];
+    if (r) {
+      [[DKDeferred cache] setValue:r forKey:k timeout:INT_MAX];
+      return r;
+    } else {
+      return [NSNull null];
+    }
+  }
+  return nil;
+}
+
++ (id)_gotUncachedImageKey:(id)k results:(id)r
+{
+  if ([r isKindOfClass:[NSData class]]) {
+    r = [UIImage imageWithData:r];
+    if (!r) return [NSNull null];
+    return r;
+  }
+  return nil;
 }
 
 + (id)loadImage:(NSString *)aUrl sizeTo:(CGSize)size cached:(BOOL)cached paused:(BOOL)_paused

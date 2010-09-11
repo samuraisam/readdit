@@ -19,4 +19,5 @@
   #define PREF_KEY(__key) [[NSUserDefaults standardUserDefaults] objectForKey:(__key)]
   #define PREF_SYNCHRONIZE [[NSUserDefaults standardUserDefaults] synchronize]
   #define PREF_SET(__key, __value) [[NSUserDefaults standardUserDefaults] setObject:(__value) forKey:(__key)]
+
 #endif

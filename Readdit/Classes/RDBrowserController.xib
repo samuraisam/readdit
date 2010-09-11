@@ -122,7 +122,7 @@
 							<double key="NSSize">18</double>
 							<int key="NSfFlags">16</int>
 						</object>
-						<object class="NSColor" key="IBUITextColor">
+						<object class="NSColor" key="IBUITextColor" id="287234262">
 							<int key="NSColorSpace">1</int>
 							<bytes key="NSRGB">MCAwIDAAA</bytes>
 						</object>
@@ -225,7 +225,7 @@
 						<reference key="IBUIFont" ref="583024135"/>
 						<string key="IBUINormalTitle">fffffffuuuuuuuuuuuu</string>
 						<reference key="IBUIHighlightedTitleColor" ref="56538253"/>
-						<reference key="IBUINormalTitleColor" ref="56538253"/>
+						<reference key="IBUINormalTitleColor" ref="287234262"/>
 						<reference key="IBUINormalTitleShadowColor" ref="941111448"/>
 					</object>
 					<object class="IBUIButton" id="712367525">
@@ -240,7 +240,7 @@
 						<reference key="IBUIFont" ref="583024135"/>
 						<string key="IBUINormalTitle">sam</string>
 						<reference key="IBUIHighlightedTitleColor" ref="56538253"/>
-						<reference key="IBUINormalTitleColor" ref="56538253"/>
+						<reference key="IBUINormalTitleColor" ref="287234262"/>
 						<reference key="IBUINormalTitleShadowColor" ref="941111448"/>
 					</object>
 				</object>

@@ -9,6 +9,7 @@
 #import "RDRedditClient.h"
 #import "RegexKitLite.h"
 #import "DKDeferredSqliteCache.h"
+#import "NSObject+UIKitGenericErrorHandling.h"
 
 
 @implementation RDRedditClient
@@ -80,6 +81,7 @@
 
 - (id)_gotSubredditUsername:(NSString *)username method:(NSString *)method results:(id)r
 {
+  if ([r handleErrorAndAlert:NO]) return r;
   id ret = EMPTY_ARRAY;
   id d = [[[[NSString alloc] initWithData:r encoding:
             NSUTF8StringEncoding] autorelease] JSONValue];
@@ -138,9 +140,12 @@
 {
   if (isDeferred(r)) return [r addCallback:curryTS(self, 
                              @selector(_cacheMethod:username:results:), method, username)];
+  
+  if ([r handleErrorAndAlert:NO]) return r;
+  
   NSString *key = [username stringByAppendingString:method];
   NSLog(@"caching %@", key);
-  [methodCache setValue:r forKey:key timeout:7200];
+  [methodCache setValue:r forKey:key timeout:INT_MAX];
   return r;
 }
 
