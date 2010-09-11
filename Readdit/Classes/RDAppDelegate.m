@@ -45,6 +45,9 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application 
 {
+  [DKDeferred cache].forceImmediateCaching = YES;
+  [[DKDeferred cache] purgeMemoryCache];
+  [DKDeferred cache].forceImmediateCaching = NO;
 }
 
 
