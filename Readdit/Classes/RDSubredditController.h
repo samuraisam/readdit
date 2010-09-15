@@ -27,6 +27,7 @@
   UIButton *nextButton;
   UIActivityIndicatorView *nextLoadingIndicator;
   BOOL loadingMore;
+  NSArray *seenItems;
 }
 
 @property(nonatomic, retain) MGSplitViewController *splitController;

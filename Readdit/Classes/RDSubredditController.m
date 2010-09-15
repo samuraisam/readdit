@@ -123,6 +123,9 @@ static UIFont *titleLabelFont = nil;
     if (items) [items release];
     items = [[r objectAtIndex:0] retain];
     next = (id)[[NSNull null] retain];
+    if (seenItems) [seenItems release];
+    seenItems = [[[RDRedditClient sharedClient] seenItemsForSubreddit:reddit 
+                                                  username:username] retain];
   } else {
     NSLog(@"cached reddit miss %@", r);
   }
@@ -155,6 +158,9 @@ static UIFont *titleLabelFont = nil;
     if (next) [next release];
     next = [[r objectAtIndex:1] retain];
     nextButton.enabled = ![next isEqual:[NSNull null]];
+    if (seenItems) [seenItems release];
+    seenItems = [[[RDRedditClient sharedClient] seenItemsForSubreddit:reddit 
+                                                   username:username] retain];
     [self.tableView reloadData];
     
     [self prefetchItemThumbnails];
@@ -366,8 +372,7 @@ static UIFont *titleLabelFont = nil;
 - (void)configureCell:(RDItemCell *)cell forItem:(NSDictionary *)item
 {
   cell.titleLabel.text = [item objectForKey:@"title"];
-  cell.clicked = ! [[item objectForKey:@"clicked"] isEqual:[NSNull null]] 
-                 ? boolv([item objectForKey:@"clicked"]) : NO;
+  cell.clicked = [seenItems containsObject:[item objectForKey:@"name"]];
   cell.upvoteLabel.text = [[item objectForKey:@"score"] description];
   cell.commentLabel.text = [[item objectForKey:@"num_comments"] description];
   NSDate *created = [NSDate dateWithTimeIntervalSince1970:
@@ -386,6 +391,16 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
   //RDBrowserController *c = (id)[(id)splitController.detailViewController topViewController];
   if (currentItemIndexPath.row == indexPath.row) return;
   id i = [[[items objectAtIndex:indexPath.row] objectForKey:@"data"] copy];
+  [[RDRedditClient sharedClient] recordSeenItem:[i objectForKey:@"name"] 
+                                      subreddit:reddit username:username];
+  NSArray *visible = [self.tableView indexPathsForVisibleRows];
+  if ([visible containsObject:indexPath]) {
+    int idx = [visible indexOfObject:indexPath];
+    if (idx != NSNotFound && idx < [visible count]) {
+      RDItemCell *cell = [[self.tableView visibleCells] objectAtIndex:idx];
+      cell.clicked = YES;
+    }
+  }
   browserController.item =  i;
   browserController.username = username;
   browserController.delegate = self;

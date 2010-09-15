@@ -44,7 +44,7 @@ static UIColor *clickedTitleColor = nil;
     upvoteLabel.textColor = upvoteColor;
     commentLabel.textColor = commentColor;
     infoLabel.textColor = infoColor;
-    titleLabel.textColor = titleColor;
+    titleLabel.textColor = !clicked ? titleColor : clickedTitleColor;
     upvoteLabel.layer.shadowColor = commentLabel.layer.shadowColor = infoLabel.layer.shadowColor = titleLabel.layer.shadowColor = [UIColor clearColor].CGColor;
     upvoteLabel.layer.shadowRadius = commentLabel.layer.shadowRadius = infoLabel.layer.shadowRadius = titleLabel.layer.shadowRadius = 0;
     upvoteLabel.layer.shadowOpacity = commentLabel.layer.shadowOpacity = infoLabel.layer.shadowOpacity = titleLabel.layer.shadowOpacity = 0;
@@ -56,10 +56,18 @@ static UIColor *clickedTitleColor = nil;
   }
 }
 
+- (void)prepareForReuse
+{
+  self.clicked = NO;
+  [super prepareForReuse];
+}
+
 - (void)setClicked:(BOOL)c
 {
-  if (clicked != c)
-    titleLabel.textColor = c ? clickedTitleColor : titleColor;
+  if (clicked != c) {
+    if (clicked && self.selected) titleLabel.textColor = [UIColor whiteColor];
+    else titleLabel.textColor = c ? clickedTitleColor : titleColor;
+  }
   clicked = c;
 }
 

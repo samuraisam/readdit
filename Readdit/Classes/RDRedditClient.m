@@ -14,7 +14,7 @@
 
 @implementation RDRedditClient
 
-@synthesize methodCache;
+@synthesize methodCache, reads;
 
 + (id)sharedClient
 {
@@ -30,6 +30,7 @@
       @"rdmethodcache.db" maxEntries:3000 cullFrequency:3] autorelease];
     c.useMemoryCache = NO;
     [sharedClient setMethodCache:c];
+    [sharedClient setReads:[NSMutableDictionary dictionary]];
   }
   return sharedClient;
 }
@@ -41,6 +42,42 @@
     return array_(PREF_KEY(@"username"), PREF_KEY(@"modhash"), PREF_KEY(@"cookie"));
   }
   return EMPTY_ARRAY;
+}
+
+- (NSArray *)seenItemsForSubreddit:(NSString *)reddit username:(NSString *)username
+{
+  NSString *key = [NSString stringWithFormat:@"%@%@reads", username, reddit];
+  NSMutableArray *ret = [self.reads objectForKey:key];
+  if (!ret) {
+    NSArray *y = [[NSUserDefaults standardUserDefaults] objectForKey:key];
+    if (!y) y = EMPTY_ARRAY;
+    ret = [NSMutableArray arrayWithArray:y];
+    [self.reads setObject:ret forKey:key];
+  }
+  return ret;
+}
+
+- (void)recordSeenItem:(NSString *)item subreddit:(NSString *)reddit username:(NSString *)username
+{
+  NSString *key = [NSString stringWithFormat:@"%@%@reads", username, reddit];
+  NSMutableArray *a = [self.reads objectForKey:key];
+  if (!a) {
+    a = [NSMutableArray array];
+    [self.reads setObject:a forKey:key];
+  }
+  if (![a containsObject:item])
+    [a insertObject:[[item copy] autorelease] atIndex:0];
+  if ([a count] > MAXIMUM_SEEN_CACHE_COUNT)
+    [a removeObjectsInRange:NSMakeRange(MAXIMUM_SEEN_CACHE_COUNT, a.count - 1)];
+}
+
+- (void)writeSeenItemCache
+{
+  NSUserDefaults *defs = [NSUserDefaults standardUserDefaults];
+  for (NSString *key in [self.reads allKeys]) {
+    [defs setObject:[self.reads objectForKey:key] forKey:key];
+  }
+  [defs synchronize];
 }
 
 - (DKDeferred *)vote:(int)d item:(NSString *)theid subreddit:(NSString *)sub username:(NSString *)un
@@ -195,9 +232,10 @@
       }
     }
   }
-  NSLog(@"saving subscriptions ids:%@ names:%@", names, display_names);
+  //NSLog(@"saving subscriptions ids:%@ names:%@", names, display_names);
   [[NSUserDefaults standardUserDefaults] setObject:array_(names, display_names) 
              forKey:[username stringByAppendingString:@"subscribedsubreddits"]];
+  [[NSUserDefaults standardUserDefaults] synchronize];
   return r;
 }
 

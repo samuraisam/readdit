@@ -11,6 +11,7 @@
 #import "RDBrowserController.h"
 #import "MGSplitViewController.h"
 #import "DKDeferredSqliteCache.h"
+#import "RDRedditClient.h"
 
 
 @implementation RDAppDelegate
@@ -45,6 +46,7 @@
 
 - (void)applicationWillTerminate:(UIApplication *)application 
 {
+  [[RDRedditClient sharedClient] writeSeenItemCache];
   [DKDeferred cache].forceImmediateCaching = YES;
   [[DKDeferred cache] purgeMemoryCache];
   [DKDeferred cache].forceImmediateCaching = NO;

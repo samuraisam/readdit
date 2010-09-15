@@ -11,18 +11,26 @@
 
 
 #define REDDIT_URL @"http://www.reddit.com/"
+#define MAXIMUM_SEEN_CACHE_COUNT 255
 
 
 @interface RDRedditClient : NSObject 
 {
   id<DKCache> methodCache;
+  NSMutableDictionary *reads;
 }
 
 @property(retain) id<DKCache> methodCache;
+@property(retain) NSMutableDictionary *reads;
 
 + (id)sharedClient;
 
 - (NSArray *)accounts;
+
+/* local data manipulation */
+- (NSArray *)seenItemsForSubreddit:(NSString *)reddit username:(NSString *)username;
+- (void)recordSeenItem:(NSString *)item subreddit:(NSString *)reddit username:(NSString *)username;
+- (void)writeSeenItemCache;
 
 /* account manipulation */
 - (DKDeferred *)loginUsername:(NSString *)username password:(NSString *)password;
@@ -35,7 +43,7 @@
 
 /* account subreddit enumeration */
 - (DKDeferred *)subredditsForUsername:(NSString *)username;
-- (NSArray *)subscribedSubredditIdsForUsername:(NSString *)username;
+- (NSArray *)subscribedSubredditIdsForUsername:(NSString *)username; // requires calling subredditsForUsername first
 - (DKDeferred *)cachedSubredditsForUsername:(NSString *)username;
 
 /* account subreddit views */
