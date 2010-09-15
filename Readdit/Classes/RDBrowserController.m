@@ -85,9 +85,12 @@
   [upButton setImage:up forState:UIControlStateNormal];
 }
 
-- (void)webViewDidStartLoad:(UIWebView *)webView
+- (void)webViewDidStartLoad:(UIWebView *)v
 {
   [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+  backItem.enabled = v.canGoBack;
+  forwardItem.enabled = v.canGoForward;
+  refreshItem.enabled = YES;
 }
 
 - (void)webViewDidFinishLoad:(UIWebView *)v
@@ -96,7 +99,6 @@
   backItem.enabled = v.canGoBack;
   forwardItem.enabled = v.canGoForward;
   refreshItem.enabled = YES;
-  
 }
 
 - (void)upvote:(UIButton *)sender

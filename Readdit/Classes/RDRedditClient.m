@@ -322,6 +322,11 @@
                             objectForKey:@"modhash"]); // required for editing
       PREF_SET(@"username", username);
       PREF_SET(@"cookie", [headers objectForKey:@"Set-Cookie"]); // required for personalized pages
+      NSHTTPCookieStorage *st = [NSHTTPCookieStorage sharedHTTPCookieStorage];
+      [st setCookieAcceptPolicy:NSHTTPCookieAcceptPolicyAlways];
+      [st setCookies:[NSHTTPCookie cookiesWithResponseHeaderFields:
+                      headers forURL:[[r URLResponse] URL]] forURL:[[r URLResponse] URL] 
+                     mainDocumentURL:[NSURL URLWithString:REDDIT_URL]];
       PREF_SYNCHRONIZE;
       [DKDeferred setRestClient:[RDRestClient clientWithURL:REDDIT_URL]];
       [[DKDeferred rest:REDDIT_URL] setUsername:username];
