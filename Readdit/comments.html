@@ -254,10 +254,10 @@ p {
 <body>
     
     <!-- THIS IS THE STRUCTURE OF THE HEADER -->
-    <div id="storyinfo">
+    <div id="storyinfo" style="display:none;">
         <div id="storyid" style="display:none;"></div>
-        <div id="storytitlewrapper"><span id="storytitle">Loading the current story.</span> (<span id="storydomain">domain</span>)</div>
-        <div id="submittedby">submitted <span id="storydate"></span> by <span id="storyauthor"></span></div>
+        <div id="storytitlewrapper"><span id="storytitle">Loading the current story.</span> (<span style="display:none;" id="storydomain">domain</span>)</div>
+        <div style="display:none;" id="submittedby">submitted <span id="storydate"></span> by <span id="storyauthor"></span></div>
     </div>
     
 	<div id="selfpost">
@@ -314,6 +314,7 @@ p {
         }
         
         window.STORY_ID = arguments["id"];
+        window.MODHASH = arguments["uh"];
     }
     else
     {
@@ -344,6 +345,7 @@ p {
     xhr.open("GET", BASE_URL+"/comments/"+STORY_ID+"/.json", true);
 	
 	xhr.setRequestHeader("x-reddit-version", "2.1");
+  xhr.setRequestHeader("Origin", "http://reddit.com");
     
     xhr.onreadystatechange = function()
     {

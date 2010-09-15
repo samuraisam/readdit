@@ -151,7 +151,7 @@
 {
   NSArray *c = [[item objectForKey:@"permalink"] captureComponentsMatchedByRegex:@"/([^/]*)/$"];
   NSLog(@"c %@", c);
-  NSString *path = [NSString stringWithFormat:@"%@?id=%@&title=%@&author=%@&created=%@&domain=%@&base=%@&jump=%@",
+  NSString *path = [NSString stringWithFormat:@"%@?id=%@&title=%@&author=%@&created=%@&domain=%@&base=%@&jump=%@&mh=%@",
                     [[NSBundle mainBundle] pathForResource:@"comments" ofType:@"html"],
                     [[item objectForKey:@"id"] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
                     [@"Loading Story Title" stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
@@ -159,7 +159,8 @@
                     [[NSString stringWithFormat:@"%f", [[NSDate date] timeIntervalSince1970]] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
                     [@"reddit.com" stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
                     [@"http:////reddit.com" stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
-                    [([c count] == 2 ? [c objectAtIndex:1] : @"no_such_id") stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding]];
+                    [([c count] == 2 ? [c objectAtIndex:1] : @"no_such_id") stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
+                    [PREF_KEY(@"modhash") stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding]];
   NSURLRequest *req = [NSURLRequest requestWithURL:[[NSURL alloc] initWithScheme:@"file" host:@"host" path:path]];
   NSLog(@"req %@", req);
   [webView loadRequest:req];
