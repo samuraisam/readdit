@@ -65,35 +65,51 @@ static UIFont *titleLabelFont = nil;
 {
   username = reddit = nil;
   items = [EMPTY_ARRAY retain];
+  loadingMore = NO;
   didLoadCachedItems = NO;
   self.actionTableViewHeaderClass = [YMRefreshView class];
   currentItemIndexPath = nil;
   loadingPool = [[DKDeferredPool alloc] init];
   [loadingPool setConcurrency:1];
+  nextLoadingIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
+                          UIActivityIndicatorViewStyleGray];
+  nextLoadingIndicator.autoresizingMask 
+    = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
+  nextButton = [[UIButton buttonWithType:UIButtonTypeRoundedRect] retain];
+  [nextButton addTarget:self action:@selector(loadMore:) forControlEvents:UIControlEventTouchUpInside];
+  nextPageFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 52)];
+  nextPageFooterView.backgroundColor = [UIColor whiteColor];
+  nextPageFooterView.opaque = YES;
+  nextPageFooterView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 }
 
 #pragma mark -
 #pragma mark View lifecycle
 
-/*
-- (void)viewDidLoad {
-    [super viewDidLoad];
-
-    // Uncomment the following line to preserve selection between presentations.
-    // self.clearsSelectionOnViewWillAppear = NO;
- 
-    // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
-    // self.navigationItem.rightBarButtonItem = self.editButtonItem;
+- (void)viewDidLoad 
+{
+  [super viewDidLoad];
+  self.tableView.tableFooterView = nextPageFooterView;
+  [nextPageFooterView addSubview:nextButton];
 }
-*/
-
 
 - (void)viewWillAppear:(BOOL)animated 
 {
+  [super viewWillAppear:animated];
   self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
   self.tableView.separatorColor = [UIColor colorWithHexString:@"8c9ba4"];
   self.tableView.backgroundColor = [UIColor colorWithHexString:@"8c9ba4"];
-  [super viewWillAppear:animated];
+}
+
+- (void)loadMore:(UIButton *)sender
+{
+  loadingMore = YES;
+  [sender removeFromSuperview];
+  [nextPageFooterView addSubview:nextLoadingIndicator];
+  [nextLoadingIndicator startAnimating];
+  [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+  [[[RDRedditClient sharedClient] subreddit:reddit page:next existing:items user:username]
+   addBoth:callbackTS(self, _gotItems:)];
 }
 
 - (id)_gotCachedItems:(id)r
@@ -103,7 +119,8 @@ static UIFont *titleLabelFont = nil;
   if ([r isKindOfClass:[NSArray class]]) {
     NSLog(@"got cached reddit: %i items", [r count]);
     if (items) [items release];
-    items = [r retain];
+    items = [[r objectAtIndex:0] retain];
+    next = (id)[[NSNull null] retain];
     [self prefetchItemThumbnails];
   } else {
     NSLog(@"cached reddit miss %@", r);
@@ -119,15 +136,24 @@ static UIFont *titleLabelFont = nil;
   if (isDeferred(r)) return [r addBoth:callbackTS(self, _gotItems:)];
   
   [self dataSourceDidFinishLoadingNewData];
-  [loadingPool drain];
-  [self.tableView reloadData];
+  if (loadingMore) {
+    [nextLoadingIndicator stopAnimating];
+    [nextLoadingIndicator removeFromSuperview];
+    [nextPageFooterView addSubview:nextButton];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+  }
+  nextButton.enabled = YES;
+  //[loadingPool drain];
   
   if ([r handleErrorAndAlert:YES]) return r;
   
   NSLog(@"got Items %i", [r count]);
   if ([r isKindOfClass:[NSArray class]]) {
     if (items) [items release];
-    items = [r retain];
+    items = [[r objectAtIndex:0] retain];
+    if (next) [next release];
+    next = [[r objectAtIndex:1] retain];
+    [self.tableView reloadData];
     
     [self prefetchItemThumbnails];
     
@@ -158,7 +184,6 @@ static UIFont *titleLabelFont = nil;
     idx++;
   }  
 }
-  
 
 - (void)setItems:(NSArray *)i
 {
@@ -186,12 +211,18 @@ static UIFont *titleLabelFont = nil;
 {
   [super viewDidAppear:animated];
   NSLog(@"username %@ reddit %@", username, reddit);
+  if (currentItemIndexPath) [currentItemIndexPath release];
+  currentItemIndexPath = nil;
+  nextButton.frame = CGRectMake(4, 4, self.tableView.frame.size.width - 8, 44);
+  nextLoadingIndicator.frame = CGRectMake(self.tableView.frame.size.width / 2 
+                                          - nextLoadingIndicator.frame.size.width / 2, 12, 22, 22);
   if (username && reddit) {
     id l = PREF_KEY(([NSString stringWithFormat:@"%@%@lastupdated", username, reddit]));
     if (l) {
       NSDate *d = [NSDate dateWithTimeIntervalSince1970:[l intValue]];
       [(YMRefreshView *)self.refreshHeaderView setLastUpdatedDate:d];
     }
+    nextButton.enabled = NO;
     if (!didLoadCachedItems) {
       [[[RDRedditClient sharedClient] cachedSubreddit:reddit forUsername:username]
        addBoth:callbackTS(self, _gotCachedItems:)];
@@ -203,11 +234,20 @@ static UIFont *titleLabelFont = nil;
   }
 }
 
-/*
-- (void)viewWillDisappear:(BOOL)animated {
-    [super viewWillDisappear:animated];
+- (void) reloadTableViewDataSource
+{
+  [[[RDRedditClient sharedClient] subreddit:reddit forUsername:username]
+   addBoth:callbackTS(self, _gotItems:)];
 }
-*/
+
+- (void)viewWillDisappear:(BOOL)animated
+{
+  if (currentItemIndexPath) [currentItemIndexPath release];
+  currentItemIndexPath = nil;
+  [loadingPool drain];
+  [super viewWillDisappear:animated];
+}
+
 /*
 - (void)viewDidDisappear:(BOOL)animated {
     [super viewDidDisappear:animated];
@@ -292,6 +332,20 @@ static UIFont *titleLabelFont = nil;
   return cell;
 }
 
+- (void)tableView:(UITableView *)tableView willDisplayCell:
+(UITableViewCell *)cell forRowAtIndexPath:(NSIndexPath *)indexPath
+{
+  if (indexPath.row == ([items count] - 1)) {
+    if (![next isEqual:[NSNull null]]) {
+      [nextButton setTitle:@"More" forState:UIControlStateNormal];
+      nextButton.enabled = YES;
+    } else {
+      [nextButton setTitle:@"No More Available" forState:UIControlStateNormal];
+      nextButton.enabled = NO;
+    }
+  }
+}
+
 - (id)_didGetImageIndexPath:(NSIndexPath *)indexPath results:(id)r
 {
   if ([r isKindOfClass:[UIImage class]]) {
@@ -310,6 +364,8 @@ static UIFont *titleLabelFont = nil;
 - (void)configureCell:(RDItemCell *)cell forItem:(NSDictionary *)item
 {
   cell.titleLabel.text = [item objectForKey:@"title"];
+  cell.clicked = ! [[item objectForKey:@"clicked"] isEqual:[NSNull null]] 
+                 ? boolv([item objectForKey:@"clicked"]) : NO;
   cell.upvoteLabel.text = [[item objectForKey:@"score"] description];
   cell.commentLabel.text = [[item objectForKey:@"num_comments"] description];
   NSDate *created = [NSDate dateWithTimeIntervalSince1970:
@@ -339,6 +395,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 
 - (void)didUpdateCurrentItem:(NSDictionary *)item
 {
+  if (!currentItemIndexPath) return;
   NSMutableArray *a = [NSMutableArray arrayWithArray:items];
   NSMutableDictionary *d = [NSMutableDictionary dictionaryWithDictionary:
                             [a objectAtIndex:currentItemIndexPath.row]];
@@ -357,7 +414,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
   items = [a retain];
 }
 
-
 #pragma mark -
 #pragma mark Memory management
 
@@ -371,9 +427,11 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
   NSLog(@"view did unload %@", self);
 }
 
-
 - (void)dealloc 
 {
+  [nextLoadingIndicator release];
+  [nextButton release];
+  [nextPageFooterView release];
   [browserController release];
   [items release];
   [splitController release];

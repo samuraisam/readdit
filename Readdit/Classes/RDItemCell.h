@@ -13,9 +13,11 @@
 {
   IBOutlet UILabel *upvoteLabel, *commentLabel, *infoLabel, *titleLabel;
   IBOutlet UIImageView *thumbnail;
+  BOOL clicked;
 }
 
 @property(nonatomic, retain) UILabel *upvoteLabel, *commentLabel, *infoLabel, *titleLabel;
 @property(nonatomic, retain) UIImageView *thumbnail;
+@property(nonatomic, assign) BOOL clicked;
 
 @end

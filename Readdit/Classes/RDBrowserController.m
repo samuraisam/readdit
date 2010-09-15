@@ -40,6 +40,12 @@
   webView.delegate = self;
   webView.scalesPageToFit = YES;
   webView.dataDetectorTypes = UIDataDetectorTypeLink | UIDataDetectorTypePhoneNumber;
+  backItem.target = forwardItem.target = refreshItem.target = webView;
+  backItem.action = @selector(goBack);
+  forwardItem.action = @selector(goForward);
+  refreshItem.action = @selector(reload);
+  backItem.enabled = forwardItem.enabled = refreshItem.enabled = NO;
+  
   [self.view addSubview:webView];
   [webView loadRequest:req];
   
@@ -90,6 +96,7 @@
   backItem.enabled = v.canGoBack;
   forwardItem.enabled = v.canGoForward;
   refreshItem.enabled = YES;
+  
 }
 
 - (void)upvote:(UIButton *)sender
@@ -118,6 +125,11 @@
 
 - (void)gotoAuthor:(id)s
 {
+  UIActionSheet *as = [[[UIActionSheet alloc] initWithTitle:nil delegate:
+                        self cancelButtonTitle:nil destructiveButtonTitle:
+                        nil otherButtonTitles:@"Add Friend", @"Submissions", 
+                        @"Liked", nil] autorelease];
+  [as showFromRect:[s frame] inView:[s superview] animated:YES];
 }
 
 - (void)gotoReddit:(id)s

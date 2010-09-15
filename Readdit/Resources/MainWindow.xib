@@ -10,7 +10,9 @@
 			<string key="NS.key.0">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 			<string key="NS.object.0">117</string>
 		</object>
-		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs"/>
+		<array class="NSMutableArray" key="IBDocument.EditedObjectIDs">
+			<integer value="57"/>
+		</array>
 		<array key="IBDocument.PluginDependencies">
 			<string>com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 		</array>
@@ -77,7 +79,14 @@
 				<array class="NSMutableArray" key="IBUIViewControllers">
 					<object class="IBUIViewController" id="547863455">
 						<object class="IBUINavigationItem" key="IBUINavigationItem" id="1017893230">
+							<reference key="IBUINavigationBar"/>
 							<string key="IBUITitle">Reddits</string>
+							<object class="IBUIBarButtonItem" key="IBUILeftBarButtonItem" id="697525409">
+								<string key="targetRuntimeIdentifier">IBIPadFramework</string>
+								<int key="IBUIStyle">1</int>
+								<reference key="IBUINavigationItem" ref="1017893230"/>
+								<int key="IBUISystemItemIdentifier">12</int>
+							</object>
 							<string key="targetRuntimeIdentifier">IBIPadFramework</string>
 						</object>
 						<reference key="IBUIParentViewController" ref="686886125"/>
@@ -223,6 +232,14 @@
 					</object>
 					<int key="connectionID">71</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBCocoaTouchEventConnection" key="connection">
+						<string key="label">search:</string>
+						<reference key="source" ref="697525409"/>
+						<reference key="destination" ref="547863455"/>
+					</object>
+					<int key="connectionID">73</int>
+				</object>
 			</array>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<array key="orderedObjects">
@@ -283,6 +300,9 @@
 					<object class="IBObjectRecord">
 						<int key="objectID">57</int>
 						<reference key="object" ref="1017893230"/>
+						<array class="NSMutableArray" key="children">
+							<reference ref="697525409"/>
+						</array>
 						<reference key="parent" ref="547863455"/>
 					</object>
 					<object class="IBObjectRecord">
@@ -317,6 +337,11 @@
 						<reference key="object" ref="621684730"/>
 						<reference key="parent" ref="0"/>
 					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">72</int>
+						<reference key="object" ref="697525409"/>
+						<reference key="parent" ref="1017893230"/>
+					</object>
 				</array>
 			</object>
 			<dictionary class="NSMutableDictionary" key="flattenedProperties">
@@ -344,12 +369,13 @@
 				<string key="68.CustomClassName">RDSubredditController</string>
 				<string key="68.IBEditorWindowLastContentRect">{{0, 4}, {783, 1002}}</string>
 				<string key="68.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
+				<string key="72.IBPluginDependency">com.apple.InterfaceBuilder.IBCocoaTouchPlugin</string>
 			</dictionary>
 			<dictionary class="NSMutableDictionary" key="unlocalizedProperties"/>
 			<nil key="activeLocalization"/>
 			<dictionary class="NSMutableDictionary" key="localizations"/>
 			<nil key="sourceID"/>
-			<int key="maxID">71</int>
+			<int key="maxID">73</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<array class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -415,6 +441,13 @@
 					<string key="className">NSObject</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">Lib/DeferredKit/NSObject+UIKitGenericErrorHandling.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSObject</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">Lib/JSON/NSObject+SBJSON.h</string>
 					</object>
 				</object>
@@ -461,12 +494,17 @@
 					<string key="className">RDBrowserController</string>
 					<string key="superclassName">UIViewController</string>
 					<dictionary class="NSMutableDictionary" key="actions">
+						<string key="action:">id</string>
 						<string key="downvote:">id</string>
 						<string key="gotoAuthor:">id</string>
 						<string key="gotoReddit:">id</string>
 						<string key="upvote:">id</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="actionInfosByName">
+						<object class="IBActionInfo" key="action:">
+							<string key="name">action:</string>
+							<string key="candidateClassName">id</string>
+						</object>
 						<object class="IBActionInfo" key="downvote:">
 							<string key="name">downvote:</string>
 							<string key="candidateClassName">id</string>
@@ -485,6 +523,7 @@
 						</object>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="outlets">
+						<string key="actionItem">UIBarButtonItem</string>
 						<string key="authorButton">UIButton</string>
 						<string key="backItem">UIBarButtonItem</string>
 						<string key="byLabel">UILabel</string>
@@ -502,6 +541,10 @@
 						<string key="webView">UIWebView</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
+						<object class="IBToOneOutletInfo" key="actionItem">
+							<string key="name">actionItem</string>
+							<string key="candidateClassName">UIBarButtonItem</string>
+						</object>
 						<object class="IBToOneOutletInfo" key="authorButton">
 							<string key="name">authorButton</string>
 							<string key="candidateClassName">UIButton</string>
@@ -571,6 +614,17 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">RDRedditsController</string>
 					<string key="superclassName">YMTableViewController</string>
+					<object class="NSMutableDictionary" key="actions">
+						<string key="NS.key.0">search:</string>
+						<string key="NS.object.0">id</string>
+					</object>
+					<object class="NSMutableDictionary" key="actionInfosByName">
+						<string key="NS.key.0">search:</string>
+						<object class="IBActionInfo" key="NS.object.0">
+							<string key="name">search:</string>
+							<string key="candidateClassName">id</string>
+						</object>
+					</object>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="detailViewController">RDBrowserController</string>
 						<string key="redditViewController">RDSubredditController</string>
@@ -600,12 +654,17 @@
 					<string key="superclassName">YMTableViewController</string>
 					<dictionary class="NSMutableDictionary" key="outlets">
 						<string key="browserController">RDBrowserController</string>
+						<string key="loadingPool">id</string>
 						<string key="splitController">MGSplitViewController</string>
 					</dictionary>
 					<dictionary class="NSMutableDictionary" key="toOneOutletInfosByName">
 						<object class="IBToOneOutletInfo" key="browserController">
 							<string key="name">browserController</string>
 							<string key="candidateClassName">RDBrowserController</string>
+						</object>
+						<object class="IBToOneOutletInfo" key="loadingPool">
+							<string key="name">loadingPool</string>
+							<string key="candidateClassName">id</string>
 						</object>
 						<object class="IBToOneOutletInfo" key="splitController">
 							<string key="name">splitController</string>
@@ -622,6 +681,13 @@
 					<object class="IBClassDescriptionSource" key="sourceIdentifier" id="1024883495">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">Lib/YMTableViewController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">UIWebView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">Lib/ShareKit/Core/Categories/UIWebView+SHK.h</string>
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">

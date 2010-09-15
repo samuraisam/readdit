@@ -21,11 +21,19 @@
   NSArray *reddits;
   NSArray *builtins, *builtins2;
   NSString *username;
+  NSString *next;
+  NSArray *subscribedSubredditIds;
+  BOOL searchMode;
+  RDRedditsController *redditsSearchController;
 }
 
+@property (nonatomic, assign) BOOL searchMode;
 @property (nonatomic, retain) IBOutlet MGSplitViewController *splitController;
 @property (nonatomic, retain) IBOutlet RDBrowserController *detailViewController;
 @property (nonatomic, retain) IBOutlet RDSubredditController *redditViewController;
 @property (nonatomic, retain) NSString *username;
+@property (nonatomic, retain) RDRedditsController *redditsSearchController;
+
+- (IBAction)search:(id)s;
 
 @end

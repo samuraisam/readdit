@@ -13,6 +13,7 @@
 @implementation RDItemCell
 
 @synthesize upvoteLabel, commentLabel, infoLabel, titleLabel, thumbnail;
+@synthesize clicked;
 
 //- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
 //    if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
@@ -25,6 +26,7 @@ static UIColor *upvoteColor = nil;
 static UIColor *commentColor = nil;
 static UIColor *infoColor = nil;
 static UIColor *titleColor = nil;
+static UIColor *clickedTitleColor = nil;
 
 + (void)initialize
 {
@@ -32,6 +34,7 @@ static UIColor *titleColor = nil;
   if (!commentColor) commentColor = [[UIColor colorWithWhite:.37 alpha:1.0] retain];
   if (!infoColor) infoColor = [[UIColor colorWithRed:31.0/255.0 green:50.0/255.0 blue:79.0/255.0 alpha:1.0] retain];
   if (!titleColor) titleColor = [[UIColor blackColor] retain];
+  if (!clickedTitleColor) clickedTitleColor = [[UIColor colorWithRed:57.0/255.0 green:0 blue:98.0/255.0 alpha:1] retain];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated 
@@ -48,9 +51,16 @@ static UIColor *titleColor = nil;
   } else {
     upvoteLabel.textColor = commentLabel.textColor = infoLabel.textColor = titleLabel.textColor = [UIColor whiteColor];
     upvoteLabel.layer.shadowColor = commentLabel.layer.shadowColor = infoLabel.layer.shadowColor = titleLabel.layer.shadowColor = [UIColor whiteColor].CGColor;
-    upvoteLabel.layer.shadowRadius = commentLabel.layer.shadowRadius = infoLabel.layer.shadowRadius = titleLabel.layer.shadowRadius = 3;
+    upvoteLabel.layer.shadowRadius = commentLabel.layer.shadowRadius = infoLabel.layer.shadowRadius = titleLabel.layer.shadowRadius = 2;
     upvoteLabel.layer.shadowOpacity = commentLabel.layer.shadowOpacity = infoLabel.layer.shadowOpacity = titleLabel.layer.shadowOpacity = .5;
   }
+}
+
+- (void)setClicked:(BOOL)c
+{
+  if (clicked != c)
+    titleLabel.textColor = c ? clickedTitleColor : titleColor;
+  clicked = c;
 }
 
 - (void)layoutSubviews

@@ -9,7 +9,9 @@
 #import <Foundation/Foundation.h>
 #import "DKDeferredSqliteCache.h"
 
+
 #define REDDIT_URL @"http://www.reddit.com/"
+
 
 @interface RDRedditClient : NSObject 
 {
@@ -21,13 +23,26 @@
 + (id)sharedClient;
 
 - (NSArray *)accounts;
+
 - (DKDeferred *)loginUsername:(NSString *)username password:(NSString *)password;
+
 - (DKDeferred *)vote:(int)d item:(NSString *)theid subreddit:(NSString *)sub username:(NSString *)un;
 
+- (DKDeferred *)alterSubredditSubscription:(NSString *)subreddit withID:(NSString *)subId action:(NSString *)action username:(NSString *)username;
+
+- (DKDeferred *)allSubreddits;
+
+- (DKDeferred *)queryAllSubreddits:(NSString *)term;
+
 - (DKDeferred *)subredditsForUsername:(NSString *)username;
+- (NSArray *)subscribedSubredditIdsForUsername:(NSString *)username;
+
 - (DKDeferred *)cachedSubredditsForUsername:(NSString *)username;
 
 - (DKDeferred *)subreddit:(NSString *)sub forUsername:(NSString *)username;
+
+- (DKDeferred *)subreddit:(NSString *)sub page:(NSString *)page existing:(NSArray *)existingResults user:(NSString *)username;
+
 - (DKDeferred *)cachedSubreddit:(NSString *)sub forUsername:(NSString *)username;
 
 @end

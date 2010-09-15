@@ -51,6 +51,54 @@
           addCallback:callbackTS(self, _didVote:)];
 }
 
+- (DKDeferred *)alterSubredditSubscription:(NSString *)subreddit withID:(NSString *)subId
+                        action:(NSString *)action username:(NSString *)username
+{
+  return [[[DKDeferred rest:REDDIT_URL] POST:@"api/subscribe" values:
+    dict_(action, @"action", subreddit, @"r", @"json", @"renderstyle", subId, @"sr", PREF_KEY(@"modhash"), @"uh")]
+   addBoth:callbackTS(self, _didAlterSubscription:)];
+}
+
+- (id)_didAlterSubscription:(id)r
+{
+  id d = nil;
+  if ([r isKindOfClass:[NSData class]] && [(d = [[[[NSString alloc] initWithData:r encoding:
+      NSUTF8StringEncoding] autorelease] JSONValue]) isKindOfClass:[NSDictionary class]]) {
+    NSLog(@"didAlterSubscription %@", d);
+    return @"success";
+  }
+  NSLog(@"didntAlterSubscription %@", r);
+  return @"failure";
+}
+
+- (DKDeferred *)allSubreddits
+{
+  return [[[DKDeferred rest:REDDIT_URL] GET:@"reddits/.json" values:EMPTY_DICT]
+          addBoth:callbackTS(self, _gotAllSubreddits:)];
+}
+
+- (DKDeferred *)queryAllSubreddits:(NSString *)term
+{
+  return [[[DKDeferred rest:REDDIT_URL] GET:@"reddits/search/.json" values:
+           dict_(term, @"q")] addBoth:callbackTS(self, _gotAllSubreddits:)];
+}
+
+- (id)_gotAllSubreddits:(id)r
+{
+  if ([r handleErrorAndAlert:NO]) return r;
+  id ret = EMPTY_ARRAY;
+  id d = [[[[NSString alloc] initWithData:r encoding:
+            NSUTF8StringEncoding] autorelease] JSONValue];
+  id next = [NSNull null];
+  if ([d isKindOfClass:[NSDictionary class]]) {
+    if (!(ret = [[d objectForKey:@"data"] objectForKey:@"children"]))
+      ret = EMPTY_ARRAY;
+    if (!(next = [[d objectForKey:@"data"] objectForKey:@"after"]))
+      next = [NSNull null];
+  }
+  return array_(ret, next); 
+}
+
 - (id)_didVote:(id)r
 {
   id d = nil;
@@ -66,8 +114,19 @@
   if (!username) username = @"";
   NSString *method = [sub stringByAppendingString:@".json"];
   return [[[[DKDeferred rest:REDDIT_URL] GET:method values:EMPTY_DICT]
-           addBoth:curryTS(self, @selector(_gotSubredditUsername:method:results:), username, method)]
+           addBoth:curryTS(self, @selector(_gotSubredditUsername:method:existing:results:), 
+                           username, method, EMPTY_ARRAY)]
           addBoth:curryTS(self, @selector(_cacheMethod:username:results:), method, username)];
+}
+
+- (DKDeferred *)subreddit:(NSString *)sub page:(NSString *)page existing:
+(NSArray *)existingResults user:(NSString *)username
+{
+  if (!username) username = @"";
+  NSString *method = [sub stringByAppendingString:@".json"];
+  return [[[DKDeferred rest:REDDIT_URL] GET:method values:dict_(page, @"after")]
+          addBoth:curryTS(self, @selector(_gotSubredditUsername:method:existing:results:), 
+                          username, method, existingResults)];
 }
 
 - (DKDeferred *)cachedSubreddit:(NSString *)sub forUsername:(NSString *)username
@@ -79,26 +138,62 @@
   return [methodCache valueForKey:key];
 }
 
-- (id)_gotSubredditUsername:(NSString *)username method:(NSString *)method results:(id)r
+- (id)_gotSubredditUsername:(NSString *)username method:(NSString *)method 
+                   existing:(NSArray *)existing results:(id)r
 {
   if ([r handleErrorAndAlert:NO]) return r;
   id ret = EMPTY_ARRAY;
   id d = [[[[NSString alloc] initWithData:r encoding:
             NSUTF8StringEncoding] autorelease] JSONValue];
+  id next = [NSNull null];
   if ([d isKindOfClass:[NSDictionary class]]) {
     if (!(ret = [[d objectForKey:@"data"] objectForKey:@"children"]))
       ret = EMPTY_ARRAY;
+    if (!(next = [[d objectForKey:@"data"] objectForKey:@"after"]))
+      next = [NSNull null];
   }
-  return ret;
+  ret = [existing arrayByAddingObjectsFromArray:ret];
+  return array_(ret, next); 
 }
 
 - (DKDeferred *)subredditsForUsername:(NSString *)username
 {
   static NSString *m = @"reddits/mine/.json";
   if (!username) username = @"";
-  return [[[[DKDeferred rest:REDDIT_URL] GET:m values:EMPTY_DICT] addCallback:
-           curryTS(self, @selector(_didGetSubredditsUsername:method:results:), username, m)]
-          addCallback:curryTS(self, @selector(_cacheMethod:username:results:), m, username)];
+  return [[[[[DKDeferred rest:REDDIT_URL] GET:m values:EMPTY_DICT] addCallback:
+            curryTS(self, @selector(_didGetSubredditsUsername:method:results:), username, m)]
+           addCallback:curryTS(self, @selector(_cacheMethod:username:results:), m, username)]
+          addCallback:curryTS(self, @selector(_saveSubscribedRedditsUsername:results:), username)];
+}
+
+- (NSArray *)subscribedSubredditIdsForUsername:(NSString *)username
+{
+  NSArray *ret = [[NSUserDefaults standardUserDefaults] objectForKey:
+                         [username stringByAppendingString:@"subscribedsubreddits"]];
+  if (!ret) ret = EMPTY_ARRAY;
+  return ret;
+}
+
+- (id)_saveSubscribedRedditsUsername:(NSString *)username results:(id)r
+{
+  NSMutableArray *names = [NSMutableArray array];
+  NSMutableArray *display_names = [NSMutableArray array];
+  if ([r isKindOfClass:[NSArray class]]) {
+    for (NSDictionary *d in r) {
+      NSDictionary *y = nil;
+      if ([d isKindOfClass:[NSDictionary class]] 
+          && (y = [d objectForKey:@"data"])
+          && ![[y objectForKey:@"display_name"] isEqual:[NSNull null]] 
+          && ![[y objectForKey:@"name"] isEqual:[NSNull null]]) {
+        [names addObject:[y objectForKey:@"name"]];
+        [display_names addObject:[y objectForKey:@"display_name"]];
+      }
+    }
+  }
+  NSLog(@"saving subscriptions ids:%@ names:%@", names, display_names);
+  [[NSUserDefaults standardUserDefaults] setObject:array_(names, display_names) 
+             forKey:[username stringByAppendingString:@"subscribedsubreddits"]];
+  return r;
 }
 
 - (DKDeferred *)cachedSubredditsForUsername:(NSString *)username

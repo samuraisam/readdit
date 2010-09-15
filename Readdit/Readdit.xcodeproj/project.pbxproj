@@ -15,6 +15,8 @@
 		158AA0B01239B9AA004696EE /* whitecheckmark.png in Resources */ = {isa = PBXBuildFile; fileRef = 158AA0AF1239B9AA004696EE /* whitecheckmark.png */; };
 		158AA0F81239C9BB004696EE /* comments.html in Resources */ = {isa = PBXBuildFile; fileRef = 158AA0F71239C9BB004696EE /* comments.html */; };
 		158AA1111239CEBD004696EE /* inlineitem.png in Resources */ = {isa = PBXBuildFile; fileRef = 158AA1101239CEBD004696EE /* inlineitem.png */; };
+		15ACABF812404EFB00737799 /* RDRedditCellSubscribe.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15ACABF712404EFB00737799 /* RDRedditCellSubscribe.xib */; };
+		15ACAC501240573100737799 /* RDRedditCellSimple.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15ACAC4F1240573100737799 /* RDRedditCellSimple.xib */; };
 		15B89FCF12372E9000E09833 /* item-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 15B89FCE12372E9000E09833 /* item-bg.png */; };
 		15B8D930123413A3008DA31D /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 15B8D92F123413A3008DA31D /* libsqlite3.0.dylib */; };
 		15B8D95912341A7F008DA31D /* MGSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B8D95412341A7F008DA31D /* MGSplitViewController.m */; };
@@ -133,6 +135,10 @@
 		15E686D51235AA79002D16B9 /* up-arrow-liked.png in Resources */ = {isa = PBXBuildFile; fileRef = 15E686D31235AA79002D16B9 /* up-arrow-liked.png */; };
 		15F51367123B83E2002E34F7 /* item-bg-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 15F51366123B83E2002E34F7 /* item-bg-selected.png */; };
 		15F5138B123BF80A002E34F7 /* NSObject+UIKitGenericErrorHandling.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F5138A123BF80A002E34F7 /* NSObject+UIKitGenericErrorHandling.m */; };
+		15F51545123DB682002E34F7 /* subscribebutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 15F51543123DB682002E34F7 /* subscribebutton.png */; };
+		15F51546123DB682002E34F7 /* unsubscribebutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 15F51544123DB682002E34F7 /* unsubscribebutton.png */; };
+		15F51549123DC183002E34F7 /* RDRedditCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F51548123DC183002E34F7 /* RDRedditCell.m */; };
+		15F5154B123DC1A5002E34F7 /* RDRedditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15F5154A123DC1A5002E34F7 /* RDRedditCell.xib */; };
 		1D3623260D0F684500981E51 /* RDAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* RDAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -152,6 +158,8 @@
 		158AA0AF1239B9AA004696EE /* whitecheckmark.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = whitecheckmark.png; path = Resources/images/whitecheckmark.png; sourceTree = "<group>"; };
 		158AA0F71239C9BB004696EE /* comments.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = comments.html; sourceTree = "<group>"; };
 		158AA1101239CEBD004696EE /* inlineitem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = inlineitem.png; path = Resources/images/inlineitem.png; sourceTree = "<group>"; };
+		15ACABF712404EFB00737799 /* RDRedditCellSubscribe.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RDRedditCellSubscribe.xib; sourceTree = "<group>"; };
+		15ACAC4F1240573100737799 /* RDRedditCellSimple.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RDRedditCellSimple.xib; sourceTree = "<group>"; };
 		15B89FCE12372E9000E09833 /* item-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "item-bg.png"; path = "Resources/images/item-bg.png"; sourceTree = "<group>"; };
 		15B8D92F123413A3008DA31D /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		15B8D95312341A7F008DA31D /* MGSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MGSplitViewController.h; path = Lib/MGSplitViewController.h; sourceTree = "<group>"; };
@@ -371,6 +379,11 @@
 		15F51366123B83E2002E34F7 /* item-bg-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "item-bg-selected.png"; path = "Resources/images/item-bg-selected.png"; sourceTree = "<group>"; };
 		15F51389123BF80A002E34F7 /* NSObject+UIKitGenericErrorHandling.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "NSObject+UIKitGenericErrorHandling.h"; sourceTree = "<group>"; };
 		15F5138A123BF80A002E34F7 /* NSObject+UIKitGenericErrorHandling.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "NSObject+UIKitGenericErrorHandling.m"; sourceTree = "<group>"; };
+		15F51543123DB682002E34F7 /* subscribebutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = subscribebutton.png; path = Resources/images/subscribebutton.png; sourceTree = "<group>"; };
+		15F51544123DB682002E34F7 /* unsubscribebutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = unsubscribebutton.png; path = Resources/images/unsubscribebutton.png; sourceTree = "<group>"; };
+		15F51547123DC183002E34F7 /* RDRedditCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDRedditCell.h; sourceTree = "<group>"; };
+		15F51548123DC183002E34F7 /* RDRedditCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDRedditCell.m; sourceTree = "<group>"; };
+		15F5154A123DC1A5002E34F7 /* RDRedditCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RDRedditCell.xib; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* RDAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* RDAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDAppDelegate.m; sourceTree = "<group>"; };
@@ -431,6 +444,11 @@
 				15BBC1821234A565001E20FC /* RDItemCell.m */,
 				15BBC1841234A570001E20FC /* RDItemCell.xib */,
 				155DEAA3123AEB6B006B73B5 /* RDItemCellPhoto.xib */,
+				15F51547123DC183002E34F7 /* RDRedditCell.h */,
+				15F51548123DC183002E34F7 /* RDRedditCell.m */,
+				15F5154A123DC1A5002E34F7 /* RDRedditCell.xib */,
+				15ACAC4F1240573100737799 /* RDRedditCellSimple.xib */,
+				15ACABF712404EFB00737799 /* RDRedditCellSubscribe.xib */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -949,6 +967,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				15F51543123DB682002E34F7 /* subscribebutton.png */,
+				15F51544123DB682002E34F7 /* unsubscribebutton.png */,
 				15F51366123B83E2002E34F7 /* item-bg-selected.png */,
 				158AA1101239CEBD004696EE /* inlineitem.png */,
 				158AA0AF1239B9AA004696EE /* whitecheckmark.png */,
@@ -1017,6 +1037,7 @@
 			isa = PBXProject;
 			buildConfigurationList = C01FCF4E08A954540054247B /* Build configuration list for PBXProject "Readdit" */;
 			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
 			hasScannedForEncodings = 1;
 			knownRegions = (
 				English,
@@ -1065,6 +1086,11 @@
 				15D9C3881239E35500025247 /* FBConnect.bundle in Resources */,
 				155DEAA4123AEB6B006B73B5 /* RDItemCellPhoto.xib in Resources */,
 				15F51367123B83E2002E34F7 /* item-bg-selected.png in Resources */,
+				15F51545123DB682002E34F7 /* subscribebutton.png in Resources */,
+				15F51546123DB682002E34F7 /* unsubscribebutton.png in Resources */,
+				15F5154B123DC1A5002E34F7 /* RDRedditCell.xib in Resources */,
+				15ACABF812404EFB00737799 /* RDRedditCellSubscribe.xib in Resources */,
+				15ACAC501240573100737799 /* RDRedditCellSimple.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1173,6 +1199,7 @@
 				15D9C3A31239E35500025247 /* SHKViewControllerWrapper.m in Sources */,
 				15D9C40A1239F25400025247 /* Reachability.m in Sources */,
 				15F5138B123BF80A002E34F7 /* NSObject+UIKitGenericErrorHandling.m in Sources */,
+				15F51549123DC183002E34F7 /* RDRedditCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -22,6 +22,11 @@
   NSIndexPath *currentItemIndexPath;
   BOOL didLoadFromLaunch;
   id<DKKeyedPool> loadingPool;
+  NSString *next;
+  UIView *nextPageFooterView;
+  UIButton *nextButton;
+  UIActivityIndicatorView *nextLoadingIndicator;
+  BOOL loadingMore;
 }
 
 @property(nonatomic, retain) MGSplitViewController *splitController;
