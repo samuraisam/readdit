@@ -24,25 +24,23 @@
 
 - (NSArray *)accounts;
 
+/* account manipulation */
 - (DKDeferred *)loginUsername:(NSString *)username password:(NSString *)password;
-
 - (DKDeferred *)vote:(int)d item:(NSString *)theid subreddit:(NSString *)sub username:(NSString *)un;
-
 - (DKDeferred *)alterSubredditSubscription:(NSString *)subreddit withID:(NSString *)subId action:(NSString *)action username:(NSString *)username;
 
-- (DKDeferred *)allSubreddits;
+/* global subreddit enumeration */
+- (DKDeferred *)allSubredditsPage:(NSString *)page existing:(NSArray *)existingResults;
+- (DKDeferred *)queryAllSubreddits:(NSString *)term page:(NSString *)page existing:(NSArray *)existingResults;
 
-- (DKDeferred *)queryAllSubreddits:(NSString *)term;
-
+/* account subreddit enumeration */
 - (DKDeferred *)subredditsForUsername:(NSString *)username;
 - (NSArray *)subscribedSubredditIdsForUsername:(NSString *)username;
-
 - (DKDeferred *)cachedSubredditsForUsername:(NSString *)username;
 
+/* account subreddit views */
 - (DKDeferred *)subreddit:(NSString *)sub forUsername:(NSString *)username;
-
 - (DKDeferred *)subreddit:(NSString *)sub page:(NSString *)page existing:(NSArray *)existingResults user:(NSString *)username;
-
 - (DKDeferred *)cachedSubreddit:(NSString *)sub forUsername:(NSString *)username;
 
 @end

@@ -89,6 +89,11 @@ static UIFont *titleLabelFont = nil;
 - (void)viewDidLoad 
 {
   [super viewDidLoad];
+  self.clearsSelectionOnViewWillAppear = YES;
+  self.contentSizeForViewInPopover = CGSizeMake(320.0, 600.0);
+  self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
+  self.tableView.separatorColor = [UIColor colorWithHexString:@"a5bcca"];
+  self.tableView.backgroundColor = [UIColor colorWithHexString:@"8c9ba4"];
   self.tableView.tableFooterView = nextPageFooterView;
   [nextPageFooterView addSubview:nextButton];
 }
@@ -96,9 +101,6 @@ static UIFont *titleLabelFont = nil;
 - (void)viewWillAppear:(BOOL)animated 
 {
   [super viewWillAppear:animated];
-  self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
-  self.tableView.separatorColor = [UIColor colorWithHexString:@"8c9ba4"];
-  self.tableView.backgroundColor = [UIColor colorWithHexString:@"8c9ba4"];
 }
 
 - (void)loadMore:(UIButton *)sender
@@ -121,7 +123,6 @@ static UIFont *titleLabelFont = nil;
     if (items) [items release];
     items = [[r objectAtIndex:0] retain];
     next = (id)[[NSNull null] retain];
-    [self prefetchItemThumbnails];
   } else {
     NSLog(@"cached reddit miss %@", r);
   }
@@ -143,7 +144,7 @@ static UIFont *titleLabelFont = nil;
     [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
   }
   nextButton.enabled = YES;
-  //[loadingPool drain];
+  [loadingPool drain];
   
   if ([r handleErrorAndAlert:YES]) return r;
   
@@ -153,6 +154,7 @@ static UIFont *titleLabelFont = nil;
     items = [[r objectAtIndex:0] retain];
     if (next) [next release];
     next = [[r objectAtIndex:1] retain];
+    nextButton.enabled = ![next isEqual:[NSNull null]];
     [self.tableView reloadData];
     
     [self prefetchItemThumbnails];

@@ -21,10 +21,14 @@
   NSArray *reddits;
   NSArray *builtins, *builtins2;
   NSString *username;
-  NSString *next;
   NSArray *subscribedSubredditIds;
-  BOOL searchMode;
+  BOOL searchMode, gotInitialSearchResults;
   RDRedditsController *redditsSearchController;
+  NSString *next;
+  UIView *nextPageFooterView;
+  UIButton *nextButton;
+  UIActivityIndicatorView *nextLoadingIndicator;
+  BOOL loadingMore, subscribing;
 }
 
 @property (nonatomic, assign) BOOL searchMode;

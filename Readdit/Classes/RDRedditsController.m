@@ -51,7 +51,8 @@
   // TODO: multi-user support
   username = [PREF_KEY(@"username") copy];
   performingInitialSync = firstSyncCompleted = NO;
-  searchMode = NO;
+  loadingMore = subscribing = NO;
+  searchMode = gotInitialSearchResults = NO;
   reddits = [EMPTY_ARRAY retain];
   builtins = [array_(array_(@"Front Page", @"/"), array_(@"All", @"/r/all/"), array_(@"Top", @"/top/"), 
                      array_(@"New", @"/new/"), array_(@"Controversial", @"/controversial/")) retain];
@@ -60,6 +61,17 @@
                       array_(@"Liked", @"/user/$username/liked/"), array_(@"Disliked", @"/user/$username/disliked/"),
                       array_(@"Hidden", @"/user/$username/hidden/")) retain];
   subscribedSubredditIds = [EMPTY_ARRAY retain];
+  
+  nextLoadingIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
+                          UIActivityIndicatorViewStyleGray];
+  nextLoadingIndicator.autoresizingMask 
+  = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
+  nextButton = [[UIButton buttonWithType:UIButtonTypeRoundedRect] retain];
+  [nextButton addTarget:self action:@selector(loadMore:) forControlEvents:UIControlEventTouchUpInside];
+  nextPageFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 52)];
+  nextPageFooterView.backgroundColor = [UIColor whiteColor];
+  nextPageFooterView.opaque = YES;
+  nextPageFooterView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 }
 
 - (RDRedditsController *)redditsSearchController
@@ -83,6 +95,34 @@
   self.tableView.separatorStyle = UITableViewCellSeparatorStyleSingleLine;
   self.tableView.separatorColor = [UIColor colorWithHexString:@"a5bcca"];
   self.tableView.backgroundColor = [UIColor colorWithHexString:@"8c9ba4"];
+  self.tableView.tableFooterView = nextPageFooterView;
+  [nextPageFooterView addSubview:nextButton];
+  if (searchMode) {
+    self.navigationItem.rightBarButtonItem 
+      = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:
+          UIBarButtonSystemItemRefresh target:self action:
+          @selector(refresh:)] autorelease];
+  }
+}
+
+- (void)refresh:(UIBarButtonItem *)sender
+{
+  sender.enabled = NO;
+  [[[RDRedditClient sharedClient] allSubredditsPage:nil existing:EMPTY_ARRAY]
+   addBoth:callbackTS(self, _gotSubreddits:)];
+  [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+}
+
+- (void)loadMore:(UIButton *)sender
+{
+  loadingMore = YES;
+  [sender removeFromSuperview];
+  [nextPageFooterView addSubview:nextLoadingIndicator];
+  [nextLoadingIndicator startAnimating];
+  [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+  [[[RDRedditClient sharedClient] allSubredditsPage:next existing:reddits] 
+   addBoth:callbackTS(self, _gotSubreddits:)];
+  self.navigationItem.rightBarButtonItem.enabled = NO;
 }
 
 - (void)setSearchMode:(BOOL)s
@@ -98,15 +138,21 @@
 {
   [super viewWillAppear:animated];
   if (username && !searchMode) self.title = username;  
-  //[self.tableView reloadData];
+  if (!searchMode) self.tableView.tableFooterView = nil;
 }
 
 - (void)viewDidAppear:(BOOL)animated 
 {
   [super viewDidAppear:animated];
   if (searchMode) {
-    [[[RDRedditClient sharedClient] allSubreddits] addBoth:callbackTS(self, _gotSubreddits:)];
-    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    nextButton.frame = CGRectMake(4, 4, self.tableView.frame.size.width - 8, 44);
+    nextLoadingIndicator.frame = CGRectMake(self.tableView.frame.size.width / 2 
+                                            - nextLoadingIndicator.frame.size.width / 2, 12, 22, 22);
+    if (!gotInitialSearchResults) {
+      [[[RDRedditClient sharedClient] allSubredditsPage:nil existing:EMPTY_ARRAY]
+       addBoth:callbackTS(self, _gotSubreddits:)];
+      [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+    }
     return;
   }
   if (![[[RDRedditClient sharedClient] accounts] count]) {
@@ -161,6 +207,7 @@
     NSLog(@"cachedSubreddits Miss %@", r);
   }
   [self.tableView reloadData];
+  if (subscribedSubredditIds) [subscribedSubredditIds release];
   subscribedSubredditIds = [[[RDRedditClient sharedClient] subscribedSubredditIdsForUsername:
                              username] retain];
   firstSyncCompleted = YES;
@@ -173,6 +220,14 @@
 {
   [self dataSourceDidFinishLoadingNewData];
   performingInitialSync = NO;
+  gotInitialSearchResults = YES;
+  
+  if (loadingMore) {
+    [nextLoadingIndicator stopAnimating];
+    [nextLoadingIndicator removeFromSuperview];
+    [nextPageFooterView addSubview:nextButton];
+    [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:NO];
+  }
   
   if ([r handleErrorAndAlert:YES]) return r;
   
@@ -180,10 +235,12 @@
   if (isDeferred(r)) return [r addBoth:callbackTS(self, _gotSubreddits:)];
   if (!searchMode) {
     NSDate *d = [NSDate date];
-    PREF_SET([username stringByAppendingString:@"redditslastupdated"], nsni([d timeIntervalSince1970]));
+    PREF_SET([username stringByAppendingString:@"redditslastupdated"], 
+             nsni([d timeIntervalSince1970]));
     PREF_SYNCHRONIZE;
     [(YMRefreshView *)self.refreshHeaderView setLastUpdatedDate:d];
   }
+  if (subscribedSubredditIds) [subscribedSubredditIds release];
   subscribedSubredditIds = [[[RDRedditClient sharedClient] subscribedSubredditIdsForUsername:
                              username] retain];
   if (reddits) [reddits release];
@@ -194,6 +251,10 @@
   } else {
     reddits = [r retain];
   }
+  if (searchMode && [next isEqual:[NSNull null]]) nextButton.enabled = NO;
+  if (searchMode) [nextButton setTitle:@"More" forState:UIControlStateNormal];
+  if (searchMode) self.navigationItem.rightBarButtonItem.enabled = YES;
+  
   [self.tableView reloadData];
   return r;
 }
@@ -279,8 +340,16 @@
   return cell;
 }
 
+- (NSIndexPath *)tableView:(UITableView *)tableView 
+  willSelectRowAtIndexPath:(NSIndexPath *)indexPath
+{
+  if (subscribing) return nil;
+  return indexPath;
+}
+
 - (void)subscribeCell:(RDRedditCell *)cell
 {
+  subscribing = YES;
   self.tableView.scrollEnabled = NO;
   cell.loading = YES;
   NSIndexPath *indexPath = cell.userInfo;
@@ -295,6 +364,7 @@
 - (id)_didSubscribeCell:(RDRedditCell *)cell action:(NSString *)action results:(id)r
 {
   NSLog(@"didSubscribe %@", r);
+  subscribing = NO;
   cell.loading = NO;
   self.tableView.scrollEnabled = YES;
   if ([r handleErrorAndAlert:YES]) return r;
