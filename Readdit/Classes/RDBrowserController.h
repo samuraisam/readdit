@@ -41,6 +41,7 @@ UIActionSheetDelegate, MBProgressHUDDelegate>
 - (IBAction)gotoReddit:(id)s;
 - (IBAction)gotoAuthor:(id)s;
 - (IBAction)action:(id)s;
+- (IBAction)gotoComments:(id)s;
 - (void)refreshVote;
 
 @end

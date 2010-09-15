@@ -88,6 +88,8 @@
 - (void)webViewDidStartLoad:(UIWebView *)v
 {
   [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+  if ([[v.request URL] description])
+    [urlButton setTitle:[[v.request URL] description] forState:UIControlStateNormal];
   backItem.enabled = v.canGoBack;
   forwardItem.enabled = v.canGoForward;
   refreshItem.enabled = YES;
@@ -123,6 +125,44 @@
   [downButton setEnabled:NO];
   [upButton setEnabled:NO];
   [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
+}
+
+/*
+ NSString *path = [NSString stringWithFormat:@"%@?id=%@&title=%@&author=%@&created=%@&domain=%@&base=%@&jump=%@",
+ [[NSBundle mainBundle] pathForResource:@"comments" ofType:@"html"],
+ [theID stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
+ [@"Loading Story Title" stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
+ [@"reddit" stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
+ [[NSString stringWithFormat:@"%f",[[NSDate date] timeIntervalSince1970]] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
+ [@"reddit.com" stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
+ [RedditBaseURLString stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
+ [(commentID ? commentID : @"no_such_id") stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding]
+ ];
+ 
+ NSURL *url = [[NSURL alloc] initWithScheme:@"file" host:@"localhost" path:path];
+ 
+ NSURLRequest *request = [NSURLRequest requestWithURL:url];
+ 
+ [url release];
+ 
+ [self loadRequest:request];		
+ */
+- (void)gotoComments:(id)s
+{
+  NSArray *c = [[item objectForKey:@"permalink"] captureComponentsMatchedByRegex:@"/([^/]*)/$"];
+  NSLog(@"c %@", c);
+  NSString *path = [NSString stringWithFormat:@"%@?id=%@&title=%@&author=%@&created=%@&domain=%@&base=%@&jump=%@",
+                    [[NSBundle mainBundle] pathForResource:@"comments" ofType:@"html"],
+                    [[item objectForKey:@"id"] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
+                    [@"Loading Story Title" stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
+                    [@"reddit" stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
+                    [[NSString stringWithFormat:@"%f", [[NSDate date] timeIntervalSince1970]] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
+                    [@"reddit.com" stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
+                    [@"http:////reddit.com" stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
+                    [([c count] == 2 ? [c objectAtIndex:1] : @"no_such_id") stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding]];
+  NSURLRequest *req = [NSURLRequest requestWithURL:[[NSURL alloc] initWithScheme:@"file" host:@"host" path:path]];
+  NSLog(@"req %@", req);
+  [webView loadRequest:req];
 }
 
 - (void)gotoAuthor:(id)s

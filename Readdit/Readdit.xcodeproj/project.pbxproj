@@ -17,6 +17,8 @@
 		158AA1111239CEBD004696EE /* inlineitem.png in Resources */ = {isa = PBXBuildFile; fileRef = 158AA1101239CEBD004696EE /* inlineitem.png */; };
 		15ACABF812404EFB00737799 /* RDRedditCellSubscribe.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15ACABF712404EFB00737799 /* RDRedditCellSubscribe.xib */; };
 		15ACAC501240573100737799 /* RDRedditCellSimple.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15ACAC4F1240573100737799 /* RDRedditCellSimple.xib */; };
+		15ACADC91240B8B500737799 /* commentbutton-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 15ACADC71240B8B500737799 /* commentbutton-selected.png */; };
+		15ACADCA1240B8B500737799 /* commentbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 15ACADC81240B8B500737799 /* commentbutton.png */; };
 		15B89FCF12372E9000E09833 /* item-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 15B89FCE12372E9000E09833 /* item-bg.png */; };
 		15B8D930123413A3008DA31D /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 15B8D92F123413A3008DA31D /* libsqlite3.0.dylib */; };
 		15B8D95912341A7F008DA31D /* MGSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B8D95412341A7F008DA31D /* MGSplitViewController.m */; };
@@ -160,6 +162,8 @@
 		158AA1101239CEBD004696EE /* inlineitem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = inlineitem.png; path = Resources/images/inlineitem.png; sourceTree = "<group>"; };
 		15ACABF712404EFB00737799 /* RDRedditCellSubscribe.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RDRedditCellSubscribe.xib; sourceTree = "<group>"; };
 		15ACAC4F1240573100737799 /* RDRedditCellSimple.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RDRedditCellSimple.xib; sourceTree = "<group>"; };
+		15ACADC71240B8B500737799 /* commentbutton-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "commentbutton-selected.png"; path = "Resources/images/commentbutton-selected.png"; sourceTree = "<group>"; };
+		15ACADC81240B8B500737799 /* commentbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = commentbutton.png; path = Resources/images/commentbutton.png; sourceTree = "<group>"; };
 		15B89FCE12372E9000E09833 /* item-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "item-bg.png"; path = "Resources/images/item-bg.png"; sourceTree = "<group>"; };
 		15B8D92F123413A3008DA31D /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		15B8D95312341A7F008DA31D /* MGSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MGSplitViewController.h; path = Lib/MGSplitViewController.h; sourceTree = "<group>"; };
@@ -967,6 +971,8 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				15ACADC71240B8B500737799 /* commentbutton-selected.png */,
+				15ACADC81240B8B500737799 /* commentbutton.png */,
 				15F51543123DB682002E34F7 /* subscribebutton.png */,
 				15F51544123DB682002E34F7 /* unsubscribebutton.png */,
 				15F51366123B83E2002E34F7 /* item-bg-selected.png */,
@@ -1091,6 +1097,8 @@
 				15F5154B123DC1A5002E34F7 /* RDRedditCell.xib in Resources */,
 				15ACABF812404EFB00737799 /* RDRedditCellSubscribe.xib in Resources */,
 				15ACAC501240573100737799 /* RDRedditCellSimple.xib in Resources */,
+				15ACADC91240B8B500737799 /* commentbutton-selected.png in Resources */,
+				15ACADCA1240B8B500737799 /* commentbutton.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
