@@ -10,7 +10,7 @@
 #import "YMTableViewController.h"
 #import "MGSplitViewController.h"
 
-@class RDItemCell, RDBrowserController;
+@class RDItemCell, RDBrowserController, RDPileController;
 
 @interface RDSubredditController : YMTableViewController 
 {
@@ -28,6 +28,7 @@
   UIActivityIndicatorView *nextLoadingIndicator;
   BOOL loadingMore;
   NSArray *seenItems;
+  RDPileController *pileController;
 }
 
 @property(nonatomic, retain) MGSplitViewController *splitController;
@@ -35,6 +36,7 @@
 @property(copy) NSString *username, *reddit;
 @property(assign) BOOL didLoadFromLaunch;
 @property(nonatomic, retain) NSArray *items;
+@property(nonatomic, retain) RDPileController *pileController;
 
 - (void)configureCell:(RDItemCell *)cell forItem:(NSDictionary *)item;
 

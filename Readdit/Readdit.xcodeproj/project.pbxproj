@@ -19,6 +19,12 @@
 		15ACAC501240573100737799 /* RDRedditCellSimple.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15ACAC4F1240573100737799 /* RDRedditCellSimple.xib */; };
 		15ACADC91240B8B500737799 /* commentbutton-selected.png in Resources */ = {isa = PBXBuildFile; fileRef = 15ACADC71240B8B500737799 /* commentbutton-selected.png */; };
 		15ACADCA1240B8B500737799 /* commentbutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 15ACADC81240B8B500737799 /* commentbutton.png */; };
+		15ACAE961241468900737799 /* RDPileController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15ACAE951241468900737799 /* RDPileController.m */; };
+		15ACAE9A1241471100737799 /* RDPileItemCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15ACAE991241471100737799 /* RDPileItemCell.m */; };
+		15ACAE9C1241472300737799 /* RDPileItemCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15ACAE9B1241472300737799 /* RDPileItemCell.xib */; };
+		15ACAE9F12414FC600737799 /* pileitem.png in Resources */ = {isa = PBXBuildFile; fileRef = 15ACAE9E12414FC600737799 /* pileitem.png */; };
+		15ACAF51124170B300737799 /* closebutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 15ACAF50124170B300737799 /* closebutton.png */; };
+		15ACAF9F12417A1500737799 /* selectedpileitem.png in Resources */ = {isa = PBXBuildFile; fileRef = 15ACAF9E12417A1500737799 /* selectedpileitem.png */; };
 		15B89FCF12372E9000E09833 /* item-bg.png in Resources */ = {isa = PBXBuildFile; fileRef = 15B89FCE12372E9000E09833 /* item-bg.png */; };
 		15B8D930123413A3008DA31D /* libsqlite3.0.dylib in Frameworks */ = {isa = PBXBuildFile; fileRef = 15B8D92F123413A3008DA31D /* libsqlite3.0.dylib */; };
 		15B8D95912341A7F008DA31D /* MGSplitViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15B8D95412341A7F008DA31D /* MGSplitViewController.m */; };
@@ -164,6 +170,14 @@
 		15ACAC4F1240573100737799 /* RDRedditCellSimple.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RDRedditCellSimple.xib; sourceTree = "<group>"; };
 		15ACADC71240B8B500737799 /* commentbutton-selected.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "commentbutton-selected.png"; path = "Resources/images/commentbutton-selected.png"; sourceTree = "<group>"; };
 		15ACADC81240B8B500737799 /* commentbutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = commentbutton.png; path = Resources/images/commentbutton.png; sourceTree = "<group>"; };
+		15ACAE941241468900737799 /* RDPileController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDPileController.h; sourceTree = "<group>"; };
+		15ACAE951241468900737799 /* RDPileController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDPileController.m; sourceTree = "<group>"; };
+		15ACAE981241471100737799 /* RDPileItemCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDPileItemCell.h; sourceTree = "<group>"; };
+		15ACAE991241471100737799 /* RDPileItemCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDPileItemCell.m; sourceTree = "<group>"; };
+		15ACAE9B1241472300737799 /* RDPileItemCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RDPileItemCell.xib; sourceTree = "<group>"; };
+		15ACAE9E12414FC600737799 /* pileitem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = pileitem.png; path = Resources/images/pileitem.png; sourceTree = "<group>"; };
+		15ACAF50124170B300737799 /* closebutton.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = closebutton.png; path = Resources/images/closebutton.png; sourceTree = "<group>"; };
+		15ACAF9E12417A1500737799 /* selectedpileitem.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = selectedpileitem.png; path = Resources/images/selectedpileitem.png; sourceTree = "<group>"; };
 		15B89FCE12372E9000E09833 /* item-bg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "item-bg.png"; path = "Resources/images/item-bg.png"; sourceTree = "<group>"; };
 		15B8D92F123413A3008DA31D /* libsqlite3.0.dylib */ = {isa = PBXFileReference; lastKnownFileType = "compiled.mach-o.dylib"; name = libsqlite3.0.dylib; path = usr/lib/libsqlite3.0.dylib; sourceTree = SDKROOT; };
 		15B8D95312341A7F008DA31D /* MGSplitViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MGSplitViewController.h; path = Lib/MGSplitViewController.h; sourceTree = "<group>"; };
@@ -439,11 +453,18 @@
 				15B8D9C4123422EF008DA31D /* RDLoginController.h */,
 				15B8D9C5123422EF008DA31D /* RDLoginController.m */,
 				15B8D9C6123422EF008DA31D /* RDLoginController.xib */,
-				15B8D9C912342365008DA31D /* RDTextInputCell.h */,
-				15B8D9CA12342365008DA31D /* RDTextInputCell.m */,
-				15B8D9CC12342430008DA31D /* RDTextInputCell.xib */,
 				15BBC10312347A09001E20FC /* RDSubredditController.h */,
 				15BBC10412347A09001E20FC /* RDSubredditController.m */,
+				15ACAE941241468900737799 /* RDPileController.h */,
+				15ACAE951241468900737799 /* RDPileController.m */,
+				15ACAE971241469000737799 /* Cells */,
+			);
+			path = Classes;
+			sourceTree = "<group>";
+		};
+		15ACAE971241469000737799 /* Cells */ = {
+			isa = PBXGroup;
+			children = (
 				15BBC1811234A565001E20FC /* RDItemCell.h */,
 				15BBC1821234A565001E20FC /* RDItemCell.m */,
 				15BBC1841234A570001E20FC /* RDItemCell.xib */,
@@ -453,8 +474,14 @@
 				15F5154A123DC1A5002E34F7 /* RDRedditCell.xib */,
 				15ACAC4F1240573100737799 /* RDRedditCellSimple.xib */,
 				15ACABF712404EFB00737799 /* RDRedditCellSubscribe.xib */,
+				15B8D9C912342365008DA31D /* RDTextInputCell.h */,
+				15B8D9CA12342365008DA31D /* RDTextInputCell.m */,
+				15B8D9CC12342430008DA31D /* RDTextInputCell.xib */,
+				15ACAE981241471100737799 /* RDPileItemCell.h */,
+				15ACAE991241471100737799 /* RDPileItemCell.m */,
+				15ACAE9B1241472300737799 /* RDPileItemCell.xib */,
 			);
-			path = Classes;
+			name = Cells;
 			sourceTree = "<group>";
 		};
 		15B8D95212341A7F008DA31D /* MGSplitViewController */ = {
@@ -971,6 +998,9 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				15ACAF9E12417A1500737799 /* selectedpileitem.png */,
+				15ACAF50124170B300737799 /* closebutton.png */,
+				15ACAE9E12414FC600737799 /* pileitem.png */,
 				15ACADC71240B8B500737799 /* commentbutton-selected.png */,
 				15ACADC81240B8B500737799 /* commentbutton.png */,
 				15F51543123DB682002E34F7 /* subscribebutton.png */,
@@ -1099,6 +1129,10 @@
 				15ACAC501240573100737799 /* RDRedditCellSimple.xib in Resources */,
 				15ACADC91240B8B500737799 /* commentbutton-selected.png in Resources */,
 				15ACADCA1240B8B500737799 /* commentbutton.png in Resources */,
+				15ACAE9C1241472300737799 /* RDPileItemCell.xib in Resources */,
+				15ACAE9F12414FC600737799 /* pileitem.png in Resources */,
+				15ACAF51124170B300737799 /* closebutton.png in Resources */,
+				15ACAF9F12417A1500737799 /* selectedpileitem.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1208,6 +1242,8 @@
 				15D9C40A1239F25400025247 /* Reachability.m in Sources */,
 				15F5138B123BF80A002E34F7 /* NSObject+UIKitGenericErrorHandling.m in Sources */,
 				15F51549123DC183002E34F7 /* RDRedditCell.m in Sources */,
+				15ACAE961241468900737799 /* RDPileController.m in Sources */,
+				15ACAE9A1241471100737799 /* RDPileItemCell.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

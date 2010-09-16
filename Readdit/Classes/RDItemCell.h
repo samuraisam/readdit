@@ -9,15 +9,21 @@
 #import <UIKit/UIKit.h>
 
 
-@interface RDItemCell : UITableViewCell 
+@interface RDItemCell : UITableViewCell <UIActionSheetDelegate>
 {
   IBOutlet UILabel *upvoteLabel, *commentLabel, *infoLabel, *titleLabel;
   IBOutlet UIImageView *thumbnail;
   BOOL clicked;
+  UISwipeGestureRecognizer *swipeRecognizer;
+  UIActionSheet *actionSheet;
+  id target, userInfo;
+  SEL addToPileAction;
 }
 
 @property(nonatomic, retain) UILabel *upvoteLabel, *commentLabel, *infoLabel, *titleLabel;
 @property(nonatomic, retain) UIImageView *thumbnail;
 @property(nonatomic, assign) BOOL clicked;
+@property(nonatomic, retain) id target, userInfo;
+@property(nonatomic, assign) SEL addToPileAction;
 
 @end

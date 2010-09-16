@@ -13,7 +13,7 @@
 @implementation RDItemCell
 
 @synthesize upvoteLabel, commentLabel, infoLabel, titleLabel, thumbnail;
-@synthesize clicked;
+@synthesize clicked, target, userInfo, addToPileAction;
 
 //- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
 //    if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
@@ -37,6 +37,23 @@ static UIColor *clickedTitleColor = nil;
   if (!clickedTitleColor) clickedTitleColor = [[UIColor colorWithRed:57.0/255.0 green:0 blue:98.0/255.0 alpha:1] retain];
 }
 
+- (void)handleGesture:(UIGestureRecognizer *)gestureRecognizer
+{
+  if (actionSheet) return;
+  actionSheet = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:
+                 nil destructiveButtonTitle:nil otherButtonTitles:@"Add to Pile", nil];
+  [actionSheet showFromRect:self.frame inView:self.superview animated:YES];
+}
+
+- (void)actionSheet:(UIActionSheet *)as didDismissWithButtonIndex:(NSInteger)buttonIndex
+{
+  if (buttonIndex == 0) {
+    if (target) [target performSelector:addToPileAction withObject:self];
+  }
+  [actionSheet release];
+  actionSheet = nil;
+}
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated 
 {
   [super setSelected:selected animated:animated];
@@ -58,6 +75,12 @@ static UIColor *clickedTitleColor = nil;
 
 - (void)prepareForReuse
 {
+  if (!swipeRecognizer) {
+    swipeRecognizer = [[UISwipeGestureRecognizer alloc] initWithTarget:self 
+                                          action:@selector(handleGesture:)];
+    swipeRecognizer.direction = UISwipeGestureRecognizerDirectionRight | UISwipeGestureRecognizerDirectionLeft;
+    [self addGestureRecognizer:swipeRecognizer];
+  }
   self.clicked = NO;
   [super prepareForReuse];
 }
@@ -87,6 +110,8 @@ static UIColor *clickedTitleColor = nil;
 
 - (void)dealloc 
 {
+  [actionSheet release];
+  [swipeRecognizer release];
   [thumbnail release];
   [upvoteLabel release];
   [commentLabel release];

@@ -14,6 +14,7 @@
 #import <CoreGraphics/CoreGraphics.h>
 #import <QuartzCore/QuartzCore.h>
 #import "NSObject+UIKitGenericErrorHandling.h"
+#import "RDPileController.h"
 
 
 static UIFont *titleLabelFont = nil;
@@ -30,6 +31,7 @@ static UIFont *titleLabelFont = nil;
 @implementation RDSubredditController
 
 @synthesize username, reddit, splitController, browserController, didLoadFromLaunch, items;
+@synthesize pileController;
 
 #pragma mark -
 #pragma mark Initialization
@@ -70,7 +72,7 @@ static UIFont *titleLabelFont = nil;
   self.actionTableViewHeaderClass = [YMRefreshView class];
   currentItemIndexPath = nil;
   loadingPool = [[DKDeferredPool alloc] init];
-  [loadingPool setConcurrency:1];
+  [loadingPool setConcurrency:4];
   nextLoadingIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
                           UIActivityIndicatorViewStyleGray];
   nextLoadingIndicator.autoresizingMask 
@@ -81,6 +83,16 @@ static UIFont *titleLabelFont = nil;
   nextPageFooterView.backgroundColor = [UIColor whiteColor];
   nextPageFooterView.opaque = YES;
   nextPageFooterView.autoresizingMask = UIViewAutoresizingFlexibleWidth;
+}
+
+- (RDPileController *)pileController
+{
+  if (!pileController) {
+    pileController = [[RDPileController alloc] initWithStyle:UITableViewStylePlain];
+    pileController.username = self.username;
+    pileController.browserController = self.browserController;
+  }
+  return pileController;
 }
 
 #pragma mark -
@@ -96,11 +108,20 @@ static UIFont *titleLabelFont = nil;
   self.tableView.backgroundColor = [UIColor colorWithHexString:@"8c9ba4"];
   self.tableView.tableFooterView = nextPageFooterView;
   [nextPageFooterView addSubview:nextButton];
+  self.navigationItem.rightBarButtonItem 
+    = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind
+                                  target:self action:@selector(showPile:)] autorelease];
 }
 
 - (void)viewWillAppear:(BOOL)animated 
 {
   [super viewWillAppear:animated];
+}
+
+- (void)showPile:(UIBarButtonItem *)sender
+{
+  self.pileController.username = self.username;
+  [self.navigationController pushViewController:self.pileController animated:YES];
 }
 
 - (void)loadMore:(UIButton *)sender
@@ -296,7 +317,6 @@ static UIFont *titleLabelFont = nil;
   return (r >= macks ? r : macks);
 }
 
-// Customize the appearance of table view cells.
 - (UITableViewCell *)tableView:(UITableView *)tableView 
          cellForRowAtIndexPath:(NSIndexPath *)indexPath 
 {  
@@ -317,6 +337,8 @@ static UIFont *titleLabelFont = nil;
       cell.thumbnail.layer.masksToBounds = YES;
       cell.thumbnail.layer.cornerRadius = 5;
     }
+    cell.target = self;
+    cell.addToPileAction = @selector(addToPileCell:);
   }
 
   [self configureCell:cell forItem:item];
@@ -380,6 +402,7 @@ static UIFont *titleLabelFont = nil;
   cell.infoLabel.text = [NSString stringWithFormat:@"%@ by %@", 
                          [NSDate fastStringForDisplayFromDate:created],
                          [item objectForKey:@"author"]];
+  cell.userInfo = item;
 }
 
 #pragma mark -
@@ -431,6 +454,14 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
   items = [a retain];
 }
 
+- (void)addToPileCell:(RDItemCell *)cell
+{
+  NSLog(@"add To Pile %@", cell);
+  [self.pileController addItem:cell.userInfo request:
+   [[NSURLRequest alloc] initWithURL:
+    [NSURL URLWithString:[cell.userInfo objectForKey:@"url"]]]];
+}
+
 #pragma mark -
 #pragma mark Memory management
 
@@ -446,6 +477,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 
 - (void)dealloc 
 {
+  [pileController release];
   [nextLoadingIndicator release];
   [nextButton release];
   [nextPageFooterView release];

@@ -85,11 +85,24 @@
   [upButton setImage:up forState:UIControlStateNormal];
 }
 
+- (BOOL) webView:(UIWebView *)webView shouldStartLoadWithRequest:(NSURLRequest *)request
+  navigationType:(UIWebViewNavigationType)navigationType
+{
+  NSURL *url = [request URL];
+  if ([[url scheme] hasPrefix:@"file"]) {
+    [urlButton setTitle:
+     [REDDIT_URL stringByAppendingString:
+       [[item objectForKey:@"permalink"] stringByReplacingOccurrencesOfRegex:
+        @"^/" withString:@""]] forState:UIControlStateNormal];
+  } else {
+    [urlButton setTitle:[[request URL] description] forState:UIControlStateNormal];
+  }
+  return YES;
+}
+
 - (void)webViewDidStartLoad:(UIWebView *)v
 {
   [[UIApplication sharedApplication] setNetworkActivityIndicatorVisible:YES];
-  if ([[v.request URL] description])
-    [urlButton setTitle:[[v.request URL] description] forState:UIControlStateNormal];
   backItem.enabled = v.canGoBack;
   forwardItem.enabled = v.canGoForward;
   refreshItem.enabled = YES;
