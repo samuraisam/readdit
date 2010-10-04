@@ -15,6 +15,7 @@
 #import <QuartzCore/QuartzCore.h>
 #import "NSObject+UIKitGenericErrorHandling.h"
 #import "RDPileController.h"
+#import "RDMagazineController.h"
 
 
 static UIFont *titleLabelFont = nil;
@@ -32,6 +33,7 @@ static UIFont *titleLabelFont = nil;
 
 @synthesize username, reddit, splitController, browserController, didLoadFromLaunch, items;
 @synthesize pileController;
+@synthesize magazineController;
 
 #pragma mark -
 #pragma mark Initialization
@@ -67,6 +69,7 @@ static UIFont *titleLabelFont = nil;
 {
   username = reddit = nil;
   items = [EMPTY_ARRAY retain];
+  gotFirstPage = NO;
   loadingMore = NO;
   didLoadCachedItems = NO;
   self.actionTableViewHeaderClass = [YMRefreshView class];
@@ -95,6 +98,14 @@ static UIFont *titleLabelFont = nil;
   return pileController;
 }
 
+- (RDMagazineController *)magazineController
+{
+  if (!magazineController) {
+    magazineController = [[RDMagazineController alloc] init];
+  }
+  return magazineController;
+}
+
 #pragma mark -
 #pragma mark View lifecycle
 
@@ -110,7 +121,7 @@ static UIFont *titleLabelFont = nil;
   [nextPageFooterView addSubview:nextButton];
   self.navigationItem.rightBarButtonItem 
     = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind
-                                  target:self action:@selector(showPile:)] autorelease];
+                                  target:self action:@selector(showMagazine:)] autorelease];
 }
 
 - (void)viewWillAppear:(BOOL)animated 
@@ -122,6 +133,22 @@ static UIFont *titleLabelFont = nil;
 {
   self.pileController.username = self.username;
   [self.navigationController pushViewController:self.pileController animated:YES];
+}
+
+- (void)showMagazine:(UIBarButtonItem *)sender
+{
+  UINavigationController *navController = [[[UINavigationController alloc] initWithRootViewController:
+                                            self.magazineController] autorelease];
+  self.magazineController.title = self.title;
+  [self.splitController presentModalViewController:navController animated:YES];
+  self.magazineController.navigationItem.leftBarButtonItem =
+    [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+                                                   target:self.splitController
+                                                   action:@selector(dismissModalViewControllerAnimated:)]
+                                                   autorelease];
+  navController.navigationBar.barStyle = UIBarStyleBlackOpaque;
+  self.magazineController.dataSource = self;
+  self.magazineController.items = items;
 }
 
 - (void)loadMore:(UIButton *)sender
@@ -151,9 +178,15 @@ static UIFont *titleLabelFont = nil;
     NSLog(@"cached reddit miss %@", r);
   }
   [self.tableView reloadData];
-  [[[RDRedditClient sharedClient] subreddit:reddit forUsername:username]
-   addBoth:callbackTS(self, _gotItems:)];
+  [self LOAD_MORE_MOTHERFUCKER];
   return r;
+}
+
+- (DKDeferred *)LOAD_MORE_MOTHERFUCKER
+{
+  return [(!gotFirstPage ? [[RDRedditClient sharedClient] subreddit:reddit forUsername:username]
+           : [[RDRedditClient sharedClient] subreddit:reddit page:next existing:items user:username])
+   addBoth:callbackTS(self, _gotItems:)];
 }
 
 - (id)_gotItems:(id)r
@@ -191,8 +224,9 @@ static UIFont *titleLabelFont = nil;
              nsni([d timeIntervalSince1970]));
     PREF_SYNCHRONIZE;
     [(YMRefreshView *)self.refreshHeaderView setLastUpdatedDate:d];
+    gotFirstPage = YES;
   }
-  return r;
+  return items;
 }
 
 - (void)prefetchItemThumbnails

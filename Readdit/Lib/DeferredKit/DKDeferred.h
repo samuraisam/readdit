@@ -369,6 +369,8 @@
 
 - (BOOL)hasKeyInMemory:(id)k;
 
+- (void)setMemoryCacheMaximum:(int)count;
+
 @property(assign) BOOL useMemoryCache;
 @property(assign) BOOL forceImmediateCaching;
 

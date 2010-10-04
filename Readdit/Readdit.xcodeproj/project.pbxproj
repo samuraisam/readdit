@@ -147,6 +147,11 @@
 		15F51546123DB682002E34F7 /* unsubscribebutton.png in Resources */ = {isa = PBXBuildFile; fileRef = 15F51544123DB682002E34F7 /* unsubscribebutton.png */; };
 		15F51549123DC183002E34F7 /* RDRedditCell.m in Sources */ = {isa = PBXBuildFile; fileRef = 15F51548123DC183002E34F7 /* RDRedditCell.m */; };
 		15F5154B123DC1A5002E34F7 /* RDRedditCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15F5154A123DC1A5002E34F7 /* RDRedditCell.xib */; };
+		15FA9403124FFAB300FC0528 /* RDMagazineController.m in Sources */ = {isa = PBXBuildFile; fileRef = 15FA9402124FFAB300FC0528 /* RDMagazineController.m */; };
+		15FA94061250007B00FC0528 /* RDMagazineController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15FA94051250007B00FC0528 /* RDMagazineController.xib */; };
+		15FA947F12501A1300FC0528 /* RDMagazineColumnPortrait.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15FA947E12501A1300FC0528 /* RDMagazineColumnPortrait.xib */; };
+		15FA948212501C7100FC0528 /* RDMagazineColumnLandscape.xib in Resources */ = {isa = PBXBuildFile; fileRef = 15FA948112501C7100FC0528 /* RDMagazineColumnLandscape.xib */; };
+		15FA948B12501EF800FC0528 /* mag-noimg.png in Resources */ = {isa = PBXBuildFile; fileRef = 15FA948A12501EF800FC0528 /* mag-noimg.png */; };
 		1D3623260D0F684500981E51 /* RDAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 1D3623250D0F684500981E51 /* RDAppDelegate.m */; };
 		1D60589B0D05DD56006BFB54 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; };
 		1D60589F0D05DD5A006BFB54 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1D30AB110D05D00D00671497 /* Foundation.framework */; };
@@ -402,6 +407,12 @@
 		15F51547123DC183002E34F7 /* RDRedditCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDRedditCell.h; sourceTree = "<group>"; };
 		15F51548123DC183002E34F7 /* RDRedditCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDRedditCell.m; sourceTree = "<group>"; };
 		15F5154A123DC1A5002E34F7 /* RDRedditCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RDRedditCell.xib; sourceTree = "<group>"; };
+		15FA9401124FFAB300FC0528 /* RDMagazineController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDMagazineController.h; sourceTree = "<group>"; };
+		15FA9402124FFAB300FC0528 /* RDMagazineController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDMagazineController.m; sourceTree = "<group>"; };
+		15FA94051250007B00FC0528 /* RDMagazineController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RDMagazineController.xib; sourceTree = "<group>"; };
+		15FA947E12501A1300FC0528 /* RDMagazineColumnPortrait.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RDMagazineColumnPortrait.xib; sourceTree = "<group>"; };
+		15FA948112501C7100FC0528 /* RDMagazineColumnLandscape.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = RDMagazineColumnLandscape.xib; sourceTree = "<group>"; };
+		15FA948A12501EF800FC0528 /* mag-noimg.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "mag-noimg.png"; path = "Resources/mag-noimg.png"; sourceTree = "<group>"; };
 		1D30AB110D05D00D00671497 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		1D3623240D0F684500981E51 /* RDAppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = RDAppDelegate.h; sourceTree = "<group>"; };
 		1D3623250D0F684500981E51 /* RDAppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RDAppDelegate.m; sourceTree = "<group>"; };
@@ -458,6 +469,9 @@
 				15ACAE941241468900737799 /* RDPileController.h */,
 				15ACAE951241468900737799 /* RDPileController.m */,
 				15ACAE971241469000737799 /* Cells */,
+				15FA9401124FFAB300FC0528 /* RDMagazineController.h */,
+				15FA9402124FFAB300FC0528 /* RDMagazineController.m */,
+				15FA94051250007B00FC0528 /* RDMagazineController.xib */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -480,6 +494,8 @@
 				15ACAE981241471100737799 /* RDPileItemCell.h */,
 				15ACAE991241471100737799 /* RDPileItemCell.m */,
 				15ACAE9B1241472300737799 /* RDPileItemCell.xib */,
+				15FA947E12501A1300FC0528 /* RDMagazineColumnPortrait.xib */,
+				15FA948112501C7100FC0528 /* RDMagazineColumnLandscape.xib */,
 			);
 			name = Cells;
 			sourceTree = "<group>";
@@ -998,6 +1014,7 @@
 		29B97317FDCFA39411CA2CEA /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				15FA948A12501EF800FC0528 /* mag-noimg.png */,
 				15ACAF9E12417A1500737799 /* selectedpileitem.png */,
 				15ACAF50124170B300737799 /* closebutton.png */,
 				15ACAE9E12414FC600737799 /* pileitem.png */,
@@ -1133,6 +1150,10 @@
 				15ACAE9F12414FC600737799 /* pileitem.png in Resources */,
 				15ACAF51124170B300737799 /* closebutton.png in Resources */,
 				15ACAF9F12417A1500737799 /* selectedpileitem.png in Resources */,
+				15FA94061250007B00FC0528 /* RDMagazineController.xib in Resources */,
+				15FA947F12501A1300FC0528 /* RDMagazineColumnPortrait.xib in Resources */,
+				15FA948212501C7100FC0528 /* RDMagazineColumnLandscape.xib in Resources */,
+				15FA948B12501EF800FC0528 /* mag-noimg.png in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1244,6 +1265,7 @@
 				15F51549123DC183002E34F7 /* RDRedditCell.m in Sources */,
 				15ACAE961241468900737799 /* RDPileController.m in Sources */,
 				15ACAE9A1241471100737799 /* RDPileItemCell.m in Sources */,
+				15FA9403124FFAB300FC0528 /* RDMagazineController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

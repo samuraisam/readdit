@@ -29,6 +29,7 @@
   [window addSubview:splitViewController.view];
   [window makeKeyAndVisible];
   [DKDeferred setCache:[DKDeferredSqliteCache sharedCache]];
+  [[DKDeferred cache] setMemoryCacheMaximum:100];
   NSArray *paths = NSSearchPathForDirectoriesInDomains(NSCachesDirectory, NSUserDomainMask, YES);
   NSString *_cacheDir = [[paths objectAtIndex:0] stringByAppendingPathComponent:@"URLCache"]; 
   NSLog(@"urlCache %@", _cacheDir);

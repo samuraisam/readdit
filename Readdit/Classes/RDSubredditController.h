@@ -11,6 +11,7 @@
 #import "MGSplitViewController.h"
 
 @class RDItemCell, RDBrowserController, RDPileController;
+@class RDMagazineController;
 
 @interface RDSubredditController : YMTableViewController 
 {
@@ -27,10 +28,13 @@
   UIButton *nextButton;
   UIActivityIndicatorView *nextLoadingIndicator;
   BOOL loadingMore;
+  BOOL gotFirstPage;
   NSArray *seenItems;
   RDPileController *pileController;
+  RDMagazineController *magazineController;
 }
 
+@property(nonatomic, retain) RDMagazineController *magazineController;
 @property(nonatomic, retain) MGSplitViewController *splitController;
 @property(nonatomic, retain) RDBrowserController *browserController;
 @property(copy) NSString *username, *reddit;
@@ -39,5 +43,6 @@
 @property(nonatomic, retain) RDPileController *pileController;
 
 - (void)configureCell:(RDItemCell *)cell forItem:(NSDictionary *)item;
+- (DKDeferred *)LOAD_MORE_MOTHERFUCKER;
 
 @end

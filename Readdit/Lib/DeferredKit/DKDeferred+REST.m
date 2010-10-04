@@ -177,6 +177,8 @@ NSMutableDictionary *__restClients = nil;
                 str error:&err];
       if (!err) {
         return ret;
+      } else {
+        return err;
       }
     }
   }

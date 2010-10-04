@@ -70,6 +70,20 @@
   [self refreshVote];
 }
 
+- (void)setShowsCloseButton:(BOOL)showCloseButton
+{
+  if (showCloseButton != closeButton.hidden) {
+    closeButton.hidden = showCloseButton;
+    titleLabel.frame = CGRectInset(titleLabel.frame, showCloseButton ? -80 : 80, 0);
+  }
+}
+
+- (void)close:(id)s
+{
+  if (delegate && [delegate respondsToSelector:@selector(closeBrowser:)])
+    [delegate performSelector:@selector(closeBrowser:) withObject:self];
+}
+
 - (void)refreshVote
 {
   infoLabel.text = [NSString stringWithFormat:@"%@ points | %@ comments", 

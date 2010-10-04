@@ -21,6 +21,7 @@ UIActionSheetDelegate, MBProgressHUDDelegate>
   IBOutlet UIBarButtonItem *forwardItem, *backItem, *refreshItem, *urlItem, *actionItem;
   IBOutlet UIButton *redditButton, *authorButton;
   UIButton *urlButton;
+  UIButton *closeButton;
   NSDictionary *item;
   NSString *username;
   id delegate;
@@ -42,6 +43,8 @@ UIActionSheetDelegate, MBProgressHUDDelegate>
 - (IBAction)gotoAuthor:(id)s;
 - (IBAction)action:(id)s;
 - (IBAction)gotoComments:(id)s;
+- (IBAction)close:(id)s;
 - (void)refreshVote;
+- (void)setShowsCloseButton:(BOOL)showCloseButton;
 
 @end

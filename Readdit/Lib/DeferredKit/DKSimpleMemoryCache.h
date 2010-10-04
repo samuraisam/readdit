@@ -48,6 +48,7 @@
 }
 
 @property(retain) DKCallback *onInvalidate;
+@property(assign) int capacity;
 
 - (id)initWithCapacity:(int)cap;
 

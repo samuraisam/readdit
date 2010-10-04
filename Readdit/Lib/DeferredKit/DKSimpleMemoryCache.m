@@ -40,7 +40,7 @@
 
 @implementation DKSimpleMemoryCache
 
-@synthesize onInvalidate;
+@synthesize onInvalidate, capacity = fCapacity;
 
 /************************************************************************/
 /*																		*/
@@ -57,6 +57,19 @@
     onInvalidate = nil;
 	}
 	return self;
+}
+
+- (void)setCapacity:(int)c
+{
+  if (c > fCapacity) {
+    NSArray *old = [fAge objectsAtIndexes:
+                    [NSIndexSet indexSetWithIndexesInRange:
+                     NSMakeRange(c, [fCapacity count] - 1)]];
+    for (id k in old) {
+      [self invalidateKey:k];
+    }
+  }
+  fCapacity = c;
 }
 
 - (void)dealloc

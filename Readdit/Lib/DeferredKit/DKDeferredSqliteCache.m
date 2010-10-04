@@ -466,6 +466,11 @@ cullFrequency:(int)_cullFrequency
     memoryCache.onInvalidate = nil;
 }
 
+- (void)setMemoryCacheMaximum:(int)count
+{
+  [memoryCache setCapacity:count];
+}
+
 - (void)dealloc 
 { 
   [inbox release];
