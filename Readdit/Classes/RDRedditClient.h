@@ -51,6 +51,9 @@
 - (DKDeferred *)subreddit:(NSString *)sub page:(NSString *)page existing:(NSArray *)existingResults user:(NSString *)username;
 - (DKDeferred *)cachedSubreddit:(NSString *)sub forUsername:(NSString *)username;
 
+/* post manupulation */
+- (DKDeferred *)postDetail:(NSString *)postId forUsername:(NSString *)username;
+
 @end
 
 

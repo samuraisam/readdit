@@ -15,9 +15,17 @@
 
 @implementation RDBrowserController
 
-@synthesize splitController, item, username, delegate;
+@synthesize splitController, item, username, delegate, tableView;
 @synthesize upButton, downButton, titleLabel, infoLabel, submissionLabel, webView;
 @synthesize forwardItem, backItem, refreshItem, urlItem, actionItem;
+
+- (UITableView *)tableView
+{
+  if (!tableView) tableView = [[UITableView alloc] initWithFrame:webView.frame style:UITableViewStylePlain];
+  tableView.delegate = self;
+  tableView.dataSource = self;
+  return tableView;
+}
 
 - (void)setItem:(NSDictionary *)i
 {
@@ -176,21 +184,58 @@
  */
 - (void)gotoComments:(id)s
 {
-  NSArray *c = [[item objectForKey:@"permalink"] captureComponentsMatchedByRegex:@"/([^/]*)/$"];
-  NSLog(@"c %@", c);
-  NSString *path = [NSString stringWithFormat:@"%@?id=%@&title=%@&author=%@&created=%@&domain=%@&base=%@&jump=%@&mh=%@",
-                    [[NSBundle mainBundle] pathForResource:@"comments" ofType:@"html"],
-                    [[item objectForKey:@"id"] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
-                    [@"Loading Story Title" stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
-                    [@"reddit" stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
-                    [[NSString stringWithFormat:@"%f", [[NSDate date] timeIntervalSince1970]] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
-                    [@"reddit.com" stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
-                    [@"http:////reddit.com" stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
-                    [([c count] == 2 ? [c objectAtIndex:1] : @"no_such_id") stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
-                    [PREF_KEY(@"modhash") stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding]];
-  NSURLRequest *req = [NSURLRequest requestWithURL:[[NSURL alloc] initWithScheme:@"file" host:@"host" path:path]];
-  NSLog(@"req %@", req);
-  [webView loadRequest:req];
+//  NSArray *c = [[item objectForKey:@"permalink"] captureComponentsMatchedByRegex:@"/([^/]*)/$"];
+//  NSLog(@"c %@", c);
+//  NSString *path = [NSString stringWithFormat:@"%@?id=%@&title=%@&author=%@&created=%@&domain=%@&base=%@&jump=%@&mh=%@",
+//                    [[NSBundle mainBundle] pathForResource:@"comments" ofType:@"html"],
+//                    [[item objectForKey:@"id"] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
+//                    [@"Loading Story Title" stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
+//                    [@"reddit" stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
+//                    [[NSString stringWithFormat:@"%f", [[NSDate date] timeIntervalSince1970]] stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
+//                    [@"reddit.com" stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
+//                    [@"http:////reddit.com" stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
+//                    [([c count] == 2 ? [c objectAtIndex:1] : @"no_such_id") stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding],
+//                    [PREF_KEY(@"modhash") stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding]];
+//  NSURLRequest *req = [NSURLRequest requestWithURL:[[NSURL alloc] initWithScheme:@"file" host:@"host" path:path]];
+//  NSLog(@"req %@", req);
+//  [webView loadRequest:req];
+  [self.webView.superview addSubview:self.tableView];
+  [self.webView removeFromSuperview];
+  [[[RDRedditClient sharedClient]
+    postDetail:[item objectForKey:@"id"] forUsername:username]
+   addBoth:callbackTS(self, _gotPostDetail:)];
+}
+
+- (id)_gotPostDetail:(NSArray *)ret
+{
+  if (![ret isKindOfClass:[NSArray class]]) {
+    return ret;
+  }
+  if (postDetail) [postDetail release];
+  postDetail = [ret retain];
+  NSLog(@" post detail %@", postDetail);
+  [self.tableView reloadData];
+  return ret;
+}
+
+- (NSInteger) numberOfSectionsInTableView:(UITableView *)table
+{
+  return 1;
+}
+
+- (NSInteger) tableView:(UITableView *)table numberOfRowsInSection:(NSInteger)section
+{
+  return [[[[postDetail objectAtIndex:1] objectForKey:@"data"] objectForKey:@"children"] count];
+}
+
+- (UITableViewCell *) tableView:(UITableView *)table cellForRowAtIndexPath:(NSIndexPath *)indexPath
+{
+  static NSString *ident = @"commentident";
+  UITableViewCell *cell = [table dequeueReusableCellWithIdentifier:ident];
+  if (!cell) {
+    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ident] autorelease];
+  }
+  return cell;
 }
 
 - (void)gotoAuthor:(id)s

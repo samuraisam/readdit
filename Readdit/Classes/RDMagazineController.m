@@ -218,7 +218,7 @@
     label.hidden = imageView.hidden = NO;
     label.text = [[item objectForKey:@"data"] objectForKey:@"title"];
     NSString *thumbnailURL = [NSString stringWithFormat:
-                              @"http://app.craigsfishapp.com/i/?u=%@&h=350&w=350&m=fill", 
+                              @"http://ws1.craigsfishapp.com/api/v1/thumbnail/from_address/?u=%@&h=175&w=175&m=fill", 
                               [[[item objectForKey:@"data"] objectForKey:@"url"] 
                               stringByAddingPercentEscapesUsingEncoding:NSUTF8StringEncoding]];
     id img = [[DKDeferred cache] objectForKeyInMemory:thumbnailURL];

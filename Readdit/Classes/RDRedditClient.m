@@ -208,6 +208,23 @@
           addCallback:curryTS(self, @selector(_saveSubscribedRedditsUsername:results:), username)];
 }
 
+- (DKDeferred *)postDetail:(NSString *)postId forUsername:(NSString *)username
+{
+  static NSString *m = @"comments/%@/.json";
+  if (!username) username = @"";
+  return [[[DKDeferred rest:REDDIT_URL] GET:
+           [NSString stringWithFormat:m, postId] values:EMPTY_DICT] 
+          addBoth:callbackTS(self, _doneGotPostDetails:)];
+}
+
+- (id)_doneGotPostDetails:(id)r
+{
+  if ([r handleErrorAndAlert:NO]) return r;
+  id d = [[[[NSString alloc] initWithData:r encoding:
+            NSUTF8StringEncoding] autorelease] JSONValue];
+  return d;
+}
+
 - (NSArray *)subscribedSubredditIdsForUsername:(NSString *)username
 {
   NSArray *ret = [[NSUserDefaults standardUserDefaults] objectForKey:

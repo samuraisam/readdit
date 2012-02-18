@@ -64,7 +64,7 @@
   if (c > fCapacity) {
     NSArray *old = [fAge objectsAtIndexes:
                     [NSIndexSet indexSetWithIndexesInRange:
-                     NSMakeRange(c, [fCapacity count] - 1)]];
+                     NSMakeRange(c, (int)[fCapacity count] - 1)]];
     for (id k in old) {
       [self invalidateKey:k];
     }

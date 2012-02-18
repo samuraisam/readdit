@@ -12,7 +12,7 @@
 
 @interface RDBrowserController : UIViewController 
 <UIPopoverControllerDelegate, UISplitViewControllerDelegate, UIWebViewDelegate,
-UIActionSheetDelegate, MBProgressHUDDelegate> 
+UIActionSheetDelegate, MBProgressHUDDelegate, UITableViewDataSource, UITableViewDelegate> 
 {
   IBOutlet MGSplitViewController *splitController;
   IBOutlet UIButton *upButton, *downButton;
@@ -26,8 +26,11 @@ UIActionSheetDelegate, MBProgressHUDDelegate>
   NSString *username;
   id delegate;
   MBProgressHUD *HUD;
+  NSArray *postDetail;
+  UITableView *tableView;
 }
 
+@property (nonatomic, retain) UITableView *tableView;
 @property (nonatomic, retain) id delegate;
 @property (nonatomic, retain) NSDictionary *item;
 @property (nonatomic, retain) MGSplitViewController *splitController;
