@@ -18,15 +18,15 @@ open Readdit/Readdit.xcodeproj and run in the simulator to get started quickly.
 What does it do? (so far)
 =========================
   
-	* Fully integrated with your reddit account. Subscribe and unsubscribe
-	  from reddits. (tap the magnifying glass on the subreddits listing)
-	* "Pile" which is sort of like opening an interesting link in a
-	  background tab. It will save and pre-cache your links in a in the
-	  background for later viewing. Swipe over an item in the list to put
-	  it in the pile.
-	* "Magazine" which is sort of like an endlessly scrolling wall of 
- 	  images that link to reddit stories. Great for viewing
-	  photograph-heavy reddits.
+* Fully integrated with your reddit account. Subscribe and unsubscribe
+  from reddits. (tap the magnifying glass on the subreddits listing)
+* "Pile" which is sort of like opening an interesting link in a
+  background tab. It will save and pre-cache your links in a in the
+  background for later viewing. Swipe over an item in the list to put
+  it in the pile.
+* "Magazine" which is sort of like an endlessly scrolling wall of 
+	  images that link to reddit stories. Great for viewing
+  photograph-heavy reddits.
 
 What does it need?
 ==================
@@ -38,19 +38,19 @@ http://www.reddit.com/r/readditapp/
 
 Here are some ideas to get started with:
 
-	* "Magazine" needs a code refresh. It's a bit craggy and there are
-	  some decent open source grid views that can be used now. It's
-	  currently a sideways table view (hah!)
-	* Comments! One of the best thing about reddit and it's not here!
-	* Profile interface for users. It would be neat to be able to view an
-	  overview of a user in the app.
-	* An interesting way to put things in the pile. For instance, a drawer
-	  could slide out from underneath the item list on swipe, the item
-	  drops into the drawer then it closes. Just an idea.
-	* iPhone version. This is iOS, and it could be easily ported to work
-	  fine on the iPhone.
-	* Bug fixes, plugging memory leaks, and general polish.
-	* Whatever you want! It's bloody open source.
+* "Magazine" needs a code refresh. It's a bit craggy and there are
+  some decent open source grid views that can be used now. It's
+  currently a sideways table view (hah!)
+* Comments! One of the best thing about reddit and it's not here!
+* Profile interface for users. It would be neat to be able to view an
+  overview of a user in the app.
+* An interesting way to put things in the pile. For instance, a drawer
+  could slide out from underneath the item list on swipe, the item
+  drops into the drawer then it closes. Just an idea.
+* iPhone version. This is iOS, and it could be easily ported to work
+  fine on the iPhone.
+* Bug fixes, plugging memory leaks, and general polish.
+* Whatever you want! It's bloody open source.
 
 
 Here is what it looks like:
