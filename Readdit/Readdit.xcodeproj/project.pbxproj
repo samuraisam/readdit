@@ -1299,7 +1299,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Readdit_Prefix.pch;
 				INFOPLIST_FILE = "Readdit-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				PRODUCT_NAME = Readdit;
 				SDKROOT = iphoneos;
 			};
@@ -1315,7 +1315,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Readdit_Prefix.pch;
 				INFOPLIST_FILE = "Readdit-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 3.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				PRODUCT_NAME = "Read It";
 				SDKROOT = iphoneos;
 			};
@@ -1329,6 +1329,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = Readdit_Prefix.pch;
 				INFOPLIST_FILE = "Readdit-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 4.2;
 				PRODUCT_NAME = Readdit;
 				VALIDATE_PRODUCT = YES;
 			};
