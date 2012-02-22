@@ -24,14 +24,14 @@
   RDBrowserController *browserController;
   id dataSource;
   BOOL loadingMore;
-  id currentCell;
+  id __unsafe_unretained currentCell;
   int currentIndex;
 }
 
-@property(nonatomic, retain) NSArray *items;
-@property(nonatomic, retain) id dataSource;
-@property(nonatomic, retain) RDBrowserController *browserController;
-@property(nonatomic, assign) id currentCell;
+@property(nonatomic) NSArray *items;
+@property(nonatomic) id dataSource;
+@property(nonatomic) RDBrowserController *browserController;
+@property(nonatomic, unsafe_unretained) id currentCell;
 @property(nonatomic, assign) int currentIndex;
 
 @end
@@ -40,13 +40,13 @@
 @interface RDMagazineColumn : UITableViewCell
 {
   NSArray *imageViews, *labelViews, *smokeViews;
-  id delegate;
+  id __unsafe_unretained delegate;
   SEL selectAction;
   id userData;
 }
 
-@property(nonatomic, assign) id delegate;
-@property(nonatomic, retain) id userData;
+@property(nonatomic, unsafe_unretained) id delegate;
+@property(nonatomic) id userData;
 @property(nonatomic, assign) SEL selectAction;
 @property(nonatomic, readonly) NSArray *imageViews, *labelViews, *smokeViews;
 
@@ -55,11 +55,11 @@
 
 @interface RDMagazineImage : UIImageView <UIGestureRecognizerDelegate>
 {
-  id delegate;
+  id __unsafe_unretained delegate;
   SEL touchAction;
 }
 
-@property(nonatomic, assign) id delegate;
+@property(nonatomic, unsafe_unretained) id delegate;
 @property(nonatomic, assign) SEL touchAction;
 
 @end

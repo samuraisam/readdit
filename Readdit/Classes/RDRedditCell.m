@@ -64,15 +64,6 @@
   }
 }
 
-- (void)dealloc 
-{
-  [activityIndicator release];
-  [titleLabel release];
-  [subtitleLabel release];
-  [subscribeButton release];
-  [userInfo release];
-  [super dealloc];
-}
 
 
 @end

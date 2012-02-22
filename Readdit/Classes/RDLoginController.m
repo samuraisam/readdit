@@ -104,7 +104,6 @@
   if ([cell.textLabel.text hasPrefix:@"Username"]) {
     if (passwordField) [passwordField becomeFirstResponder];
   } else {
-    if (HUD) [HUD release];
     HUD = [[MBProgressHUD alloc] initWithView:self.navigationController.view];
     HUD.labelText = @"Loading...";
     [self.navigationController.view addSubview:HUD];
@@ -134,7 +133,6 @@
 - (void) hudWasHidden
 {
   [HUD removeFromSuperview];
-  [HUD release];
   HUD = nil;
 }
 
@@ -213,11 +211,6 @@
 //}
 
 
-- (void)dealloc 
-{
-  [splitController release];
-  [super dealloc];
-}
 
 
 @end

@@ -27,9 +27,9 @@ static inline id<DKCallback> _curryTS(id target, SEL selector, ...) {
   [invocation setSelector:selector];
   va_list argumentList;
   va_start(argumentList, selector);
-  id arg;
+  __unsafe_unretained id arg;
   int i = 0;
-  while (arg = va_arg(argumentList, id)) {
+  while ((arg = va_arg(argumentList, id))) {
     //NSLog(@"arg:%@", arg);
     [invocation setArgument:&arg atIndex:i + 2];
     i++;
@@ -76,8 +76,8 @@ static inline id<DKCallback> _curryTS(id target, SEL selector, ...) {
   **/
 static inline NSString* _uuid1() {
   CFUUIDRef uuid = CFUUIDCreate(nil);
-  NSString *uuidString = (NSString *)CFUUIDCreateString(nil, uuid);
+  NSString *uuidString = (__bridge_transfer NSString *)CFUUIDCreateString(nil, uuid);
   CFRelease(uuid);
-  return [uuidString autorelease];
+  return uuidString;
 }
 #endif

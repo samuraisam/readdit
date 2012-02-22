@@ -20,7 +20,7 @@
   MBProgressHUD *HUD;
 }
 
-@property(nonatomic, retain) id delegate;
-@property(nonatomic, retain) MGSplitViewController *splitController;
+@property(nonatomic) id delegate;
+@property(nonatomic) MGSplitViewController *splitController;
 
 @end

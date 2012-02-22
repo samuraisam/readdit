@@ -26,8 +26,8 @@
       [DKDeferred setRestClient:[RDRestClient clientWithURL:REDDIT_URL]];
       [[DKDeferred rest:REDDIT_URL] setUsername:PREF_KEY(@"username")];
     }
-    DKDeferredSqliteCache *c = [[[DKDeferredSqliteCache alloc] initWithDbName:
-      @"rdmethodcache.db" maxEntries:3000 cullFrequency:3] autorelease];
+    DKDeferredSqliteCache *c = [[DKDeferredSqliteCache alloc] initWithDbName:
+      @"rdmethodcache.db" maxEntries:3000 cullFrequency:3];
     c.useMemoryCache = NO;
     [sharedClient setMethodCache:c];
     [sharedClient setReads:[NSMutableDictionary dictionary]];
@@ -66,7 +66,7 @@
     [self.reads setObject:a forKey:key];
   }
   if (![a containsObject:item])
-    [a insertObject:[[item copy] autorelease] atIndex:0];
+    [a insertObject:[item copy] atIndex:0];
   if ([a count] > MAXIMUM_SEEN_CACHE_COUNT)
     [a removeObjectsInRange:NSMakeRange(MAXIMUM_SEEN_CACHE_COUNT, a.count - 1)];
 }
@@ -100,8 +100,8 @@
 - (id)_didAlterSubscription:(id)r
 {
   id d = nil;
-  if ([r isKindOfClass:[NSData class]] && [(d = [[[[NSString alloc] initWithData:r encoding:
-      NSUTF8StringEncoding] autorelease] JSONValue]) isKindOfClass:[NSDictionary class]]) {
+  if ([r isKindOfClass:[NSData class]] && [(d = [[[NSString alloc] initWithData:r encoding:
+      NSUTF8StringEncoding] JSONValue]) isKindOfClass:[NSDictionary class]]) {
     NSLog(@"didAlterSubscription %@", d);
     return @"success";
   }
@@ -129,8 +129,8 @@
 {
   if ([r handleErrorAndAlert:NO]) return r;
   id ret = EMPTY_ARRAY;
-  id d = [[[[NSString alloc] initWithData:r encoding:
-            NSUTF8StringEncoding] autorelease] JSONValue];
+  id d = [[[NSString alloc] initWithData:r encoding:
+            NSUTF8StringEncoding] JSONValue];
   id next = [NSNull null];
   if ([d isKindOfClass:[NSDictionary class]]) {
     if (!(ret = [[d objectForKey:@"data"] objectForKey:@"children"]))
@@ -144,8 +144,8 @@
 - (id)_didVote:(id)r
 {
   id d = nil;
-  if ([r isKindOfClass:[NSData class]] && [(d = [[[[NSString alloc] initWithData:r encoding:
-      NSUTF8StringEncoding] autorelease] JSONValue]) isKindOfClass:[NSDictionary class]]) {
+  if ([r isKindOfClass:[NSData class]] && [(d = [[[NSString alloc] initWithData:r encoding:
+      NSUTF8StringEncoding] JSONValue]) isKindOfClass:[NSDictionary class]]) {
     return @"success";
   }
   return @"failure";
@@ -185,8 +185,8 @@
 {
   if ([r handleErrorAndAlert:NO]) return r;
   id ret = EMPTY_ARRAY;
-  id d = [[[[NSString alloc] initWithData:r encoding:
-            NSUTF8StringEncoding] autorelease] JSONValue];
+  id d = [[[NSString alloc] initWithData:r encoding:
+            NSUTF8StringEncoding] JSONValue];
   id next = [NSNull null];
   if ([d isKindOfClass:[NSDictionary class]]) {
     if (!(ret = [[d objectForKey:@"data"] objectForKey:@"children"]))
@@ -220,8 +220,8 @@
 - (id)_doneGotPostDetails:(id)r
 {
   if ([r handleErrorAndAlert:NO]) return r;
-  id d = [[[[NSString alloc] initWithData:r encoding:
-            NSUTF8StringEncoding] autorelease] JSONValue];
+  id d = [[[NSString alloc] initWithData:r encoding:
+            NSUTF8StringEncoding] JSONValue];
   return d;
 }
 
@@ -268,8 +268,8 @@
 - (id)_didGetSubredditsUsername:(NSString *)username method:(NSString *)method results:(id)r
 {
   id ret = EMPTY_ARRAY;
-  id d = [[[[NSString alloc] initWithData:r encoding:
-            NSUTF8StringEncoding] autorelease] JSONValue];
+  id d = [[[NSString alloc] initWithData:r encoding:
+            NSUTF8StringEncoding] JSONValue];
   if ([d isKindOfClass:[NSDictionary class]]) {
     id _d = [d objectForKey:@"data"];
     id _e = [_d objectForKey:@"children"];
@@ -308,8 +308,8 @@
 
 - (DKDeferred *)loginUsername:(NSString *)username password:(NSString *)password
 {
-  NSMutableURLRequest *req = [[[NSMutableURLRequest alloc] initWithURL:
-                               [NSURL URLWithString:REDDIT_URL @"api/login"]] autorelease];
+  NSMutableURLRequest *req = [[NSMutableURLRequest alloc] initWithURL:
+                               [NSURL URLWithString:REDDIT_URL @"api/login"]];
   [req setValue:@"application/x-www-form-urlencoded" forHTTPHeaderField:@"Content-Type"];
   [req setHTTPShouldHandleCookies:NO];
   [req setHTTPMethod:@"POST"];
@@ -318,8 +318,8 @@
      [password stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding], 
      [username stringByAddingPercentEscapesUsingEncoding:NSASCIIStringEncoding]] 
     dataUsingEncoding:NSASCIIStringEncoding]];
-  DKDeferredURLConnection *c = [[[DKDeferredURLConnection alloc] initWithRequest:
-                                 req pauseFor:0 decodeFunction:nil] autorelease];
+  DKDeferredURLConnection *c = [[DKDeferredURLConnection alloc] initWithRequest:
+                                 req pauseFor:0 decodeFunction:nil];
   [c addBoth:curryTS(self, @selector(_didLoginUsername:results:), username)];
   return c;
 }
@@ -329,8 +329,8 @@
   NSDictionary *headers = [[r URLResponse] allHeaderFields];
   NSLog(@"headers %@", headers);
   if ([r isKindOfClass:[NSData class]]) {
-    id d = [[[[NSString alloc] initWithData:r encoding:
-              NSUTF8StringEncoding] autorelease] JSONValue];
+    id d = [[[NSString alloc] initWithData:r encoding:
+              NSUTF8StringEncoding] JSONValue];
     if ([d isKindOfClass:[NSDictionary class]] 
         && [[[d objectForKey:@"json"] objectForKey:@"data"] objectForKey:@"modhash"]
         && [headers objectForKey:@"Set-Cookie"]) {
@@ -353,11 +353,6 @@
   return @"failure";
 }
 
-- (void)dealloc
-{
-  [methodCache release];
-  [super dealloc];
-}
 
 @end
 
@@ -367,7 +362,7 @@
 - (NSDictionary *)authorizeParams:(NSDictionary *)params
 {
   if (PREF_KEY(@"modhash") && [[params allKeys] count]) {
-    NSMutableDictionary *d = [[params mutableCopy] autorelease];
+    NSMutableDictionary *d = [params mutableCopy];
     [d setObject:PREF_KEY(@"modhash") forKey:@"mh"];
     return d;
   }

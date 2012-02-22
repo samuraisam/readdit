@@ -9,7 +9,7 @@
 #import "RDMagazineController.h"
 #import <QuartzCore/QuartzCore.h>
 #import "RDBrowserController.h"
-
+#import "DKDeferred.h"
 
 #define degreesToRadians(x) (M_PI * x / 180.0)
 
@@ -21,7 +21,7 @@
 - (id)initWithCoder:(NSCoder *)a
 {
   if ((self = [super initWithCoder:a])) {
-    UIGestureRecognizer *r = [[[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)] autorelease];
+    UIGestureRecognizer *r = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(handleGesture:)];
     [self addGestureRecognizer:r];
   }
   return self;
@@ -77,9 +77,9 @@
       [labs addObject:[self.contentView viewWithTag:(i+1)*10]];
       [smks addObject:[self.contentView viewWithTag:(i+1)*100]];
     }
-    smokeViews = [smks retain];
-    imageViews = [imgs retain];
-    labelViews = [labs retain];
+    smokeViews = smks;
+    imageViews = imgs;
+    labelViews = labs;
   }
   return self;
 }
@@ -92,14 +92,6 @@
   }
 }
 
-- (void)dealloc
-{
-  [smokeViews release];
-  [imageViews release];
-  [labelViews release];
-  [userData release];
-  [super dealloc];
-}
 
 @end
 
@@ -146,10 +138,9 @@
   
   scrollView.contentSize = CGSizeMake([cols count] * 170, scrollView.frame.size.height);
 
-  if (columns) [columns release];
   NSLog(@"columns rows %i columns %i %@", nrows, [cols count], 
         NSStringFromCGSize(scrollView.contentSize));
-  columns = [cols retain];
+  columns = cols;
 }
 
 - (void)loadView 
@@ -297,7 +288,7 @@
   if (!loadingMore && path.row == [columns count] - 1) {
     loadingMore = YES;
 //    NSLog(@"loading more???");
-    [[dataSource LOAD_MORE_MOTHERFUCKER] addBoth:callbackTS(self, _doneLoadingItems:)];
+    //[[dataSource LOAD_MORE_MOTHERFUCKER] addBoth:callbackTS(self, _doneLoadingItems:)]; // <- This doesn't do anything since dataSource isn't initialized anywhere :/
   }
 }
 
@@ -347,21 +338,12 @@
   [loadingPool drain];
   [cachePool drain];
   NSLog(@"viewDidUnload %@", self);
-  [browserController release];
   browserController = nil;
   self.dataSource = nil;
   [super viewDidUnload];
 }
 
 
-- (void)dealloc 
-{
-  [loadingPool release];
-  [tableView release];
-  [columns release];
-  [cachePool release];
-  [super dealloc];
-}
 
 
 @end

@@ -20,8 +20,8 @@
   NSMutableDictionary *reads;
 }
 
-@property(retain) id<DKCache> methodCache;
-@property(retain) NSMutableDictionary *reads;
+@property id<DKCache> methodCache;
+@property NSMutableDictionary *reads;
 
 + (id)sharedClient;
 

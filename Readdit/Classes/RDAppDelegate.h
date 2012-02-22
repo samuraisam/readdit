@@ -23,10 +23,10 @@
     RDBrowserController *detailViewController;
 }
 
-@property (nonatomic, retain) IBOutlet UIWindow *window;
+@property (nonatomic) IBOutlet UIWindow *window;
 
-@property (nonatomic, retain) IBOutlet MGSplitViewController *splitViewController;
-@property (nonatomic, retain) IBOutlet RDRedditsController *rootViewController;
-@property (nonatomic, retain) IBOutlet RDBrowserController *detailViewController;
+@property (nonatomic) IBOutlet MGSplitViewController *splitViewController;
+@property (nonatomic) IBOutlet RDRedditsController *rootViewController;
+@property (nonatomic) IBOutlet RDBrowserController *detailViewController;
 
 @end

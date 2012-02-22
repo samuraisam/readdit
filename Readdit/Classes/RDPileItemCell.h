@@ -17,9 +17,9 @@
   SEL closeAction;
 }
 
-@property(nonatomic, retain) UIButton *button, *closeButton;
-@property(nonatomic, retain) UILabel *titleLabel;
-@property(nonatomic, retain) id target, userInfo;
+@property(nonatomic) UIButton *button, *closeButton;
+@property(nonatomic) UILabel *titleLabel;
+@property(nonatomic) id target, userInfo;
 @property(nonatomic, assign) SEL closeAction;
 
 - (IBAction)close:(id)sender;
