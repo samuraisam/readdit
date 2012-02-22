@@ -138,6 +138,14 @@
   HUD = nil;
 }
 
+-(NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
+{
+  if(section == 0)
+    return @"Your credentials are ONLY shared with Reddit.com. We do not store these anywhere other than on your device.";
+  else
+    return @"";
+}
+
 /*
 // Override to support conditional editing of the table view.
 - (BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {

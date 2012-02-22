@@ -1,0 +1,6 @@
+[submodule "Readdit/Lib/MBProgressHUD"]
+	path = Readdit/Lib/MBProgressHUD
+	url = git://github.com/jdg/MBProgressHUD.git
+[submodule "Readdit/Lib/MGSplitViewController"]
+	path = Readdit/Lib/MGSplitViewController
+	url = git://github.com/mattgemmell/MGSplitViewController.git
