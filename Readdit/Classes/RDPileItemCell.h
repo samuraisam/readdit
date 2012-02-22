@@ -14,13 +14,11 @@
   IBOutlet UIButton *button, *closeButton;
   IBOutlet UILabel *titleLabel;
   id target, userInfo;
-  SEL closeAction;
 }
 
 @property(nonatomic) UIButton *button, *closeButton;
 @property(nonatomic) UILabel *titleLabel;
 @property(nonatomic) id target, userInfo;
-@property(nonatomic, assign) SEL closeAction;
 
 - (IBAction)close:(id)sender;
 - (IBAction)go:(id)sender;

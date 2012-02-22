@@ -16,7 +16,7 @@
 
 @implementation RDMagazineImage
 
-@synthesize delegate, touchAction;
+@synthesize delegate;
 
 - (id)initWithCoder:(NSCoder *)a
 {
@@ -29,8 +29,8 @@
 
 - (void)handleGesture:(id)r
 {
-  if (delegate && [delegate respondsToSelector:touchAction]) {
-    [delegate performSelector:touchAction withObject:self];
+  if (delegate && [delegate respondsToSelector:@selector(didTouchImage:)]) {
+    [delegate performSelector:@selector(didTouchImage:) withObject:self];
   }
 }
 
@@ -71,7 +71,6 @@
     for (int i = 0; i < 4; i++) {
       RDMagazineImage *imgv = (RDMagazineImage *)[self.contentView viewWithTag:i+1];
       imgv.delegate = self;
-      imgv.touchAction = @selector(didTouchImage:);
 
       [imgs addObject:imgv];
       [labs addObject:[self.contentView viewWithTag:(i+1)*10]];

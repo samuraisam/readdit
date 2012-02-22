@@ -13,7 +13,7 @@ static UIImage *backgroundImage = nil;
 
 @implementation RDPileItemCell
 
-@synthesize button, closeButton, titleLabel, userInfo, target, closeAction;
+@synthesize button, closeButton, titleLabel, userInfo, target;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier 
 {
@@ -53,9 +53,7 @@ static UIImage *backgroundImage = nil;
 
 - (void)close:(id)sender
 {
-  if (target) [target performSelector:closeAction withObject:self];
+  if (target) [target performSelector:@selector(closeItem:) withObject:self];
 }
-
-
 
 @end

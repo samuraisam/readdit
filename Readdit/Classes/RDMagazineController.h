@@ -56,11 +56,9 @@
 @interface RDMagazineImage : UIImageView <UIGestureRecognizerDelegate>
 {
   id __unsafe_unretained delegate;
-  SEL touchAction;
 }
 
 @property(nonatomic, unsafe_unretained) id delegate;
-@property(nonatomic, assign) SEL touchAction;
 
 @end
 

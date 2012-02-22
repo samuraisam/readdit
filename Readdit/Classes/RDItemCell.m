@@ -13,7 +13,7 @@
 @implementation RDItemCell
 
 @synthesize upvoteLabel, commentLabel, infoLabel, titleLabel, thumbnail;
-@synthesize clicked, target, userInfo, addToPileAction;
+@synthesize clicked, target, userInfo;
 
 //- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
 //    if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
@@ -48,7 +48,7 @@ static UIColor *clickedTitleColor = nil;
 - (void)actionSheet:(UIActionSheet *)as didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
   if (buttonIndex == 0) {
-    if (target) [target performSelector:addToPileAction withObject:self];
+    if (target) [target performSelector:@selector(addToPileCell:) withObject:self];
   }
   actionSheet = nil;
 }

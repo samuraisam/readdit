@@ -189,7 +189,6 @@
     cell = [[[NSBundle mainBundle] loadNibNamed:@"RDPileItemCell" 
                                     owner:nil options:nil] objectAtIndex:0];
     cell.target = self;
-    cell.closeAction = @selector(closeItem:);
   }
   
   [[cell.button viewWithTag:101] removeFromSuperview];

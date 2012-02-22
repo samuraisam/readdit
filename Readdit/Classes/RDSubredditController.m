@@ -361,7 +361,6 @@ static UIFont *titleLabelFont = nil;
       cell.thumbnail.layer.cornerRadius = 5;
     }
     cell.target = self;
-    cell.addToPileAction = @selector(addToPileCell:);
   }
 
   [self configureCell:cell forItem:item];
