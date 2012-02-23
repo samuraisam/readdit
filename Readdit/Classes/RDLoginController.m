@@ -139,7 +139,7 @@
 -(NSString *) tableView:(UITableView *)tableView titleForFooterInSection:(NSInteger)section
 {
   if(section == 0)
-    return @"Your credentials are ONLY shared with Reddit.com. We do not store these anywhere other than on your device.";
+    return @"Your credentials are ONLY shared with Reddit.com. We do not store your password anywhere.";
   else
     return @"";
 }
