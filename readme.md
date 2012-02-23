@@ -15,6 +15,11 @@ Building it:
 It's really simple. You just need Xcode. Clone the repository somewhere and,
 open Readdit/Readdit.xcodeproj and run in the simulator to get started quickly.
 
+You'll probably have to get the submodules (they are stored in Readdit/Lib):
+
+  $ git submodule init
+  $ git submodule update
+
 What does it do? (so far)
 =========================
   
