@@ -6,7 +6,7 @@ An incomplete open source and interesting take on an iPad client for reddit.
 It is licensed under the Apache Software License Version 2.0.
 
 I am accepting pull requests. If the client ever comes to a complete state
-I will releaes it for free on the App Store under the AlterTap account. No 
+I will release it for free on the App Store under the AlterTap account. No 
 profits will be made by me. This is entirely a community effort.
 
 Building it:
@@ -15,10 +15,9 @@ Building it:
 It's really simple. You just need Xcode. Clone the repository somewhere and,
 open Readdit/Readdit.xcodeproj and run in the simulator to get started quickly.
 
-You'll probably have to get the submodules (they are stored in Readdit/Lib):
+The easiest way to clone the repository and get all the required submodules is to:
 
-  $ git submodule init
-  $ git submodule update
+```git clone --recursive git://github.com/samuraisam/readdit.git```
 
 What does it do? (so far)
 =========================
