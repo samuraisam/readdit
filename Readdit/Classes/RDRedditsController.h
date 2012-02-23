@@ -32,11 +32,11 @@
 }
 
 @property (nonatomic, assign) BOOL searchMode;
-@property (nonatomic, retain) IBOutlet MGSplitViewController *splitController;
-@property (nonatomic, retain) IBOutlet RDBrowserController *detailViewController;
-@property (nonatomic, retain) IBOutlet RDSubredditController *redditViewController;
-@property (nonatomic, retain) NSString *username;
-@property (nonatomic, retain) RDRedditsController *redditsSearchController;
+@property (nonatomic) IBOutlet MGSplitViewController *splitController;
+@property (nonatomic) IBOutlet RDBrowserController *detailViewController;
+@property (nonatomic) IBOutlet RDSubredditController *redditViewController;
+@property (nonatomic) NSString *username;
+@property (nonatomic) RDRedditsController *redditsSearchController;
 
 - (IBAction)search:(id)s;
 

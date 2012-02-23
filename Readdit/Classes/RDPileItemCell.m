@@ -13,7 +13,7 @@ static UIImage *backgroundImage = nil;
 
 @implementation RDPileItemCell
 
-@synthesize button, closeButton, titleLabel, userInfo, target, closeAction;
+@synthesize button, closeButton, titleLabel, userInfo, target;
 
 - (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier 
 {
@@ -35,8 +35,8 @@ static UIImage *backgroundImage = nil;
 
 + (void)initialize
 {
-  if (!selectedBackgroundImage) selectedBackgroundImage = [[[UIImage imageNamed:@"selectedpileitem.png"] stretchableImageWithLeftCapWidth:12 topCapHeight:12] retain];
-  if (!backgroundImage) backgroundImage = [[[UIImage imageNamed:@"pileitem.png"] stretchableImageWithLeftCapWidth:12 topCapHeight:12] retain];
+  if (!selectedBackgroundImage) selectedBackgroundImage = [[UIImage imageNamed:@"selectedpileitem.png"] stretchableImageWithLeftCapWidth:12 topCapHeight:12];
+  if (!backgroundImage) backgroundImage = [[UIImage imageNamed:@"pileitem.png"] stretchableImageWithLeftCapWidth:12 topCapHeight:12];
 }
 
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated 
@@ -53,18 +53,7 @@ static UIImage *backgroundImage = nil;
 
 - (void)close:(id)sender
 {
-  if (target) [target performSelector:closeAction withObject:self];
+  if (target) [target performSelector:@selector(closeItem:) withObject:self];
 }
-
-- (void)dealloc 
-{
-  [target release];
-  [userInfo release];
-  [titleLabel release];
-  [closeButton release];
-  [button release];
-  [super dealloc];
-}
-
 
 @end

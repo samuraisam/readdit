@@ -17,13 +17,11 @@
   UISwipeGestureRecognizer *swipeRecognizer;
   UIActionSheet *actionSheet;
   id target, userInfo;
-  SEL addToPileAction;
 }
 
-@property(nonatomic, retain) UILabel *upvoteLabel, *commentLabel, *infoLabel, *titleLabel;
-@property(nonatomic, retain) UIImageView *thumbnail;
+@property(nonatomic) UILabel *upvoteLabel, *commentLabel, *infoLabel, *titleLabel;
+@property(nonatomic) UIImageView *thumbnail;
 @property(nonatomic, assign) BOOL clicked;
-@property(nonatomic, retain) id target, userInfo;
-@property(nonatomic, assign) SEL addToPileAction;
+@property(nonatomic) id target, userInfo;
 
 @end

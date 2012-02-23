@@ -34,13 +34,13 @@
   RDMagazineController *magazineController;
 }
 
-@property(nonatomic, retain) RDMagazineController *magazineController;
-@property(nonatomic, retain) MGSplitViewController *splitController;
-@property(nonatomic, retain) RDBrowserController *browserController;
-@property(copy) NSString *username, *reddit;
+@property(nonatomic) RDMagazineController *magazineController;
+@property(nonatomic) MGSplitViewController *splitController;
+@property(nonatomic) RDBrowserController *browserController;
+@property(nonatomic, copy) NSString *username, *reddit;
 @property(assign) BOOL didLoadFromLaunch;
-@property(nonatomic, retain) NSArray *items;
-@property(nonatomic, retain) RDPileController *pileController;
+@property(nonatomic) NSArray *items;
+@property(nonatomic) RDPileController *pileController;
 
 - (void)configureCell:(RDItemCell *)cell forItem:(NSDictionary *)item;
 - (DKDeferred *)LOAD_MORE_MOTHERFUCKER;

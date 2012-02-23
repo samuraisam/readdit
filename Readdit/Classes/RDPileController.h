@@ -21,7 +21,7 @@
 }
 
 @property(nonatomic, copy) NSString *username;
-@property(nonatomic, retain) RDBrowserController *browserController;
+@property(nonatomic) RDBrowserController *browserController;
 - (void)addItem:(NSDictionary *)item request:(NSURLRequest *)req;
 
 @end

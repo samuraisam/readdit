@@ -15,17 +15,17 @@
   IBOutlet UIButton *subscribeButton;
   IBOutlet UIActivityIndicatorView *activityIndicator;
   BOOL loading, subscribed;
-  id target;
+  id __unsafe_unretained target;
   SEL subscribeAction;
   id userInfo;
 }
 
-@property(nonatomic, retain) UILabel *titleLabel, *subtitleLabel;
-@property(nonatomic, retain) UIButton *subscribeButton;
-@property(nonatomic, retain) UIActivityIndicatorView *activityIndicator;
+@property(nonatomic) UILabel *titleLabel, *subtitleLabel;
+@property(nonatomic) UIButton *subscribeButton;
+@property(nonatomic) UIActivityIndicatorView *activityIndicator;
 @property(nonatomic, assign) BOOL loading, subscribed;
-@property(nonatomic, assign) id target;
-@property(nonatomic, retain) id userInfo;
+@property(nonatomic, unsafe_unretained) id target;
+@property(nonatomic) id userInfo;
 @property(nonatomic, assign) SEL subscribeAction;
 
 - (IBAction)subscribe:(id)sender;

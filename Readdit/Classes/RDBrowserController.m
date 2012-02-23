@@ -32,18 +32,16 @@
   backItem.enabled = NO;
   refreshItem.enabled = NO;
   forwardItem.enabled = NO;
-  if (item) [item release];
-  item = [i retain];
-  NSMutableURLRequest *req = [[[NSMutableURLRequest alloc] initWithURL:
+  item = i;
+  NSMutableURLRequest *req = [[NSMutableURLRequest alloc] initWithURL:
                                [NSURL URLWithString:[i objectForKey:@"url"]] cachePolicy:
-                               NSURLRequestReturnCacheDataElseLoad timeoutInterval:15.0] autorelease];
+                               NSURLRequestReturnCacheDataElseLoad timeoutInterval:15.0];
   if (boolv([i objectForKey:@"is_self"])) {
     [req setValue:PREF_KEY(@"cookie") forHTTPHeaderField:@"Cookie"];
   }
   
   UIWebView *wv = [[UIWebView alloc] initWithFrame:webView.frame];
   [webView removeFromSuperview];
-  if (webView) [webView release];
   webView = wv;
   webView.delegate = self;
   webView.scalesPageToFit = YES;
@@ -211,8 +209,7 @@
   if (![ret isKindOfClass:[NSArray class]]) {
     return ret;
   }
-  if (postDetail) [postDetail release];
-  postDetail = [ret retain];
+  postDetail = ret;
   NSLog(@" post detail %@", postDetail);
   [self.tableView reloadData];
   return ret;
@@ -233,17 +230,17 @@
   static NSString *ident = @"commentident";
   UITableViewCell *cell = [table dequeueReusableCellWithIdentifier:ident];
   if (!cell) {
-    cell = [[[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ident] autorelease];
+    cell = [[UITableViewCell alloc] initWithStyle:UITableViewCellStyleValue1 reuseIdentifier:ident];
   }
   return cell;
 }
 
 - (void)gotoAuthor:(id)s
 {
-  UIActionSheet *as = [[[UIActionSheet alloc] initWithTitle:nil delegate:
+  UIActionSheet *as = [[UIActionSheet alloc] initWithTitle:nil delegate:
                         self cancelButtonTitle:nil destructiveButtonTitle:
                         nil otherButtonTitles:@"Add Friend", @"Submissions", 
-                        @"Liked", nil] autorelease];
+                        @"Liked", nil];
   [as showFromRect:[s frame] inView:[s superview] animated:YES];
 }
 
@@ -261,7 +258,7 @@
 - (id)_didVoteDirection:(id)d :(id)r
 {
   NSLog(@"didVote %@ %@", d, r);
-  NSMutableDictionary *_ = [[item mutableCopy] autorelease];
+  NSMutableDictionary *_ = [item mutableCopy];
   int E = [[_ objectForKey:@"likes"] isEqual:[NSNull null]] 
             ? -1 : intv([_ objectForKey:@"likes"]);
   int D = intv(d);
@@ -291,8 +288,7 @@
     [delegate performSelector:@selector(didUpdateCurrentItem:) withObject:_];
   }
   
-  [item release];
-  item = [_ retain];
+  item = _;
   [self refreshVote];
   [downButton setEnabled:YES];
   [upButton setEnabled:YES];
@@ -334,7 +330,7 @@
   [self.navigationController setNavigationBarHidden:YES animated:NO];
   
   if (!urlButton) {
-    urlButton = [[UIButton buttonWithType:UIButtonTypeCustom] retain];
+    urlButton = [UIButton buttonWithType:UIButtonTypeCustom];
     [urlButton setBackgroundImage:
      [[UIImage imageNamed:@"urlbackground.png"] stretchableImageWithLeftCapWidth:
       100 topCapHeight:15] forState:UIControlStateNormal];
@@ -353,8 +349,8 @@
                             stretchableImageWithLeftCapWidth:11 topCapHeight:15];
   [redditButton setBackgroundImage:stretchableItemBg forState:UIControlStateNormal];
   [authorButton setBackgroundImage:stretchableItemBg forState:UIControlStateNormal];
-  UIBarButtonItem *sp = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:
-                          UIBarButtonSystemItemFlexibleSpace target:nil action:NULL] autorelease];
+  UIBarButtonItem *sp = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:
+                          UIBarButtonSystemItemFlexibleSpace target:nil action:NULL];
   self.toolbarItems = array_(backItem, forwardItem, refreshItem, urlItem, sp, actionItem);
   [self.navigationController setToolbarHidden:NO animated:NO];
 }
@@ -362,9 +358,9 @@
 - (void)didTouchURL:(id)s
 {
   UIActionSheet *actionSheet 
-    = [[[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:
+    = [[UIActionSheet alloc] initWithTitle:nil delegate:self cancelButtonTitle:
         nil destructiveButtonTitle:nil otherButtonTitles:
-        @"Copy to Clipboard", @"Open in Safari", nil] autorelease];
+        @"Copy to Clipboard", @"Open in Safari", nil];
   [actionSheet showFromBarButtonItem:urlItem animated:YES];
 }
 
@@ -372,7 +368,6 @@
 {
   NSLog(@"buttonIndex %i", buttonIndex);
   if (buttonIndex == 0) {
-    if (HUD) [HUD release];
     HUD = [[MBProgressHUD alloc] initWithView:self.view];
     [HUD setLabelText:@"Copied"];
     [self.view addSubview:HUD];
@@ -391,7 +386,6 @@
 - (void) hudWasHidden
 {
   [HUD removeFromSuperview];
-  [HUD release];
   HUD = nil;
 }
 
@@ -431,23 +425,7 @@
 
 - (void)dealloc 
 {
-  [HUD release];
-  [urlButton release];
-  self.actionItem = nil;
-  self.delegate = nil;
-  self.splitController = nil;
-  self.upButton = nil; 
-  self.downButton = nil; 
-  self.titleLabel = nil; 
-  self.infoLabel = nil; 
-  self.submissionLabel = nil; 
-  self.webView = nil;
-  self.forwardItem = nil; 
-  self.backItem = nil; 
-  self.refreshItem = nil; 
-  self.urlItem = nil;
   self.item = nil;
-  [super dealloc];
 }
 
 @end

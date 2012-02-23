@@ -30,14 +30,14 @@ UIActionSheetDelegate, MBProgressHUDDelegate, UITableViewDataSource, UITableView
   UITableView *tableView;
 }
 
-@property (nonatomic, retain) UITableView *tableView;
-@property (nonatomic, retain) id delegate;
-@property (nonatomic, retain) NSDictionary *item;
-@property (nonatomic, retain) MGSplitViewController *splitController;
-@property (nonatomic, retain) UIButton *upButton, *downButton;
-@property (nonatomic, retain) UILabel *titleLabel, *submissionLabel, *infoLabel;
-@property (nonatomic, retain) UIBarButtonItem *forwardItem, *backItem, *refreshItem, *urlItem, *actionItem;
-@property (nonatomic, retain) UIWebView *webView;
+@property (nonatomic) UITableView *tableView;
+@property (nonatomic) id delegate;
+@property (nonatomic) NSDictionary *item;
+@property (nonatomic) MGSplitViewController *splitController;
+@property (nonatomic) UIButton *upButton, *downButton;
+@property (nonatomic) UILabel *titleLabel, *submissionLabel, *infoLabel;
+@property (nonatomic) UIBarButtonItem *forwardItem, *backItem, *refreshItem, *urlItem, *actionItem;
+@property (nonatomic) UIWebView *webView;
 @property (copy) NSString *username;
 
 - (IBAction)upvote:(id)s;

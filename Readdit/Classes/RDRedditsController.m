@@ -53,20 +53,20 @@
   performingInitialSync = firstSyncCompleted = NO;
   loadingMore = subscribing = NO;
   searchMode = gotInitialSearchResults = NO;
-  reddits = [EMPTY_ARRAY retain];
-  builtins = [array_(array_(@"Front Page", @"/"), array_(@"All", @"/r/all/"), array_(@"Top", @"/top/"), 
-                     array_(@"New", @"/new/"), array_(@"Controversial", @"/controversial/")) retain];
-  builtins2 = [array_(array_(@"Saved", @"/saved/"),
+  reddits = EMPTY_ARRAY;
+  builtins = array_(array_(@"Front Page", @"/"), array_(@"All", @"/r/all/"), array_(@"Top", @"/top/"), 
+                     array_(@"New", @"/new/"), array_(@"Controversial", @"/controversial/"));
+  builtins2 = array_(array_(@"Saved", @"/saved/"),
                       array_(@"Friends", @"/r/friends/"), array_(@"Submitted", @"/user/$username/submitted/"),
                       array_(@"Liked", @"/user/$username/liked/"), array_(@"Disliked", @"/user/$username/disliked/"),
-                      array_(@"Hidden", @"/user/$username/hidden/")) retain];
-  subscribedSubredditIds = [EMPTY_ARRAY retain];
+                      array_(@"Hidden", @"/user/$username/hidden/"));
+  subscribedSubredditIds = EMPTY_ARRAY;
   
   nextLoadingIndicator = [[UIActivityIndicatorView alloc] initWithActivityIndicatorStyle:
                           UIActivityIndicatorViewStyleGray];
   nextLoadingIndicator.autoresizingMask 
   = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
-  nextButton = [[UIButton buttonWithType:UIButtonTypeRoundedRect] retain];
+  nextButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
   [nextButton addTarget:self action:@selector(loadMore:) forControlEvents:UIControlEventTouchUpInside];
   nextPageFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 52)];
   nextPageFooterView.backgroundColor = [UIColor whiteColor];
@@ -99,9 +99,9 @@
   [nextPageFooterView addSubview:nextButton];
   if (searchMode) {
     self.navigationItem.rightBarButtonItem 
-      = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:
+      = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:
           UIBarButtonSystemItemRefresh target:self action:
-          @selector(refresh:)] autorelease];
+          @selector(refresh:)];
   }
 }
 
@@ -156,13 +156,13 @@
     return;
   }
   if (![[[RDRedditClient sharedClient] accounts] count]) {
-    RDLoginController *login = [[[RDLoginController alloc] initWithStyle:
-                                 UITableViewStyleGrouped] autorelease];
+    RDLoginController *login = [[RDLoginController alloc] initWithStyle:
+                                 UITableViewStyleGrouped];
     login.splitController = self.splitController;
     login.delegate = self;
     login.title = @"Login";
-    UINavigationController *nav = [[[UINavigationController alloc] 
-                                initWithRootViewController:login] autorelease];
+    UINavigationController *nav = [[UINavigationController alloc] 
+                                initWithRootViewController:login];
     nav.modalPresentationStyle = UIModalPresentationFormSheet;
     [self.splitController presentModalViewController:nav animated:YES];
   } else {
@@ -200,16 +200,14 @@
 - (id)_gotCachedSubreddits:(id)r
 {
   if ([r isKindOfClass:[NSArray class]]) {
-    if (reddits) [reddits release];
-    reddits = [r retain];
+    reddits = r;
     NSLog(@"gotCachedSubreddits: %d", [r count]);
   } else {
     NSLog(@"cachedSubreddits Miss %@", r);
   }
   [self.tableView reloadData];
-  if (subscribedSubredditIds) [subscribedSubredditIds release];
-  subscribedSubredditIds = [[[RDRedditClient sharedClient] subscribedSubredditIdsForUsername:
-                             username] retain];
+  subscribedSubredditIds = [[RDRedditClient sharedClient] subscribedSubredditIdsForUsername:
+                             username];
   firstSyncCompleted = YES;
   [[[RDRedditClient sharedClient] subredditsForUsername:username] 
    addBoth:callbackTS(self, _gotSubreddits:)];
@@ -240,16 +238,13 @@
     PREF_SYNCHRONIZE;
     [(YMRefreshView *)self.refreshHeaderView setLastUpdatedDate:d];
   }
-  if (subscribedSubredditIds) [subscribedSubredditIds release];
-  subscribedSubredditIds = [[[RDRedditClient sharedClient] subscribedSubredditIdsForUsername:
-                             username] retain];
-  if (reddits) [reddits release];
+  subscribedSubredditIds = [[RDRedditClient sharedClient] subscribedSubredditIdsForUsername:
+                             username];
   if (searchMode) {
-    reddits = [[r objectAtIndex:0] retain];
-    if (next) [next release];
-    next = [[r objectAtIndex:1] retain];
+    reddits = [r objectAtIndex:0];
+    next = [r objectAtIndex:1];
   } else {
-    reddits = [r retain];
+    reddits = r;
   }
   if (searchMode && [next isEqual:[NSNull null]]) nextButton.enabled = NO;
   if (searchMode) [nextButton setTitle:@"More" forState:UIControlStateNormal];
@@ -414,13 +409,6 @@
 - (void)dealloc 
 {
   NSLog(@"dealloc %@", self);
-  [reddits release];
-  [username release];
-  [builtins release];
-  [reddits release];
-  [redditViewController release];
-  [detailViewController release];
-  [super dealloc];
 }
 
 @end

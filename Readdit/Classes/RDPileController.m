@@ -21,8 +21,8 @@
   NSDictionary *item;
 }
 
-@property(nonatomic, retain) NSURLRequest *request;
-@property(nonatomic, retain) NSDictionary *item;
+@property(nonatomic) NSURLRequest *request;
+@property(nonatomic) NSDictionary *item;
 - (void)ohShit:(id)srsly;
 
 @end
@@ -44,8 +44,7 @@
 
 - (void)setRequest:(NSURLRequest *)req
 {
-  if (request) [request release];
-  request = [req retain];
+  request = req;
   CGRect f = CGRectMake(0, 0, 600, 225);
   if (!webView) webView = [[UIWebView alloc] initWithFrame:f];
   else webView.frame = f;
@@ -69,17 +68,9 @@
 - (void)ohShit:(id)srsly;
 {
   if(!srsly && !didFinish) return;
-  [webView release];
   webView = nil;
 }
 
-- (void)dealloc
-{
-  [item release];
-  [webView release];
-  [request release];
-  [super dealloc];
-}
 
 @end
 
@@ -103,8 +94,8 @@
 
 - (void)addItem:(NSDictionary *)item request:(NSURLRequest *)req
 {
-  RDPileItemContainer *c = [[[RDPileItemContainer alloc] initWithFrame:
-                             CGRectMake(0, 0, 320, 320)] autorelease];
+  RDPileItemContainer *c = [[RDPileItemContainer alloc] initWithFrame:
+                             CGRectMake(0, 0, 320, 320)];
   c.item = item;
   c.request = req;
   [items addObject:c];
@@ -198,7 +189,6 @@
     cell = [[[NSBundle mainBundle] loadNibNamed:@"RDPileItemCell" 
                                     owner:nil options:nil] objectAtIndex:0];
     cell.target = self;
-    cell.closeAction = @selector(closeItem:);
   }
   
   [[cell.button viewWithTag:101] removeFromSuperview];
@@ -229,7 +219,7 @@
 {
   closing = NO;
   int row = indexPath.row == 0 ? 0 : indexPath.row - 1;
-  NSIndexPath *new = [[NSIndexPath indexPathForRow:row inSection:0] retain];
+  NSIndexPath *new = [NSIndexPath indexPathForRow:row inSection:0];
   NSLog(@"row %i indexPath %@", row, new);
   self.title = [NSString stringWithFormat:@"Pile (%i)", items.count];
   [self.tableView reloadData];
@@ -283,11 +273,6 @@
   [items makeObjectsPerformSelector:@selector(ohShit:) withObject:[NSNull null]];
 }
 
-- (void)dealloc 
-{
-  [items release];
-  [super dealloc];
-}
 
 
 @end

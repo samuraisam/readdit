@@ -12,10 +12,10 @@
 @interface RDTextInputCell : UITableViewCell <UITextFieldDelegate>
 {
   IBOutlet UITextField *textField;
-  IBOutlet id delegate;
+  IBOutlet id __unsafe_unretained delegate;
 }
 
-@property (nonatomic, retain) UITextField *textField;
-@property (nonatomic, assign) id delegate;
+@property (nonatomic) UITextField *textField;
+@property (nonatomic, unsafe_unretained) id delegate;
 
 @end

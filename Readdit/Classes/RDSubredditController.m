@@ -40,7 +40,7 @@ static UIFont *titleLabelFont = nil;
 
 + (void)initialize
 {
-  if (!titleLabelFont) titleLabelFont = [[UIFont boldSystemFontOfSize:15] retain];
+  if (!titleLabelFont) titleLabelFont = [UIFont boldSystemFontOfSize:15];
 }
 
 - (id)initWithStyle:(UITableViewStyle)style 
@@ -68,7 +68,7 @@ static UIFont *titleLabelFont = nil;
 - (void)privateInit
 {
   username = reddit = nil;
-  items = [EMPTY_ARRAY retain];
+  items = EMPTY_ARRAY;
   gotFirstPage = NO;
   loadingMore = NO;
   didLoadCachedItems = NO;
@@ -80,7 +80,7 @@ static UIFont *titleLabelFont = nil;
                           UIActivityIndicatorViewStyleGray];
   nextLoadingIndicator.autoresizingMask 
     = UIViewAutoresizingFlexibleRightMargin | UIViewAutoresizingFlexibleLeftMargin;
-  nextButton = [[UIButton buttonWithType:UIButtonTypeRoundedRect] retain];
+  nextButton = [UIButton buttonWithType:UIButtonTypeRoundedRect];
   [nextButton addTarget:self action:@selector(loadMore:) forControlEvents:UIControlEventTouchUpInside];
   nextPageFooterView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, 320, 52)];
   nextPageFooterView.backgroundColor = [UIColor whiteColor];
@@ -120,8 +120,8 @@ static UIFont *titleLabelFont = nil;
   self.tableView.tableFooterView = nextPageFooterView;
   [nextPageFooterView addSubview:nextButton];
   self.navigationItem.rightBarButtonItem 
-    = [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind
-                                  target:self action:@selector(showMagazine:)] autorelease];
+    = [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemRewind
+                                  target:self action:@selector(showMagazine:)];
 }
 
 - (void)viewWillAppear:(BOOL)animated 
@@ -137,15 +137,14 @@ static UIFont *titleLabelFont = nil;
 
 - (void)showMagazine:(UIBarButtonItem *)sender
 {
-  UINavigationController *navController = [[[UINavigationController alloc] initWithRootViewController:
-                                            self.magazineController] autorelease];
+  UINavigationController *navController = [[UINavigationController alloc] initWithRootViewController:
+                                            self.magazineController];
   self.magazineController.title = self.title;
   [self.splitController presentModalViewController:navController animated:YES];
   self.magazineController.navigationItem.leftBarButtonItem =
-    [[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
+    [[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemDone
                                                    target:self.splitController
-                                                   action:@selector(dismissModalViewControllerAnimated:)]
-                                                   autorelease];
+                                                   action:@selector(dismissModalViewControllerAnimated:)];
   navController.navigationBar.barStyle = UIBarStyleBlackOpaque;
   self.magazineController.dataSource = self;
   self.magazineController.items = items;
@@ -168,12 +167,10 @@ static UIFont *titleLabelFont = nil;
   [loadingPool drain];
   if ([r isKindOfClass:[NSArray class]]) {
     NSLog(@"got cached reddit: %i items", [r count]);
-    if (items) [items release];
-    items = [[r objectAtIndex:0] retain];
-    next = (id)[[NSNull null] retain];
-    if (seenItems) [seenItems release];
-    seenItems = [[[RDRedditClient sharedClient] seenItemsForSubreddit:reddit 
-                                                  username:username] retain];
+    items = [r objectAtIndex:0];
+    next = (id)[NSNull null];
+    seenItems = [[RDRedditClient sharedClient] seenItemsForSubreddit:reddit 
+                                                  username:username];
   } else {
     NSLog(@"cached reddit miss %@", r);
   }
@@ -207,14 +204,11 @@ static UIFont *titleLabelFont = nil;
   
   NSLog(@"got Items %i", [r count]);
   if ([r isKindOfClass:[NSArray class]]) {
-    if (items) [items release];
-    items = [[r objectAtIndex:0] retain];
-    if (next) [next release];
-    next = [[r objectAtIndex:1] retain];
+    items = [r objectAtIndex:0];
+    next = [r objectAtIndex:1];
     nextButton.enabled = ![next isEqual:[NSNull null]];
-    if (seenItems) [seenItems release];
-    seenItems = [[[RDRedditClient sharedClient] seenItemsForSubreddit:reddit 
-                                                   username:username] retain];
+    seenItems = [[RDRedditClient sharedClient] seenItemsForSubreddit:reddit 
+                                                   username:username];
     [self.tableView reloadData];
     
     [self prefetchItemThumbnails];
@@ -250,22 +244,19 @@ static UIFont *titleLabelFont = nil;
 
 - (void)setItems:(NSArray *)i
 {
-  if (items) [items release];
-  items = [i retain];
+  items = i;
   [loadingPool drain];
   [self.tableView reloadData];
 }
 
 - (void)setReddit:(NSString *)r
 {
-  if (reddit) [reddit release];
   reddit = [r copy];
   didLoadCachedItems = NO;
 }
 
 - (void)setUsername:(NSString *)u
 {
-  if (username) [username release];
   username = [u copy];
   didLoadCachedItems = NO;
 }
@@ -274,7 +265,6 @@ static UIFont *titleLabelFont = nil;
 {
   [super viewDidAppear:animated];
   NSLog(@"username %@ reddit %@", username, reddit);
-  if (currentItemIndexPath) [currentItemIndexPath release];
   currentItemIndexPath = nil;
   nextButton.frame = CGRectMake(4, 4, self.tableView.frame.size.width - 8, 44);
   nextLoadingIndicator.frame = CGRectMake(self.tableView.frame.size.width / 2 
@@ -305,7 +295,6 @@ static UIFont *titleLabelFont = nil;
 
 - (void)viewWillDisappear:(BOOL)animated
 {
-  if (currentItemIndexPath) [currentItemIndexPath release];
   currentItemIndexPath = nil;
   [loadingPool drain];
   [super viewWillDisappear:animated];
@@ -372,7 +361,6 @@ static UIFont *titleLabelFont = nil;
       cell.thumbnail.layer.cornerRadius = 5;
     }
     cell.target = self;
-    cell.addToPileAction = @selector(addToPileCell:);
   }
 
   [self configureCell:cell forItem:item];
@@ -462,9 +450,8 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
   browserController.username = username;
   browserController.delegate = self;
   currentItemIndexPath = nil;
-  currentItemIndexPath = [[NSIndexPath indexPathForRow:indexPath.row inSection:0] retain];
+  currentItemIndexPath = [NSIndexPath indexPathForRow:indexPath.row inSection:0];
   NSLog(@"current index? %@", currentItemIndexPath);
-  [i release];
 }
 
 - (void)didUpdateCurrentItem:(NSDictionary *)item
@@ -484,8 +471,7 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
       [self configureCell:cell forItem:item];
     }
   }
-  [items release];
-  items = [a retain];
+  items = a;
 }
 
 - (void)addToPileCell:(RDItemCell *)cell
@@ -509,19 +495,6 @@ didSelectRowAtIndexPath:(NSIndexPath *)indexPath
   NSLog(@"view did unload %@", self);
 }
 
-- (void)dealloc 
-{
-  [pileController release];
-  [nextLoadingIndicator release];
-  [nextButton release];
-  [nextPageFooterView release];
-  [browserController release];
-  [items release];
-  [splitController release];
-  [username release];
-  [reddit release];
-  [super dealloc];
-}
 
 
 @end

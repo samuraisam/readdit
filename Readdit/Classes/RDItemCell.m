@@ -13,7 +13,7 @@
 @implementation RDItemCell
 
 @synthesize upvoteLabel, commentLabel, infoLabel, titleLabel, thumbnail;
-@synthesize clicked, target, userInfo, addToPileAction;
+@synthesize clicked, target, userInfo;
 
 //- (id)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier {
 //    if ((self = [super initWithStyle:style reuseIdentifier:reuseIdentifier])) {
@@ -30,11 +30,11 @@ static UIColor *clickedTitleColor = nil;
 
 + (void)initialize
 {
-  if (!upvoteColor) upvoteColor = [[UIColor colorWithRed:172.0/255.0 green:81.0/255.0 blue:14.0/255.0 alpha:1] retain];
-  if (!commentColor) commentColor = [[UIColor colorWithWhite:.37 alpha:1.0] retain];
-  if (!infoColor) infoColor = [[UIColor colorWithRed:31.0/255.0 green:50.0/255.0 blue:79.0/255.0 alpha:1.0] retain];
-  if (!titleColor) titleColor = [[UIColor blackColor] retain];
-  if (!clickedTitleColor) clickedTitleColor = [[UIColor colorWithRed:57.0/255.0 green:0 blue:98.0/255.0 alpha:1] retain];
+  if (!upvoteColor) upvoteColor = [UIColor colorWithRed:172.0/255.0 green:81.0/255.0 blue:14.0/255.0 alpha:1];
+  if (!commentColor) commentColor = [UIColor colorWithWhite:.37 alpha:1.0];
+  if (!infoColor) infoColor = [UIColor colorWithRed:31.0/255.0 green:50.0/255.0 blue:79.0/255.0 alpha:1.0];
+  if (!titleColor) titleColor = [UIColor blackColor];
+  if (!clickedTitleColor) clickedTitleColor = [UIColor colorWithRed:57.0/255.0 green:0 blue:98.0/255.0 alpha:1];
 }
 
 - (void)handleGesture:(UIGestureRecognizer *)gestureRecognizer
@@ -48,9 +48,8 @@ static UIColor *clickedTitleColor = nil;
 - (void)actionSheet:(UIActionSheet *)as didDismissWithButtonIndex:(NSInteger)buttonIndex
 {
   if (buttonIndex == 0) {
-    if (target) [target performSelector:addToPileAction withObject:self];
+    if (target) [target performSelector:@selector(addToPileCell:) withObject:self];
   }
-  [actionSheet release];
   actionSheet = nil;
 }
 
@@ -108,17 +107,6 @@ static UIColor *clickedTitleColor = nil;
   titleLabel.frame = s;
 }
 
-- (void)dealloc 
-{
-  [actionSheet release];
-  [swipeRecognizer release];
-  [thumbnail release];
-  [upvoteLabel release];
-  [commentLabel release];
-  [infoLabel release];
-  [titleLabel release];
-  [super dealloc];
-}
 
 
 @end
