@@ -8,7 +8,7 @@
 
 #import "YMRefreshView.h"
 #import <QuartzCore/QuartzCore.h>
-
+#import "ZelNSDateFormatter+Extras.h"
 
 #define kReleaseToReloadStatus	0
 #define kPullToReloadStatus		1
@@ -120,7 +120,7 @@
 		[formatter setDateStyle:NSDateFormatterShortStyle];
 		[formatter setTimeStyle:NSDateFormatterShortStyle];
 		lastUpdatedLabel.text = [NSString stringWithFormat:
-                             @"Last Updated: %@", [formatter stringFromDate:lastUpdatedDate]];
+                             @"Last Updated: %@", [NSDateFormatter dateDifferenceStringFromDate:lastUpdatedDate]];
 		[formatter release];
 	}
 	else
