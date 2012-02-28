@@ -115,13 +115,8 @@
 		}
     
 		lastUpdatedDate = [newDate retain];
-    
-		NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
-		[formatter setDateStyle:NSDateFormatterShortStyle];
-		[formatter setTimeStyle:NSDateFormatterShortStyle];
-		lastUpdatedLabel.text = [NSString stringWithFormat:
-                             @"Last Updated: %@", [NSDateFormatter dateDifferenceStringFromDate:lastUpdatedDate]];
-		[formatter release];
+        [self setUpdateLabel];
+        
 	}
 	else
 	{
@@ -145,6 +140,17 @@
 		default:
 			break;
 	}
+}
+
+-(void)setUpdateLabel
+{
+    NSDateFormatter* formatter = [[NSDateFormatter alloc] init];
+    [formatter setDateStyle:NSDateFormatterShortStyle];
+    [formatter setTimeStyle:NSDateFormatterShortStyle];
+    lastUpdatedLabel.text = [NSString stringWithFormat:
+                             @"Last Updated: %@", [NSDateFormatter dateDifferenceStringFromDate:lastUpdatedDate]];
+    [formatter release];
+
 }
 
 - (void)toggleActivityView:(BOOL)isON
