@@ -46,6 +46,7 @@
   webView.delegate = self;
   webView.scalesPageToFit = YES;
   webView.dataDetectorTypes = UIDataDetectorTypeLink | UIDataDetectorTypePhoneNumber;
+    [webView setAutoresizingMask:(UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight)];
   backItem.target = forwardItem.target = refreshItem.target = webView;
   backItem.action = @selector(goBack);
   forwardItem.action = @selector(goForward);
