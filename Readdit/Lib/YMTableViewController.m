@@ -207,6 +207,7 @@
 	{
 		checkForRefresh = YES;  //  only check offset when dragging
 	}
+    [[self refreshHeaderView] setUpdateLabel ];
 } 
 
 - (void)scrollViewDidScroll:(UIScrollView *)scrollView

@@ -17,7 +17,7 @@
 - (void)flipImageAnimated:(BOOL)animated;
 - (void)toggleActivityView:(BOOL)isON;
 - (void)setStatus:(int)status;
-
+- (void)setUpdateLabel;
 @property BOOL isFlipped;
 
 @end
