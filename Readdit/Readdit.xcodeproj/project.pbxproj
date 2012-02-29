@@ -516,13 +516,13 @@
 			name = MGSplitViewController;
 			sourceTree = "<group>";
 		};
-		15B8D97A12341FF5008DA31D /* DK */ = {
+		15B8D97A12341FF5008DA31D /* DeferredKit */ = {
 			isa = PBXGroup;
 			children = (
 				15B8D97B12341FF5008DA31D /* DeferredKit */,
 				15B8D99A12341FF5008DA31D /* JSON */,
 			);
-			name = DK;
+			name = DeferredKit;
 			path = Lib;
 			sourceTree = "<group>";
 		};
@@ -592,7 +592,7 @@
 			name = Data;
 			sourceTree = "<group>";
 		};
-		15D9C2CA1239E35500025247 /* Lib */ = {
+		15D9C2CA1239E35500025247 /* Sharekit */ = {
 			isa = PBXGroup;
 			children = (
 				15D9C2CB1239E35500025247 /* SHKConfig.h */,
@@ -602,6 +602,7 @@
 				15D9C3111239E35500025247 /* Sharers */,
 				15D9C3531239E35500025247 /* UI */,
 			);
+			name = Sharekit;
 			path = Lib;
 			sourceTree = "<group>";
 		};
@@ -1006,8 +1007,8 @@
 				7B8060DB14F3DEC000B9C081 /* MBProgressHUD */,
 				15BBC18E1234A92F001E20FC /* NSDate+Helper.h */,
 				15BBC18F1234A92F001E20FC /* NSDate+Helper.m */,
-				15D9C2CA1239E35500025247 /* Lib */,
-				15B8D97A12341FF5008DA31D /* DK */,
+				15D9C2CA1239E35500025247 /* Sharekit */,
+				15B8D97A12341FF5008DA31D /* DeferredKit */,
 				15B8D95212341A7F008DA31D /* MGSplitViewController */,
 				28A0AAE50D9B0CCF005BE974 /* Readdit_Prefix.pch */,
 				29B97316FDCFA39411CA2CEA /* main.m */,
